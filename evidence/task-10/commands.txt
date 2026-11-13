@@ -1,0 +1,59 @@
+# Run from the repository root. Desktop commands need the scoped execution
+# boundary in docs/minecraft-environment.md. Run one desktop command at a time.
+# The original run used artifacts/task-10. Use a fresh root for a replay.
+artifact_root="artifacts/task-10-repeat"
+neutral_shaders="artifacts/task-11/variants/neutral/shaders"
+python3 tools/minecraft.py window
+sed "s|shaderpack/shaders/|$neutral_shaders/|" evidence/task-10/pack.sha256 |
+  sha256sum -c - &&
+  python3 evidence/task-10/configure.py --artifacts-dir "$artifact_root" \
+    --shaders-dir "$neutral_shaders" prepare
+
+mc_dir=$(python3 -c 'import sys; sys.path.insert(0,"tools"); import minecraft; print(minecraft.GAME)')
+diff -r "$neutral_shaders" "$mc_dir/shaderpacks/TASK-10-neutral/shaders"
+diff -rq scripts/scenes/data "$mc_dir/saves/TASK-03 Visual Scenes/datapacks/task03/data"
+
+# Repeat this block sequentially, with the following mode, batch values.
+# sodium sodium-01
+# neutral neutral-01
+# neutral neutral-02
+# sodium sodium-02
+python3 evidence/task-10/configure.py --artifacts-dir "$artifact_root" "$mode"
+dest="$artifact_root/$batch"
+python3 tools/minecraft.py --artifacts-dir "$dest" launch --timeout 120
+python3 tools/minecraft.py screenshot "$dest/title.png"
+python3 tools/minecraft.py click 1280 535
+python3 tools/minecraft.py screenshot "$dest/world-list.png"
+# Verify that the first row is TASK-03 Visual Scenes before clicking it.
+python3 tools/minecraft.py click 1200 195
+python3 tools/minecraft.py click 1050 1315
+# In sodium-01 only, once loaded, verify Unlimited in F3 and close the debug HUD.
+python3 tools/minecraft.py key F3
+python3 tools/minecraft.py screenshot "$dest/f3-preflight.png"
+python3 tools/minecraft.py key F3
+# In every batch, once loaded and with ordinary HUD visible and menus closed:
+python3 scripts/scenes.py profile "$dest/runs" daylight forest cave
+python3 tools/minecraft.py stop --timeout 60
+python3 tools/minecraft.py --artifacts-dir "$dest" logs
+
+# After the last normal shutdown, verify pack copy again, then restore.
+diff -r "$neutral_shaders" "$mc_dir/shaderpacks/TASK-10-neutral/shaders"
+python3 evidence/task-10/configure.py --artifacts-dir "$artifact_root" restore
+python3 -m unittest discover -s scripts
+python3 evidence/task-10/summarize.py --artifacts-dir "$artifact_root" > "$artifact_root/runs.csv"
+python3 -m py_compile scripts/{scenes,frametimes}.py evidence/task-10/{configure,summarize}.py
+# Inspect before and after image grids in mode, repeat, scene order.
+for frame in before after; do
+  images=()
+  for batch in sodium-01 neutral-01 neutral-02 sodium-02; do
+    for scene in daylight forest cave; do
+      images+=("$artifact_root/$batch/runs/$scene/recording/$frame.png")
+    done
+  done
+  magick montage "${images[@]}" -thumbnail 480x270 -tile 3x -geometry +2+2 \
+    "$artifact_root/$frame-grid.png"
+done
+flatpak info org.prismlauncher.PrismLauncher | rg 'Version:|Branch:|ID:'
+rg -n 'Shaders are disabled|Using shaderpack: TASK-10-neutral|TASK03_READY_|Stopped tick profiling|All dimensions are saved|Finished saving' \
+  "$artifact_root"/*/logs-*/latest.log
+rg -n 'Render target settings for colortex0:' "$artifact_root"/neutral-*/logs-*/debug.log

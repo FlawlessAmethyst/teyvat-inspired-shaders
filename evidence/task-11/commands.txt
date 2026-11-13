@@ -1,0 +1,119 @@
+# Run from the repository root. Retain artifacts/task-11 as the source snapshot.
+# Commands invoking the desktop toolkit or session.sh use the scoped
+# execution boundary in docs/minecraft-environment.md.
+source_root=artifacts/task-11
+root=artifacts/task-11-repeat
+mc_dir=$(python3 -c 'import sys; sys.path.insert(0,"tools"); import minecraft; print(minecraft.GAME)')
+mkdir -p "$root"/variants/{neutral,graded,diagnostic}
+cp -a "$source_root/variants/neutral/shaders" "$root/variants/neutral/"
+cp -a "$source_root/variants/graded/shaders" "$root/variants/graded/"
+sed "s|shaderpack/shaders/|$root/variants/neutral/shaders/|" evidence/task-10/pack.sha256 | sha256sum -c -
+sed "s|shaderpack/shaders/|$root/variants/graded/shaders/|" evidence/task-11/pack.sha256 | sha256sum -c -
+cp -a "$root/variants/graded/shaders" "$root/variants/diagnostic/"
+cp evidence/task-11/diagnostic.fsh "$root/variants/diagnostic/shaders/final.fsh"
+diff -rq scripts/scenes/data "$mc_dir/saves/TASK-03 Visual Scenes/datapacks/task03/data"
+python3 evidence/task-11/configure.py --artifacts-dir "$root" prepare
+python3 evidence/task-11/configure.py --artifacts-dir "$root" neutral
+dest="$root/neutral-01"
+python3 tools/minecraft.py --artifacts-dir "$dest" launch --timeout 120
+python3 tools/minecraft.py screenshot "$dest/title.png"
+python3 tools/minecraft.py click 1280 535
+python3 tools/minecraft.py screenshot "$dest/world-list.png"
+# Repeat the title click after loading if required. Inspect world-list.png
+# and verify the first row is TASK-03 Visual Scenes before entering.
+python3 tools/minecraft.py click 1200 195
+python3 tools/minecraft.py click 1050 1315
+sleep 8
+python3 scripts/scenes.py profile "$dest/runs" daylight forest cave
+for scene in daylight forest sunset night cave; do
+  python3 scripts/scenes.py capture "$scene" "$dest/$scene"
+done
+python3 tools/minecraft.py stop --timeout 60
+python3 tools/minecraft.py --artifacts-dir "$dest" logs
+
+# Stage a temporary slot 9 trigger in the stopped TASK-03 world. Keep the
+# original build trigger in the repository and restore it after graded-01.
+scene_functions="$mc_dir/saves/TASK-03 Visual Scenes/datapacks/task03/data/task03/function"
+cmp scripts/scenes/data/task03/function/slot8.mcfunction "$scene_functions/slot8.mcfunction"
+test ! -e "$scene_functions/snow_show.mcfunction"
+test ! -e "$scene_functions/snow_hide.mcfunction"
+cp evidence/task-11/snow-functions/*.mcfunction "$scene_functions/"
+bash evidence/task-11/session.sh "$root" graded-01
+# Verify TASK11_SNOW_PLACED_24_6 and TASK11_SNOW_REMOVED_24_6 in the log.
+cmp evidence/task-11/snow-functions/slot8.mcfunction "$scene_functions/slot8.mcfunction"
+cmp evidence/task-11/snow-functions/snow_show.mcfunction "$scene_functions/snow_show.mcfunction"
+cmp evidence/task-11/snow-functions/snow_hide.mcfunction "$scene_functions/snow_hide.mcfunction"
+cp scripts/scenes/data/task03/function/slot8.mcfunction "$scene_functions/"
+rm "$scene_functions/snow_show.mcfunction" "$scene_functions/snow_hide.mcfunction"
+diff -rq scripts/scenes/data "$mc_dir/saves/TASK-03 Visual Scenes/datapacks/task03/data"
+
+for batch in graded-02 neutral-02 diagnostic; do
+  bash evidence/task-11/session.sh "$root" "$batch" || break
+done
+
+# Verify installed copies, stop, restore and analyze.
+for variant in neutral graded diagnostic; do
+  diff -rq "$root/variants/$variant/shaders" "$mc_dir/shaderpacks/TASK-11-$variant/shaders"
+done
+diff -rq "$source_root/variants/graded/shaders" "$root/variants/graded/shaders"
+python3 evidence/task-11/configure.py --artifacts-dir "$root" restore
+python3 evidence/task-11/summarize.py --artifacts-dir "$root" > "$root/runs.csv"
+python3 evidence/task-11/check_ramp.py "$root/diagnostic/ramp/native.png"
+python3 -m unittest discover -s scripts
+python3 -m py_compile evidence/task-11/*.py
+bash -n evidence/task-11/session.sh
+sed "s|shaderpack/shaders/|$root/variants/graded/shaders/|" evidence/task-11/pack.sha256 | sha256sum -c -
+rg -n 'Using shaderpack: TASK-11-|Creating pipeline|TASK03_READY_|Stopped tick profiling|TASK11_SNOW_|All dimensions are saved|Finished saving' "$root"/*/logs-*/latest.log
+rg -n 'Render target settings for colortex0:' "$root"/*/logs-*/debug.log
+
+# Expand Iris includes before standalone GLSL compilation and linking.
+python3 - "$root" <<'PY'
+from pathlib import Path
+import re
+import subprocess
+import sys
+from tempfile import TemporaryDirectory
+
+def expand(path, shaders):
+    return re.sub(r'^#include "/([^"]+)"$', lambda match: expand(shaders / match[1], shaders),
+                  path.read_text(), flags=re.MULTILINE)
+
+with TemporaryDirectory(prefix="task-11-glsl-") as temp:
+    shipped = Path(sys.argv[1]) / "variants/graded/shaders"
+    diagnostic = Path(sys.argv[1]) / "variants/diagnostic/shaders"
+    fragments = sorted(shipped.glob("*.fsh")) + [diagnostic / "final.fsh"]
+    for fragment in fragments:
+        vertex = fragment.with_suffix(".vsh")
+        vert = Path(temp) / (vertex.stem + ".vert")
+        frag = Path(temp) / (fragment.stem + ".frag")
+        vert.write_text(expand(vertex, vertex.parent))
+        frag.write_text(expand(fragment, fragment.parent))
+        subprocess.run(["glslangValidator", "-l", vert, frag], check=True)
+        print(f"PASS {fragment.parent}/{fragment.stem}")
+PY
+
+# Labeled overview from the original 2560x1440 F2 captures.
+for scene in daylight forest sunset night cave; do
+  magick montage -font DejaVu-Sans -pointsize 18 \
+    -label "$scene - neutral" "$root/neutral-01/$scene/native.png" \
+    -label "$scene - graded" "$root/graded-01/$scene/native.png" \
+    -thumbnail 640x360 -tile 2x1 -geometry +4+4 "$root/$scene-row.png"
+done
+magick "$root"/{daylight,forest,sunset,night,cave}-row.png -append -quality 92 "$root/comparison.jpg"
+
+# Record output endpoint counts on the F2 images, in R/G/B order.
+python3 - "$root" <<'PY'
+from pathlib import Path
+import subprocess
+import sys
+import numpy as np
+
+root = Path(sys.argv[1])
+for scene in ('daylight', 'forest', 'sunset', 'night', 'cave'):
+    for batch in ('neutral-01', 'graded-01'):
+        image = root / batch / scene / 'native.png'
+        raw = subprocess.check_output(['magick', image, '-alpha', 'off', '-depth', '8', 'rgb:-'])
+        rgb = np.frombuffer(raw, dtype=np.uint8).reshape(-1, 3)
+        print(scene, batch, 'zero', np.sum(rgb == 0, axis=0).tolist(),
+              '255', np.sum(rgb == 255, axis=0).tolist())
+PY

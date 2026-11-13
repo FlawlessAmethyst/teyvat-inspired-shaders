@@ -1,0 +1,259 @@
+{
+  "accessed": "2026-11-12",
+  "repositories": {
+    "iris": {
+      "url": "https://github.com/IrisShaders/Iris",
+      "revision": "12ea3bf16b39c0a70ec31dc9de1483c77bd3ccc3",
+      "local_path": "artifacts/task-06/iris-source"
+    },
+    "docs": {
+      "url": "https://github.com/IrisShaders/DocsPage",
+      "revision": "98f84cbe456e7e367afe788885869be46681be8c",
+      "local_path": "artifacts/task-06/iris-docs"
+    }
+  },
+  "files": [
+    {
+      "repository": "docs",
+      "path": "src/content/docs/current/Reference/Programs/gbuffers.mdx",
+      "sha256": "9f4db9a92d537812358722eee5dbb07bf85a63dde8935d8a5caef200810a9b3b",
+      "url": "https://github.com/IrisShaders/DocsPage/blob/98f84cbe456e7e367afe788885869be46681be8c/src/content/docs/current/Reference/Programs/gbuffers.mdx"
+    },
+    {
+      "repository": "docs",
+      "path": "src/content/docs/current/Reference/Programs/shadow.mdx",
+      "sha256": "82a6ce3f525164ec2187a4b7a0aa0cd8430430aad6b448f504d53b6336f27a22",
+      "url": "https://github.com/IrisShaders/DocsPage/blob/98f84cbe456e7e367afe788885869be46681be8c/src/content/docs/current/Reference/Programs/shadow.mdx"
+    },
+    {
+      "repository": "docs",
+      "path": "src/content/docs/current/Reference/Programs/deferred.mdx",
+      "sha256": "3d54651e4b7f176c5dc882fde67bfce329a906a0eaa9e1f217a64d96fca89ca5",
+      "url": "https://github.com/IrisShaders/DocsPage/blob/98f84cbe456e7e367afe788885869be46681be8c/src/content/docs/current/Reference/Programs/deferred.mdx"
+    },
+    {
+      "repository": "docs",
+      "path": "src/content/docs/current/Reference/Programs/composite.mdx",
+      "sha256": "5f63ec2e3ba0831a22f122076e58e7a4774e385a588b28af03229a0b862d57cc",
+      "url": "https://github.com/IrisShaders/DocsPage/blob/98f84cbe456e7e367afe788885869be46681be8c/src/content/docs/current/Reference/Programs/composite.mdx"
+    },
+    {
+      "repository": "docs",
+      "path": "src/content/docs/current/Reference/Programs/final.mdx",
+      "sha256": "b2c949398238ae36eb6aaca12d4641d65c119db13c6596d02f1ef981d76fc04e",
+      "url": "https://github.com/IrisShaders/DocsPage/blob/98f84cbe456e7e367afe788885869be46681be8c/src/content/docs/current/Reference/Programs/final.mdx"
+    },
+    {
+      "repository": "docs",
+      "path": "src/content/docs/current/Reference/Buffers/colortex.mdx",
+      "sha256": "8f809e9f01056d419fcc5de716188902f6edd93e74d55240df243213920397fc",
+      "url": "https://github.com/IrisShaders/DocsPage/blob/98f84cbe456e7e367afe788885869be46681be8c/src/content/docs/current/Reference/Buffers/colortex.mdx"
+    },
+    {
+      "repository": "docs",
+      "path": "src/content/docs/current/Reference/Buffers/depthtex.mdx",
+      "sha256": "c886bcc5747d52fdcd1f2ba3e11af8c0816d57f18591c3406620aabf0fc893fe",
+      "url": "https://github.com/IrisShaders/DocsPage/blob/98f84cbe456e7e367afe788885869be46681be8c/src/content/docs/current/Reference/Buffers/depthtex.mdx"
+    },
+    {
+      "repository": "docs",
+      "path": "src/content/docs/current/Reference/Buffers/shadowtex.mdx",
+      "sha256": "cab37cb45fce53b4367100857266929b6947bc386ea538c6d3e439722d6782e0",
+      "url": "https://github.com/IrisShaders/DocsPage/blob/98f84cbe456e7e367afe788885869be46681be8c/src/content/docs/current/Reference/Buffers/shadowtex.mdx"
+    },
+    {
+      "repository": "docs",
+      "path": "src/content/docs/current/Reference/Buffers/atlases.mdx",
+      "sha256": "b6744dd71950e64f2f923aa67d11d10d00626fbb90c51e98c6aa551278da6d57",
+      "url": "https://github.com/IrisShaders/DocsPage/blob/98f84cbe456e7e367afe788885869be46681be8c/src/content/docs/current/Reference/Buffers/atlases.mdx"
+    },
+    {
+      "repository": "docs",
+      "path": "src/content/docs/current/Reference/Attributes/gl_Color.mdx",
+      "sha256": "3442cb6ddcd14a448ba53d0431629ed5bb18097e6543a33061c486b7bfcf0503",
+      "url": "https://github.com/IrisShaders/DocsPage/blob/98f84cbe456e7e367afe788885869be46681be8c/src/content/docs/current/Reference/Attributes/gl_Color.mdx"
+    },
+    {
+      "repository": "docs",
+      "path": "src/content/docs/current/Reference/Attributes/gl_MultiTexCoord1.mdx",
+      "sha256": "d1550729a39523dd9b610c3b0a2780a9eb8230b5361c3c74561f9f7c031790b0",
+      "url": "https://github.com/IrisShaders/DocsPage/blob/98f84cbe456e7e367afe788885869be46681be8c/src/content/docs/current/Reference/Attributes/gl_MultiTexCoord1.mdx"
+    },
+    {
+      "repository": "docs",
+      "path": "src/content/docs/current/Reference/Attributes/mc_Entity.mdx",
+      "sha256": "4bb5863f4bb5a7a0b18670485854404add1ca835f2bbc85c3dbcfcfe63b8a218",
+      "url": "https://github.com/IrisShaders/DocsPage/blob/98f84cbe456e7e367afe788885869be46681be8c/src/content/docs/current/Reference/Attributes/mc_Entity.mdx"
+    },
+    {
+      "repository": "docs",
+      "path": "src/content/docs/current/Reference/Attributes/at_midBlock.mdx",
+      "sha256": "d32b2c26a81d585c2030be7c8b7330365821fc012d1b93f20e75ebe8cc813336",
+      "url": "https://github.com/IrisShaders/DocsPage/blob/98f84cbe456e7e367afe788885869be46681be8c/src/content/docs/current/Reference/Attributes/at_midBlock.mdx"
+    },
+    {
+      "repository": "docs",
+      "path": "src/content/docs/current/Reference/Uniforms/world.mdx",
+      "sha256": "1788c1de3b3cad0ee2444f29e01c4164d70d40a6415ce7ffd76dabd36d28c6bb",
+      "url": "https://github.com/IrisShaders/DocsPage/blob/98f84cbe456e7e367afe788885869be46681be8c/src/content/docs/current/Reference/Uniforms/world.mdx"
+    },
+    {
+      "repository": "docs",
+      "path": "src/content/docs/current/Reference/Uniforms/biome.mdx",
+      "sha256": "f580f1ec34f5f3e69296fd7c16ec4d4da14f4afe26464c73c6211742bafe771c",
+      "url": "https://github.com/IrisShaders/DocsPage/blob/98f84cbe456e7e367afe788885869be46681be8c/src/content/docs/current/Reference/Uniforms/biome.mdx"
+    },
+    {
+      "repository": "docs",
+      "path": "src/content/docs/current/Reference/Uniforms/matrices.mdx",
+      "sha256": "d4a7c3066b8e2a00642d0fd38d228e59c60be3e26fd44a0e34aefdcac3bcd318",
+      "url": "https://github.com/IrisShaders/DocsPage/blob/98f84cbe456e7e367afe788885869be46681be8c/src/content/docs/current/Reference/Uniforms/matrices.mdx"
+    },
+    {
+      "repository": "docs",
+      "path": "src/content/docs/current/Reference/Uniforms/camera.mdx",
+      "sha256": "8789181119af6650539b5a7a61f41f79e2fb810f533a7a0462bf6ef3bbe12fb0",
+      "url": "https://github.com/IrisShaders/DocsPage/blob/98f84cbe456e7e367afe788885869be46681be8c/src/content/docs/current/Reference/Uniforms/camera.mdx"
+    },
+    {
+      "repository": "docs",
+      "path": "src/content/docs/current/Reference/Uniforms/system.mdx",
+      "sha256": "107ac3119a559208efe099454df5c51ca18f8187b37e7bac905df41342e92e25",
+      "url": "https://github.com/IrisShaders/DocsPage/blob/98f84cbe456e7e367afe788885869be46681be8c/src/content/docs/current/Reference/Uniforms/system.mdx"
+    },
+    {
+      "repository": "docs",
+      "path": "src/content/docs/current/Reference/Miscellaneous/block_properties.mdx",
+      "sha256": "9f042b3ea422f0780cdb27a87940d479174f163b6b9e9a3084eaa752de8fb6fa",
+      "url": "https://github.com/IrisShaders/DocsPage/blob/98f84cbe456e7e367afe788885869be46681be8c/src/content/docs/current/Reference/Miscellaneous/block_properties.mdx"
+    },
+    {
+      "repository": "docs",
+      "path": "src/content/docs/current/Reference/Miscellaneous/dimension_properties.mdx",
+      "sha256": "8ed20888a28ec10aac3f19570960034364b47cbd74344fb7119282ce9a84188f",
+      "url": "https://github.com/IrisShaders/DocsPage/blob/98f84cbe456e7e367afe788885869be46681be8c/src/content/docs/current/Reference/Miscellaneous/dimension_properties.mdx"
+    },
+    {
+      "repository": "docs",
+      "path": "src/content/docs/current/Reference/Miscellaneous/include.mdx",
+      "sha256": "b901572a90ea27fd193c6ce6baf0abaf9e49e396ef70b4c924f373bd0696f63d",
+      "url": "https://github.com/IrisShaders/DocsPage/blob/98f84cbe456e7e367afe788885869be46681be8c/src/content/docs/current/Reference/Miscellaneous/include.mdx"
+    },
+    {
+      "repository": "docs",
+      "path": "src/content/docs/current/Reference/Shaders.Properties/features.mdx",
+      "sha256": "1ecf92aa699017cb1150335987eeacd11c230f8153f0863acadf591d29639546",
+      "url": "https://github.com/IrisShaders/DocsPage/blob/98f84cbe456e7e367afe788885869be46681be8c/src/content/docs/current/Reference/Shaders.Properties/features.mdx"
+    },
+    {
+      "repository": "docs",
+      "path": "src/content/docs/current/How To/compatibility_vs_core.mdx",
+      "sha256": "10291722c51d90aa13877c0616d3eaf3a63553275225532f72b28aa3a1d49531",
+      "url": "https://github.com/IrisShaders/DocsPage/blob/98f84cbe456e7e367afe788885869be46681be8c/src/content/docs/current/How%20To/compatibility_vs_core.mdx"
+    },
+    {
+      "repository": "iris",
+      "path": "common/src/main/java/net/irisshaders/iris/pipeline/IrisRenderingPipeline.java",
+      "sha256": "8162798a136954742685f20c2dcbcda120693481e0e75ed67ca9a6597f5e7d7a",
+      "url": "https://github.com/IrisShaders/Iris/blob/12ea3bf16b39c0a70ec31dc9de1483c77bd3ccc3/common/src/main/java/net/irisshaders/iris/pipeline/IrisRenderingPipeline.java"
+    },
+    {
+      "repository": "iris",
+      "path": "common/src/main/java/net/irisshaders/iris/samplers/IrisSamplers.java",
+      "sha256": "6ad3e0e1e603145dd9381cd19572dd5aed1bf1536b7e82a47aaf74c3817793cd",
+      "url": "https://github.com/IrisShaders/Iris/blob/12ea3bf16b39c0a70ec31dc9de1483c77bd3ccc3/common/src/main/java/net/irisshaders/iris/samplers/IrisSamplers.java"
+    },
+    {
+      "repository": "iris",
+      "path": "common/src/main/java/net/irisshaders/iris/uniforms/CommonUniforms.java",
+      "sha256": "6572ebe304bf1e72f72070a6cb96932cd1762bca8b5cd594585e462e03416fd1",
+      "url": "https://github.com/IrisShaders/Iris/blob/12ea3bf16b39c0a70ec31dc9de1483c77bd3ccc3/common/src/main/java/net/irisshaders/iris/uniforms/CommonUniforms.java"
+    },
+    {
+      "repository": "iris",
+      "path": "common/src/main/java/net/irisshaders/iris/uniforms/IrisExclusiveUniforms.java",
+      "sha256": "ba499a8c8a27819724df1ac1dd4f95fb0e96d766d7df20ed144650a3c789d20d",
+      "url": "https://github.com/IrisShaders/Iris/blob/12ea3bf16b39c0a70ec31dc9de1483c77bd3ccc3/common/src/main/java/net/irisshaders/iris/uniforms/IrisExclusiveUniforms.java"
+    },
+    {
+      "repository": "iris",
+      "path": "common/src/main/java/net/irisshaders/iris/uniforms/WorldTimeUniforms.java",
+      "sha256": "c100a90ef1d8c2833c848a1d3f05decf862288d8cd9430613272b221cbce7a09",
+      "url": "https://github.com/IrisShaders/Iris/blob/12ea3bf16b39c0a70ec31dc9de1483c77bd3ccc3/common/src/main/java/net/irisshaders/iris/uniforms/WorldTimeUniforms.java"
+    },
+    {
+      "repository": "iris",
+      "path": "common/src/main/java/net/irisshaders/iris/uniforms/MatrixUniforms.java",
+      "sha256": "e101dd295834f76f3e331d1bf6e1faf9bbc9298b378d9fb1678e31ebcccaeedc",
+      "url": "https://github.com/IrisShaders/Iris/blob/12ea3bf16b39c0a70ec31dc9de1483c77bd3ccc3/common/src/main/java/net/irisshaders/iris/uniforms/MatrixUniforms.java"
+    },
+    {
+      "repository": "iris",
+      "path": "common/src/main/java/net/irisshaders/iris/uniforms/CelestialUniforms.java",
+      "sha256": "d43cd6039f75286d99e3ac47128cdc397154ba14f85dbbc0bdc629a0a548901d",
+      "url": "https://github.com/IrisShaders/Iris/blob/12ea3bf16b39c0a70ec31dc9de1483c77bd3ccc3/common/src/main/java/net/irisshaders/iris/uniforms/CelestialUniforms.java"
+    },
+    {
+      "repository": "iris",
+      "path": "common/src/main/java/net/irisshaders/iris/shaderpack/ShaderPack.java",
+      "sha256": "841bc14dc18917f2f5fd4a8db04a6fc55268b53e2f16aebd75b1b608c8e0f313",
+      "url": "https://github.com/IrisShaders/Iris/blob/12ea3bf16b39c0a70ec31dc9de1483c77bd3ccc3/common/src/main/java/net/irisshaders/iris/shaderpack/ShaderPack.java"
+    },
+    {
+      "repository": "iris",
+      "path": "common/src/main/java/net/irisshaders/iris/pipeline/programs/SodiumPrograms.java",
+      "sha256": "d2c34474b9911aae84efa2ff1a2e0a9624fec74e0c71cfa0401d041f03c528e8",
+      "url": "https://github.com/IrisShaders/Iris/blob/12ea3bf16b39c0a70ec31dc9de1483c77bd3ccc3/common/src/main/java/net/irisshaders/iris/pipeline/programs/SodiumPrograms.java"
+    },
+    {
+      "repository": "iris",
+      "path": "common/src/main/java/net/irisshaders/iris/pipeline/transform/transformer/SodiumTransformer.java",
+      "sha256": "7e7653869739e15ace9da2fddb30a366a93e6263aa6e73045e54bf890bf55971",
+      "url": "https://github.com/IrisShaders/Iris/blob/12ea3bf16b39c0a70ec31dc9de1483c77bd3ccc3/common/src/main/java/net/irisshaders/iris/pipeline/transform/transformer/SodiumTransformer.java"
+    },
+    {
+      "repository": "iris",
+      "path": "common/src/main/java/net/irisshaders/iris/pathways/colorspace/ColorSpaceFragmentConverter.java",
+      "sha256": "10389d0e868d2835b5ba3c6778e322251e3e52efd15636634b4315474d9182a3",
+      "url": "https://github.com/IrisShaders/Iris/blob/12ea3bf16b39c0a70ec31dc9de1483c77bd3ccc3/common/src/main/java/net/irisshaders/iris/pathways/colorspace/ColorSpaceFragmentConverter.java"
+    },
+    {
+      "repository": "iris",
+      "path": "common/src/main/java/net/irisshaders/iris/pathways/colorspace/ColorSpaceComputeConverter.java",
+      "sha256": "f7bda2028f79ac7ad5e643c1fbc30fcb1bf3c3adeac1d887e64f4cf968875d04",
+      "url": "https://github.com/IrisShaders/Iris/blob/12ea3bf16b39c0a70ec31dc9de1483c77bd3ccc3/common/src/main/java/net/irisshaders/iris/pathways/colorspace/ColorSpaceComputeConverter.java"
+    }
+  ],
+  "installed_jar": {
+    "path": "~/.var/app/org.prismlauncher.PrismLauncher/data/PrismLauncher/instances/GenshinShaderDev/minecraft/mods/iris-neoforge-1.8.14-beta.1+mc1.21.1.jar",
+    "sha256": "60d5f8bf52f25e9986440f4a4270a6bd986d9cff994510e1108ac1547063b314",
+    "metadata": "modLoader = \"javafml\"\nloaderVersion = \"*\"\nlicense = \"LGPL-3.0-only\"\n\n[[mods]]\nmodId = \"iris\"\n\nversion = \"1.8.14-beta.1+mc1.21.1\"\ndisplayName = \"Iris\"\n\nlogoFile = \"iris-logo.png\" #optional\n\nauthors = \"coderbot, IMS212\"\n\ndescription = '''\nIris is a modern shaders mod for Minecraft intended to be compatible with existing OptiFine shader packs.\n'''\n\n[[dependencies.iris]]\nmodId = \"minecraft\"\ntype = \"required\"\nversionRange = \"[1.21,1.21.1)\"\nordering = \"NONE\"\nside = \"CLIENT\"\n\n[[mixins]]\nconfig = \"mixins.iris.json\"\n\n[[mixins]]\nconfig = \"mixins.iris.fantastic.json\"\n\n[[mixins]]\nconfig = \"mixins.iris.vertexformat.json\"\n\n[[mixins]]\nconfig = \"iris-batched-entity-rendering.mixins.json\"\n\n[[mixins]]\nconfig = \"mixins.iris.compat.sodium.json\"\n\n[[mixins]]\nconfig = \"mixins.iris.compat.dh.json\"\n\n[[mixins]]\nconfig = \"mixins.iris.forge.json\"\n\n[mods.\"sodium:options\"]\n\"mixin.features.render.world.sky\" = false\n\n[[dependencies.iris]]\nmodId = \"embeddium\"\ntype = \"incompatible\"\nreason = \"Iris and Embeddium cannot be used together. Please use Sodium 0.8 instead.\"\nversionRange = \"[0.0.1,)\"\nordering = \"NONE\"\nside = \"CLIENT\"\n\n[modproperties.iris]\n\"sodium:config_api_user\" = \"net.irisshaders.iris.compat.sodium.config.IrisConfig\"\n",
+    "constant_pool_presence_only": {
+      "uniforms/CommonUniforms": {
+        "rainStrength": true,
+        "wetness": true,
+        "isEyeInWater": true
+      },
+      "uniforms/MatrixUniforms": {
+        "gbufferProjectionInverse": false,
+        "shadowModelView": false
+      },
+      "samplers/IrisSamplers": {
+        "depthtex1": true,
+        "shadowtex0": true
+      },
+      "pipeline/IrisRenderingPipeline": {
+        "copyPreTranslucentDepth": true,
+        "beginTranslucents": true
+      },
+      "pipeline/programs/SodiumPrograms": {
+        "at_midBlock": true,
+        "mc_Entity": true
+      },
+      "shaderpack/ShaderPack": {
+        "dimension.properties": true
+      }
+    }
+  },
+  "limits": "Branch revision is not proven to build the installed beta. Class byte strings establish names only, not semantics or runtime results."
+}

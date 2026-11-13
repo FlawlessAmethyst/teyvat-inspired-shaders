@@ -1,0 +1,17 @@
+Working directory: the repository root
+
+python3 scripts/sample_references.py > evidence/task-04/sampling.txt 2>&1
+python3 scripts/verify_references.py > evidence/task-04/verification.txt
+python3 scripts/index_references.py
+python3 -m py_compile scripts/sample_references.py scripts/verify_references.py scripts/index_references.py
+
+Initial standalone settings-sheet command (now included in sample_references.py):
+magick montage references/pictures/settings_screen/*.jpg -set label '%f' -font DejaVu-Sans -pointsize 18 -label '%f' -geometry 480x270+4+4 -tile 3x -background '#303030' -fill white artifacts/task-04/settings-contact.jpg
+
+Exact per-video FFmpeg arguments: extraction_commands.json.
+FFprobe probe and decoded timestamp enumeration arguments: scripts/sample_references.py.
+Visual inspection: all video-01 through video-11/contact.jpg; settings-contact.jpg;
+full-resolution settings 12.jpg and 13.jpg; video-02/frame-010.png (rain check).
+
+Final rerun of sample_references.py validates per-video caches and regenerates sheets.
+Final verifier also checks scene-note coverage and generated Markdown local links.

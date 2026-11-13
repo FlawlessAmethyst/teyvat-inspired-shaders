@@ -1,0 +1,28 @@
+# Run from the repository root. Use a fresh directory under artifacts/.
+# Start with GenshinShaderDev idle. Keep the TASK-25 fog-tuning artifact tree.
+# The two rounds and the offscreen timers require scoped host access.
+set -euo pipefail
+root=${1:-artifacts/task-26-replay}
+(cd artifacts/task-25-fog-tuning/shaders &&
+    sed 's|  shaderpack/shaders/|  |' ../../../evidence/task-25/fog-pack.sha256 | sha256sum --quiet -c -)
+python3 evidence/task-26/replay.py prepare "$root"
+for variant in "$root"/variants/*; do
+    python3 evidence/task-22/link_shaders.py "$variant/shaders" > "$variant/static-link.txt" 2>&1
+    test "$(rg -c '^PASS ' "$variant/static-link.txt")" = 13
+done
+
+bash evidence/task-26/matrix.sh "$root" 01
+bash evidence/task-26/matrix.sh "$root" 02
+python3 evidence/task-26/replay.py restore "$root"
+bash evidence/task-26/verify_state.sh "$root"
+bash evidence/task-26/gpu.sh "$root"
+
+python3 evidence/task-26/review.py "$root" > "$root/runs.csv"
+python3 evidence/task-26/compare.py "$root/runs.csv" --sheets-from "$root" > "$root/effect-deltas.csv"
+python3 evidence/task-26/summarize_gpu.py "$root/gpu" > "$root/gpu-summary.csv"
+python3 -m unittest discover -s scripts -p 'test_*.py' -v
+python3 -m py_compile evidence/task-26/*.py
+for script in evidence/task-26/*.sh evidence/task-26/commands.txt; do
+    bash -n "$script"
+done
+python3 scripts/verify_references.py

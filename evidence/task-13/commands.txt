@@ -1,0 +1,99 @@
+# Run from the repository root with GenshinShaderDev stopped.
+# Use the scoped desktop execution in docs/minecraft-environment.md for
+# session.sh. Run the four sessions serially. This replay uses a fresh root.
+set -euo pipefail
+root=artifacts/task-13-repeat
+test ! -e "$root"
+mc_dir=$(python3 -c 'import sys; sys.path.insert(0, "tools"); import minecraft; print(minecraft.GAME)')
+scene_pack="$mc_dir/saves/TASK-03 Visual Scenes/datapacks/task03"
+diff -rq scripts/scenes/data "$scene_pack/data"
+cmp scripts/scenes/pack.mcmeta "$scene_pack/pack.mcmeta"
+
+mkdir -p "$root/variants/"{sunlight,ambient}
+cp -a artifacts/task-12/variants/sunlight/shaders "$root/variants/sunlight/"
+cp -a artifacts/task-13/variants/ambient/shaders "$root/variants/ambient/"
+sed "s|shaderpack/shaders/|$root/variants/sunlight/shaders/|" evidence/task-12/pack.sha256 | sha256sum -c -
+sed "s|shaderpack/shaders/|$root/variants/ambient/shaders/|" evidence/task-13/pack.sha256 | sha256sum -c -
+python3 evidence/task-12/check_glsl.py "$root/variants/ambient/shaders"
+python3 evidence/task-13/configure.py prepare "$root"
+
+for batch in sunlight-01 ambient-01 ambient-02 sunlight-02; do
+    bash evidence/task-13/session.sh "$root" "$batch"
+done
+
+for variant in sunlight ambient; do
+    diff -rq "$root/variants/$variant/shaders" "$mc_dir/shaderpacks/TASK-13-$variant/shaders"
+done
+python3 evidence/task-13/configure.py restore "$root"
+diff -rq scripts/scenes/data "$scene_pack/data"
+cmp scripts/scenes/pack.mcmeta "$scene_pack/pack.mcmeta"
+test ! -e "$mc_dir/shaderpacks/TASK-13-sunlight"
+test ! -e "$mc_dir/shaderpacks/TASK-13-ambient"
+python3 - <<'PY'
+import sys
+sys.path[:0] = ['tools', 'scripts']
+import minecraft as mc
+import scenes
+assert not mc.game_pids()
+try:
+    scenes.require_scene_world()
+except RuntimeError:
+    print('PASS dedicated world lock released')
+else:
+    raise AssertionError('Dedicated world still open')
+PY
+
+# On a failed session, inspect its screen and latest.log. Use the scoped
+# tools/minecraft.py stop and logs before retrying or restoring. Move the
+# incomplete batch out of the replay matrix so its evidence is preserved.
+
+python3 evidence/task-13/index_runs.py --artifacts-dir "$root" > "$root/runs.csv"
+python3 evidence/task-13/sample_pixels.py "$root" > "$root/pixels.csv"
+python3 -m unittest discover -s scripts
+python3 -m py_compile evidence/task-13/*.py
+bash -n evidence/task-13/session.sh
+bash -n evidence/task-13/commands.txt
+python3 evidence/task-12/index_runs.py --artifacts-dir artifacts/task-12 | cmp - evidence/task-12/runs.csv
+rg -n 'Using shaderpack: TASK-13-|Creating pipeline|TASK03_READY_|Stopped tick profiling|All dimensions are saved' "$root"/*/logs-*/latest.log
+rg -n 'Render target settings for colortex0:' "$root"/*/logs-*/debug.log
+
+for batch in sunlight-01 ambient-01 ambient-02 sunlight-02; do
+    latest=("$root/$batch"/logs-*/latest.log)
+    debug=("$root/$batch"/logs-*/debug.log)
+    test "${#latest[@]}" -eq 1
+    test "$(rg -c 'Stopped tick profiling' "${latest[0]}")" -eq 3
+    rg -qF "Using shaderpack: TASK-13-${batch%%-*}" "${latest[0]}"
+    rg -qF 'Creating pipeline for dimension minecraft:overworld' "${latest[0]}"
+    rg -qF 'All dimensions are saved' "${latest[0]}"
+    rg -q 'Render target settings for colortex0: .*requestedFormat=RGBA16F, clear=true' "${debug[0]}"
+    if rg -ni 'TASK03_READY_build|ShaderCompileException|ProgramLinkException|(failed|could not) to (compile|link) shader|failed to create .*pipeline|falling back to vanilla shading' "${latest[0]}"; then
+        exit 1
+    fi
+done
+
+for scene in daylight sunset forest cave night; do
+    for file in preset.json options.txt sodium-options.json sodium-extra-options.json dynamic_fps.json; do
+        cmp "$root/sunlight-01/$scene/$file" "$root/ambient-01/$scene/$file"
+    done
+    magick montage -font DejaVu-Sans -pointsize 20 \
+        -label "$scene - sunlight" "$root/sunlight-01/$scene/native.png" \
+        -label "$scene - ambient" "$root/ambient-01/$scene/native.png" \
+        -thumbnail 720x405 -tile 2x1 -geometry +4+4 "$root/$scene-row.png"
+done
+magick "$root"/{daylight,sunset,forest,cave,night}-row.png -append -quality 94 "$root/comparison.jpg"
+magick montage -font DejaVu-Sans -pointsize 20 \
+    -label R2 artifacts/task-04/video-06/frame-001.png \
+    -label R6 artifacts/task-04/video-09/frame-013.png \
+    -label R8 artifacts/task-04/video-11/frame-004.png \
+    -thumbnail 560x315 -tile 3x1 -geometry +4+4 "$root/reference-strip.jpg"
+
+# Check how much the lantern-floor sample varies within one pack.
+PYTHONPATH=evidence/task-12 python3 - "$root" <<'PY'
+from pathlib import Path
+import sys
+from sample_pixels import sample
+
+run = Path(sys.argv[1]) / 'ambient-01/runs/cave/recording'
+for frame in ('before.png', 'after.png'):
+    print(frame, sample(run / frame, '90x40+1840+820'))
+PY

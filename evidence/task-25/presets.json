@@ -1,0 +1,10 @@
+{
+  "valley": {"position": [-126.5, 90, -49.5], "yaw": -90, "pitch": 4, "time": 6000, "weather": "clear"},
+  "rain": {"position": [-126.5, 90, -49.5], "yaw": -90, "pitch": 4, "time": 6000, "weather": "rain"},
+  "ridges": {"position": [1004.5, 184, 1100.5], "yaw": 90, "pitch": 2, "time": 6000, "weather": "clear"},
+  "dusk": {"position": [1000.5, 184, 1000.5], "yaw": 90, "pitch": 2, "time": 12000, "weather": "clear"},
+  "grove": {"position": [1018.5, 184, 1005.5], "yaw": 180, "pitch": 5, "time": 6000, "weather": "clear"},
+  "shallows": {"position": [1006.5, 183, 1037.5], "yaw": -90, "pitch": 12, "time": 6000, "weather": "clear"},
+  "night": {"position": [1000.5, 184, 1036.5], "yaw": 180, "pitch": 8, "time": 18000, "weather": "clear"},
+  "cave": {"position": [970.5, 184, 1027.5], "yaw": 0, "pitch": 3, "time": 6000, "weather": "clear"}
+}

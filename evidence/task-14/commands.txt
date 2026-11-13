@@ -1,0 +1,136 @@
+# Run from the repository root with the dedicated GenshinShaderDev instance stopped.
+# The session.sh calls require scoped desktop execution per
+# docs/minecraft-environment.md. Preserve the original TASK-10 through TASK-14 artifacts.
+set -euo pipefail
+root=${1:-artifacts/task-14-repeat}
+test ! -e "$root"
+mc_dir=$(python3 -c 'import sys; sys.path.insert(0, "tools"); import minecraft; print(minecraft.GAME)')
+scene_pack="$mc_dir/saves/TASK-03 Visual Scenes/datapacks/task03"
+diff -rq scripts/scenes/data "$scene_pack/data"
+cmp scripts/scenes/pack.mcmeta "$scene_pack/pack.mcmeta"
+
+mkdir -p "$root/variants/"{ambient,sky}
+cp -a artifacts/task-13/variants/ambient/shaders "$root/variants/ambient/"
+cp -a shaderpack/shaders "$root/variants/sky/"
+sed "s|shaderpack/shaders/|$root/variants/ambient/shaders/|" evidence/task-13/pack.sha256 | sha256sum -c -
+sed "s|shaderpack/shaders/|$root/variants/sky/shaders/|" evidence/task-14/pack.sha256 | sha256sum -c -
+python3 - "$root" <<'PY'
+from pathlib import Path
+from tempfile import TemporaryDirectory
+import subprocess
+import sys
+sys.path.insert(0, 'evidence/task-12')
+from check_glsl import expand
+
+source = Path(sys.argv[1]) / 'variants/sky/shaders'
+with TemporaryDirectory(prefix='task-14-glsl-') as temp:
+    for fragment in sorted(source.glob('*.fsh')):
+        vertex = fragment.with_suffix('.vsh')
+        vert = Path(temp) / (vertex.stem + '.vert')
+        frag = Path(temp) / (fragment.stem + '.frag')
+        vert.write_text(expand(vertex, source))
+        frag.write_text(expand(fragment, source))
+        subprocess.run(['glslangValidator', '-l', '-DMC_RENDER_STAGE_SKY=1',
+                        '-DMC_RENDER_STAGE_SUNSET=2', vert, frag], check=True)
+PY
+python3 evidence/task-14/replay.py prepare "$root"
+
+# If a session is interrupted, use tools/minecraft.py stop and logs, preserve
+# its batch under another name, then repeat that session. For a full restore,
+# stop the client first and use replay.py restore with the original root.
+for batch in sky-01 ambient-01 ambient-02 sky-02; do
+    bash evidence/task-14/session.sh "$root" "$batch"
+done
+bash evidence/task-14/session.sh "$root" sky-video
+
+for variant in ambient sky; do
+    diff -rq "$root/variants/$variant/shaders" "$mc_dir/shaderpacks/TASK-14-$variant/shaders"
+done
+python3 evidence/task-14/replay.py restore "$root"
+diff -rq scripts/scenes/data "$scene_pack/data"
+cmp scripts/scenes/pack.mcmeta "$scene_pack/pack.mcmeta"
+test ! -e "$mc_dir/shaderpacks/TASK-14-ambient"
+test ! -e "$mc_dir/shaderpacks/TASK-14-sky"
+python3 - <<'PY'
+import sys
+sys.path[:0] = ['tools', 'scripts']
+import minecraft as mc
+import scenes
+
+assert not mc.game_pids()
+try:
+    scenes.require_scene_world()
+except RuntimeError as error:
+    assert str(error).startswith('The dedicated TASK-03 world is not open')
+    print('PASS dedicated world lock released')
+else:
+    raise AssertionError('Dedicated world still open')
+PY
+
+python3 evidence/task-14/index_runs.py --artifacts-dir "$root" > "$root/runs.csv"
+python3 evidence/task-14/review.py pixels "$root" > "$root/pixels.csv"
+python3 evidence/task-14/review.py video "$root" > "$root/video.csv"
+python3 -m unittest discover -s scripts
+python3 scripts/verify_references.py
+python3 -m py_compile evidence/task-14/*.py
+bash -n evidence/task-14/session.sh
+bash -n evidence/task-14/commands.txt
+
+for batch in sky-01 ambient-01 ambient-02 sky-02; do
+    latest=("$root/$batch"/logs-*/latest.log)
+    debug=("$root/$batch"/logs-*/debug.log)
+    test "${#latest[@]}" -eq 1
+    test "$(rg -c 'Stopped tick profiling' "${latest[0]}")" -eq 2
+    rg -qF "Using shaderpack: TASK-14-${batch%%-*}" "${latest[0]}"
+    rg -qF 'Creating pipeline for dimension minecraft:overworld' "${latest[0]}"
+    rg -qF 'All dimensions are saved' "${latest[0]}"
+    rg -q 'Render target settings for colortex0: .*requestedFormat=RGBA16F, clear=true' "${debug[0]}"
+    if rg -ni 'TASK03_READY_build|ShaderCompileException|ProgramLinkException|(failed|could not) to (compile|link) shader|failed to create .*pipeline|falling back to vanilla shading' "${latest[0]}"; then
+        exit 1
+    fi
+    for scene in daylight sunset; do
+        if [[ "$scene" == daylight ]]; then crop=80x100+1130+405; else crop=130x100+200+435; fi
+        recording="$root/$batch/runs/$scene/recording"
+        cmp <(magick "$recording/before.png" -crop "$crop" +repage -alpha off -depth 8 rgb:-) \
+            <(magick "$recording/after.png" -crop "$crop" +repage -alpha off -depth 8 rgb:-)
+    done
+done
+video_log=("$root/sky-video"/logs-*/latest.log)
+test "${#video_log[@]}" -eq 1
+rg -qF 'Using shaderpack: TASK-14-sky' "${video_log[0]}"
+rg -qF 'All dimensions are saved' "${video_log[0]}"
+rg -n 'TASK14_(RUNNING|FROZEN)_' "${video_log[0]}"
+
+magick montage -font DejaVu-Sans -pointsize 20 \
+    -label 'R9 daylight' artifacts/task-04/video-02/frame-001.png \
+    -label 'R5 twilight' artifacts/task-04/video-08/frame-008.png \
+    -label 'R6 blue settlement' artifacts/task-04/video-09/frame-013.png \
+    -thumbnail 560x315 -tile 3x1 -geometry +4+4 "$root/reference-strip.jpg"
+for scene in daylight sweep/preset night cave; do
+    output="${scene//\//-}"
+    for file in preset.json options.txt sodium-options.json sodium-extra-options.json dynamic_fps.json; do
+        cmp "$root/ambient-01/$scene/$file" "$root/sky-01/$scene/$file"
+    done
+    magick montage -font DejaVu-Sans -pointsize 20 \
+        -label "$output - ambient control" "$root/ambient-01/$scene/native.png" \
+        -label "$output - procedural sky" "$root/sky-01/$scene/native.png" \
+        -thumbnail 720x405 -tile 2x1 -geometry +4+4 "$root/$output-row.jpg"
+done
+magick montage -font DejaVu-Sans -pointsize 18 -label '%f' \
+    "$root/sky-video/dawn/native/"{0214,0215,0216,0217,0218,0219,0220,0221}.png \
+    -thumbnail 420x236 -tile 4x -geometry +4+4 "$root/dawn-wrap.jpg"
+for variant in ambient sky; do
+    magick montage -font DejaVu-Sans -pointsize 18 \
+        -label '00-12000' "$root/$variant-01/sweep/preset/native.png" \
+        -label '%f' "$root/$variant-01/sweep/"[0-9]*.png \
+        -thumbnail 480x270 -tile 4x -geometry +4+4 "$root/$variant-sweep.jpg"
+done
+for transition in dusk dawn; do
+    clip="$root/sky-video/$transition"
+    for seconds in 00 12 24 36 48 60 72 77; do
+        ffmpeg -v error -n -ss "$seconds" -i "$clip/transition.mp4" \
+            -frames:v 1 "$clip/frame-$seconds.png"
+    done
+    magick montage -font DejaVu-Sans -pointsize 18 -label '%f' "$clip"/frame-*.png \
+        -thumbnail 480x270 -tile 4x -geometry +4+4 "$root/$transition-clip.jpg"
+done

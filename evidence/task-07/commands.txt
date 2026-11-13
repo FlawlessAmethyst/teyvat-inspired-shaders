@@ -1,0 +1,10 @@
+# Run from repository root. Acquisition performed with scoped network approval
+# after sandbox DNS failed; clones are ignored research artifacts, not deliverables.
+# git clone --depth 1 https://github.com/javiergcim/MakeUpUltraFast.git artifacts/task-07/makeup
+# git clone --depth 1 https://github.com/ComplementaryDevelopment/ComplementaryReimagined.git artifacts/task-07/complementary
+# Reproduction must check out the exact revisions in sources.json, not new HEAD.
+# Source discovery used rg --files; targeted reads used cat, sed -n and rg -n.
+# Manifest records inspected file SHA-256 hashes and commit permalinks.
+set -eu
+python3 evidence/task-07/verify.py
+python3 scripts/verify_references.py

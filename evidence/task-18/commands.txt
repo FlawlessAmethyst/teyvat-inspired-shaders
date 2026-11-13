@@ -1,0 +1,115 @@
+# Run from the repository root. Desktop and NVIDIA device operations use
+# approved scoped execution. Use a fresh artifact root to replay.
+set -euo pipefail
+root=artifacts/task-18
+game=$(python3 -c 'import sys; sys.path.insert(0,"tools"); import minecraft; print(minecraft.GAME)')
+python3 tools/minecraft.py stop --timeout 60
+sed 's|shaderpack/shaders/|artifacts/task-17/shaders/|' evidence/task-16/pack.sha256 |
+    sha256sum --quiet -c -
+sha256sum --quiet -c artifacts/task-17/source-world.sha256
+python3 evidence/task-18/replay.py prepare "$root"
+cp artifacts/task-17/source-world.sha256 "$root/source-world.sha256"
+diff -rq "$root/control-shaders" "$game/shaderpacks/TASK-18-control/shaders"
+diff -rq "$root/shaders" "$game/shaderpacks/TASK-18-clouds/shaders"
+
+bash evidence/task-18/session.sh "$root" clouds
+# Inspect the first row for TASK-18 Cloud Scenes before accepting it.
+magick "$root/clouds/world-list.png" -crop 780x245+890+95 +repage /tmp/task18-world-list.png
+cp "$root/clouds/world-list.png" "$root/world-list-reference.png"
+bash evidence/task-18/session.sh "$root" clouds open
+bash evidence/task-18/session.sh "$root" control
+
+# The original run kept the first candidate as clouds-trial/ and shaders-trial/
+# before staging and rerunning the final source. These paths are optional on replay.
+python3 evidence/task-18/replay.py restore "$root"
+for path in options.txt config/{iris.properties,sodium-options.json,sodium-extra-options.json,dynamic_fps.json}; do
+    cmp "$game/$path" "$root/before/${path##*/}"
+done
+test ! -e "$game/saves/TASK-18 Cloud Scenes"
+test ! -e "$game/shaderpacks/TASK-18-clouds"
+test ! -e "$game/shaderpacks/TASK-18-control"
+find "$game/saves/TASK-03 Visual Scenes" -type f -print0 | sort -z |
+    xargs -0 sha256sum | cmp "$root/source-world.sha256" -
+diff -rq "$root/shaders" shaderpack/shaders
+sha256sum --quiet -c evidence/task-18/pack.sha256
+
+for mode in control clouds; do
+    latest=("$root/$mode"/logs-*/latest.log)
+    test "${#latest[@]}" -eq 1
+    rg -F "Using shaderpack: TASK-18-$mode" "${latest[0]}"
+    rg -F "All dimensions are saved" "${latest[0]}"
+    if rg -in '\[[^]]+/ERROR\].*shader|failed to (compile|link)|ShaderCompileException|OpenGL error' "${latest[0]}"; then
+        exit 1
+    fi
+done
+for scene in daylight sunset rain night cave; do
+    for file in preset.json options.txt sodium-options.json sodium-extra-options.json dynamic_fps.json; do
+        cmp "$root/control/$scene/$file" "$root/clouds/$scene/$file"
+    done
+    for mode in control clouds; do
+        rg -F "TASK03_READY_$scene" "$root/$mode"/logs-*/latest.log
+        rg -xF "shaderPack=TASK-18-$mode" "$root/$mode/$scene/iris.properties"
+        test "$(magick identify -format '%wx%h' "$root/$mode/$scene/native.png")" = 2560x1440
+    done
+done
+cmp <(magick "$root/control/daylight/native.png" -crop 1600x360+480+940 +repage -alpha off -depth 8 rgb:-) \
+    <(magick "$root/clouds/daylight/native.png" -crop 1600x360+480+940 +repage -alpha off -depth 8 rgb:-)
+
+# Link all pairs and expand the exact retained sky source for the GPU harness.
+python3 - "$root" <<'PY'
+from pathlib import Path
+from tempfile import TemporaryDirectory
+import subprocess
+import sys
+sys.path.insert(0, 'evidence/task-12')
+from check_glsl import expand
+
+root = Path(sys.argv[1])
+stages = {'SKY': 1, 'SUNSET': 2, 'STARS': 6, 'HAND_SOLID': 16, 'CLOUDS': 20,
+          'RAIN_SNOW': 21, 'HAND_TRANSLUCENT': 23}
+defines = [f'-DMC_RENDER_STAGE_{name}={value}' for name, value in stages.items()]
+source = root / 'shaders'
+with TemporaryDirectory(prefix='task-18-glsl-') as temp:
+    for fragment in sorted(source.glob('*.fsh')):
+        vertex = fragment.with_suffix('.vsh')
+        vert = Path(temp) / (vertex.stem + '.vert')
+        frag = Path(temp) / (fragment.stem + '.frag')
+        vert.write_text(expand(vertex, source))
+        frag.write_text(expand(fragment, source))
+        subprocess.run(['glslangValidator', '-l', *defines, vert, frag], check=True)
+
+out = root / 'timer-source'
+out.mkdir(exist_ok=True)
+defines = ''.join(f'#define MC_RENDER_STAGE_{name} {stages[name]}\n'
+                  for name in ('SKY', 'SUNSET', 'STARS'))
+for name, snapshot in [('control', 'control-shaders'), ('clouds', 'shaders'), ('trial', 'shaders-trial')]:
+    source = root / snapshot
+    if name == 'trial' and not source.is_dir():
+        continue
+    for stage, ext in [('vsh', 'vert'), ('fsh', 'frag')]:
+        version, body = expand(source / f'gbuffers_skybasic.{stage}', source).split('\n', 1)
+        (out / f'{name}.{ext}').write_text(version + '\n' + defines + body)
+PY
+
+cc -std=c11 -O2 -Wall -Wextra -Werror evidence/task-18/sky_timer.c -o "$root/sky_timer" -lEGL -lGL -lm
+# Run with the Minecraft instance stopped. Preserve each renderer/driver record.
+for run in 01 02; do
+    "$root/sky_timer" "$root/timer-source"/{control.vert,control.frag,clouds.vert,clouds.frag} \
+        > "$root/gpu-$run.csv" 2> "$root/gpu-$run-device.txt"
+done
+if [[ -d "$root/shaders-trial" ]]; then
+    "$root/sky_timer" "$root/timer-source"/{control.vert,control.frag,trial.vert,trial.frag} \
+        > "$root/gpu-trial.csv" 2> "$root/gpu-trial-device.txt"
+fi
+python3 evidence/task-18/summarize_gpu.py "$root"/gpu-*.csv > "$root/gpu-summary.csv"
+
+for scene in daylight sunset rain night cave; do
+    magick montage -font DejaVu-Sans -pointsize 18 \
+        -label 'TASK-17 control' "$root/control/$scene/native.png" \
+        -label 'TASK-18 clouds' "$root/clouds/$scene/native.png" \
+        -thumbnail 768x432 -tile 2x1 -geometry +4+4 "$root/$scene.jpg"
+done
+python3 -m unittest discover -s scripts
+python3 -m py_compile evidence/task-18/{replay,summarize_gpu}.py
+bash -n evidence/task-18/session.sh
+python3 scripts/verify_references.py

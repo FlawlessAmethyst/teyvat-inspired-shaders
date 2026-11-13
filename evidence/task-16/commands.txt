@@ -1,0 +1,148 @@
+# Run from the repository root with GenshinShaderDev stopped.
+# Desktop calls use the scoped execution described in docs/minecraft-environment.md.
+set -euo pipefail
+root=${1:-artifacts/task-16-repeat}
+test ! -e "$root"
+mc_dir=$(python3 -c 'import sys; sys.path.insert(0,"tools"); import minecraft; print(minecraft.GAME)')
+source_world="$mc_dir/saves/TASK-03 Visual Scenes"
+abs_root=$(realpath -m "$root")
+
+mkdir -p "$root/variants/shadows"
+sed 's|shaderpack/shaders/|artifacts/task-15/variants/fog/shaders/|' \
+    evidence/task-15/pack.sha256 | sha256sum -c - > "$root/control-check.txt"
+sha256sum -c evidence/task-16/pack.sha256
+cp -a artifacts/task-15/variants/fog "$root/variants/"
+cp -a shaderpack/shaders "$root/variants/shadows/"
+(cd "$source_world" && find . -type f ! -name session.lock -print0 | sort -z | xargs -0 sha256sum) > "$root/source-world.sha256"
+python3 evidence/task-16/replay.py prepare "$root"
+python3 evidence/task-16/replay.py stage "$root"
+
+# The world-list reference must show TASK-16 Shadow Scenes in the first row.
+# On a fresh machine run the first session without the following copy. Inspect
+# its world-list.png, copy it to world-list-reference.png if the first row
+# matches, then stop the client and archive the menu-only batch before retry.
+cp artifacts/task-16/world-list-reference.png "$root/world-list-reference.png"
+for batch in sodium-01 fog-01 shadows-01 shadows-02 fog-02 sodium-02 shadows-motion; do
+    bash evidence/task-16/session.sh "$root" "$batch"
+done
+
+# On interruption, stop the client gracefully before retrying or restoring.
+# Preserve any partial batch under another name. Skip the fixture-build trigger
+# only if the log already confirms TASK16_READY_FIXTURE in this world copy.
+for mode in fog shadows; do
+    diff -rq "$root/variants/$mode/shaders" "$mc_dir/shaderpacks/TASK-16-$mode/shaders"
+done
+python3 evidence/task-16/replay.py restore "$root"
+(cd "$source_world" && sha256sum -c "$abs_root/source-world.sha256")
+test ! -e "$mc_dir/shaderpacks/TASK-16-fog"
+test ! -e "$mc_dir/shaderpacks/TASK-16-shadows"
+test ! -e "$mc_dir/saves/TASK-16 Shadow Scenes"
+
+python3 - "$root" <<'PY'
+import sys
+from pathlib import Path
+sys.path.insert(0, 'evidence/task-16')
+import replay
+
+assert not replay.mc.game_pids()
+replay.scenes.WORLD = Path(sys.argv[1]) / 'world'
+try:
+    replay.scenes.require_scene_world()
+except RuntimeError as error:
+    assert str(error).startswith('The dedicated TASK-03 world is not open')
+    print('PASS copied world lock released')
+else:
+    raise AssertionError('Copied world still open')
+PY
+
+python3 evidence/task-16/index_runs.py "$root" > "$root/runs.csv"
+python3 evidence/task-16/review.py "$root" > "$root/pixels.csv"
+python3 -m unittest discover -s scripts
+python3 scripts/verify_references.py
+python3 -m py_compile evidence/task-16/*.py
+bash -n evidence/task-16/session.sh
+bash -n evidence/task-16/commands.txt
+
+python3 - <<'PY'
+from pathlib import Path
+from tempfile import TemporaryDirectory
+import subprocess
+import sys
+sys.path.insert(0, 'evidence/task-12')
+from check_glsl import expand
+
+source = Path('shaderpack/shaders')
+defines = ('-DMC_RENDER_STAGE_SKY=1', '-DMC_RENDER_STAGE_SUNSET=2',
+           '-DMC_RENDER_STAGE_HAND_SOLID=16', '-DMC_RENDER_STAGE_CLOUDS=20',
+           '-DMC_RENDER_STAGE_RAIN_SNOW=21', '-DMC_RENDER_STAGE_HAND_TRANSLUCENT=23')
+with TemporaryDirectory(prefix='task-16-glsl-') as temp:
+    for fragment in sorted(source.glob('*.fsh')):
+        vertex = fragment.with_suffix('.vsh')
+        vert = Path(temp) / (vertex.stem + '.vert')
+        frag = Path(temp) / (fragment.stem + '.frag')
+        vert.write_text(expand(vertex, source))
+        frag.write_text(expand(fragment, source))
+        subprocess.run(['glslangValidator', '-l', *defines, vert, frag], check=True)
+        print(f'PASS {vertex.stem}')
+PY
+
+for batch in sodium-01 fog-01 shadows-01 shadows-02 fog-02 sodium-02; do
+    latest=("$root/$batch"/logs-*/latest.log)
+    debug=("$root/$batch"/logs-*/debug.log)
+    test "${#latest[@]}" -eq 1
+    test "$(rg -c 'Stopped tick profiling' "${latest[0]}")" -eq 2
+    rg -qF 'All dimensions are saved' "${latest[0]}"
+    if [[ "$batch" != sodium-* ]]; then
+        rg -qF "Using shaderpack: TASK-16-${batch%%-*}" "${latest[0]}"
+        rg -qF 'Creating pipeline for dimension minecraft:overworld' "${latest[0]}"
+        rg -q 'Render target settings for colortex0: .*requestedFormat=RGBA16F, clear=true' "${debug[0]}"
+    fi
+    if rg -ni 'ShaderCompileException|ProgramLinkException|(failed|could not) to (compile|link) shader|failed to create .*pipeline|falling back to vanilla shading' "${latest[0]}"; then
+        exit 1
+    fi
+    for scene in forest sunset; do
+        recording="$root/$batch/runs/$scene/recording"
+        crop=100x66+1230+1140
+        if [[ "$scene" == sunset ]]; then crop=100x60+1100+894; fi
+        cmp <(magick "$recording/before.png" -crop "$crop" +repage -alpha off -depth 8 rgb:-) \
+            <(magick "$recording/after.png" -crop "$crop" +repage -alpha off -depth 8 rgb:-)
+    done
+done
+
+for scene in contact forest sunset range open-water cave night; do
+    for name in preset.json options.txt sodium-options.json sodium-extra-options.json dynamic_fps.json; do
+        cmp "$root/sodium-01/$scene/$name" "$root/fog-01/$scene/$name"
+        cmp "$root/fog-01/$scene/$name" "$root/shadows-01/$scene/$name"
+    done
+    magick montage -font DejaVu-Sans -pointsize 20 \
+        -label 'Sodium (shaders off)' "$root/sodium-01/$scene/native.png" \
+        -label 'TASK-15 fog control' "$root/fog-01/$scene/native.png" \
+        -label 'TASK-16 shadows' "$root/shadows-01/$scene/native.png" \
+        -thumbnail 768x432 -tile 3x1 -geometry +4+4 "$root/$scene-row.jpg"
+done
+
+magick montage -font DejaVu-Sans -pointsize 20 \
+    -label 'TASK-15 fog control' "$root/fog-01/range/native.png[510x205+1220+585]" \
+    -label 'TASK-16 shadows' "$root/shadows-01/range/native.png[510x205+1220+585]" \
+    -tile 2x1 -geometry +4+4 "$root/range-detail.jpg"
+magick montage "$root/shadows-motion"/motion/{00,02,04,07,10}.png \
+    -thumbnail 480x270 -tile 5x1 -geometry +3+3 "$root/motion-strip.jpg"
+motion_log=("$root/shadows-motion"/logs-*/latest.log)
+test "${#motion_log[@]}" -eq 1
+test "$(rg -c 'TASK16_CAMERA_STEP' "${motion_log[0]}")" -eq 10
+test "$(sha256sum "$root/shadows-motion"/motion/*.png | cut -d' ' -f1 | sort -u | wc -l)" -eq 11
+rg -qF 'All dimensions are saved' "${motion_log[0]}"
+
+# The exploratory trial snapshot and its native captures are kept in the
+# original TASK-16 artifact root. The trial ran before the fog-01 session.
+if [[ -f "$root/trial-mipped-alpha/sunset/native.png" ]]; then
+    for batch in trial-mipped-alpha shadows-01; do
+        magick "$root/fog-01/sunset/native.png" "$root/$batch/sunset/native.png" \
+            -compose difference -composite -alpha off -evaluate multiply 4 \
+            -crop 365x295+1320+675 +repage "$root/$batch/leaf-difference.png"
+    done
+    magick montage -font DejaVu-Sans -pointsize 20 \
+        -label 'Automatic atlas mip' "$root/trial-mipped-alpha/leaf-difference.png" \
+        -label 'Atlas base level' "$root/shadows-01/leaf-difference.png" \
+        -tile 2x1 -geometry +4+4 "$root/leaf-alpha.jpg"
+fi

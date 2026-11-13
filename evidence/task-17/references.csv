@@ -1,0 +1,11 @@
+id,targets,source,source_sha256,frame_number_zero_based,timestamp_seconds,path,sha256
+R1,S1/S2/S3/S4/S7,references/video/gameplay/01.mp4,4229346b4250c441944406193ba811f17b954ea45aeebad76954efff83fa23c9,0,0.0,artifacts/task-04/video-01/frame-001.png,493d830b34206004ecac8eb654827d42a3b5dbdcfa6d4d7a5503b2374331d23a
+R2,S1/S2/S7,references/video/gameplay/06.mp4,01f1e4f07598229dc96dfeee644695c12cbe385e443728da7cd9d4da5081c320,0,0.0,artifacts/task-04/video-06/frame-001.png,76c9a48066f23c23b75b46110181a72efce2a0d96c8b31bdf9aaaa767dc83027
+R3,S4,references/video/gameplay/03.mp4,f122555cb855f71e4354a063ba71aa3ac7785b2ab49731f15087b8d67ae0f6a9,2217,40.01665,artifacts/task-04/video-03/frame-009.png,e1602a4810c2a5899392aff4b8d3178ce38435e6f07fc11c136d6cb4a506d576
+R4,S5,references/video/gameplay/02.mp4,1b6fcd3849f4ad48ea4f48d2b30b2d7ad4a8019640d9595fe30718e4ab7a685c,2558,45.01665,artifacts/task-04/video-02/frame-010.png,5760a86cd8e730b676553c4ac7896e76639d2931cbb1614ade1b1bd1c7874912
+R5,S1/S3/S6/S7,references/video/gameplay/08.mp4,f7de4e224694a2a79dfc2074c21feef09fdb205f37e7bba6a86543dc8b5d4599,1752,35.01665,artifacts/task-04/video-08/frame-008.png,1d5fc7b99424aca4e349b209e6adf63eaa1be2c4840b057473bf9fcb1fe8fb92
+R6,S2/S3,references/video/gameplay/09.mp4,168db7c9c2fabe18a61cfdb352e586d19b967cb6fd747ff5bd421beda33bd0f0,2822,59.399983,artifacts/task-04/video-09/frame-013.png,c2488f9ad7bd7ca20237cade582bd8639a96bb890fc936afe15e18988432ae7a
+R7,S2/S6,references/video/gameplay/07.mp4,59d223e787a657ce47ba98471070906d1e25bd5b3eb28ecc69ca203ce53f9329,1788,40.01665,artifacts/task-04/video-07/frame-009.png,2c1e9d0c2212686ba388112f8be07e27d7eafdec67ae516f083f3de9f6250da5
+R8,S1/S2,references/video/gameplay/11.mp4,f7545fa46319d3313dd9516494e561ed6cf20eb108b89bec3213e5ecfd472878,593,15.01665,artifacts/task-04/video-11/frame-004.png,9f860064bd4ff25fe2e8fd9edeb9de0d68f23c6b21628f1a1415f73be8646f3e
+R9,S3/S4/S5/S6,references/video/gameplay/02.mp4,1b6fcd3849f4ad48ea4f48d2b30b2d7ad4a8019640d9595fe30718e4ab7a685c,0,0.0,artifacts/task-04/video-02/frame-001.png,8f56458af46457a2bd706957cab143e1e9d17e337608abd947fccd11615b2d35
+R10,S1/S4,references/video/gameplay/10.mp4,56d9102277e63ccd2118f91ca808b8bcdf56db36d94b2d1db6de0c072975fdfe,2342,50.01665,artifacts/task-04/video-10/frame-011.png,03b2283f006737e5ac0e90410cb049d36f52c25d91bfbf1bce8ac5b5e067e585

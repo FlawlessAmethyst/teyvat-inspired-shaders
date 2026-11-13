@@ -1,0 +1,29 @@
+TASK-10 — DONE — 2026-11-12
+
+PASS Scoped GenshinShaderDev window, dedicated TASK-03 Visual Scenes world lock and live shader mode.
+PASS Installed scene datapack functions matched repository copies.
+PASS Temporary TASK-10-neutral shaders matched repository files before profiling and before removal.
+PASS sodium-01/f3-preflight.png shows 2560x1440 capture with Unlimited (T: inf), 12 render chunks and 8 simulation chunks.
+PASS Four fresh sessions in order sodium-01, neutral-01, neutral-02, sodium-02, three preset acknowledgments and native profiler completions in each.
+PASS 12 validated native archives, 335017 client render-loop samples total, spans 9993–10000 ms.
+PASS Preset JSON and matching per-run options, Sodium/Dynamic FPS settings, manifest and mod JAR hashes. Iris settings differed only in selection and enablement, ignoring generated comment timestamps.
+PASS Native profiler system reports agreed on CPU, OpenGL backend, window size, Java, kernel, Minecraft version and JVM flags. Native options reports agreed on benchmark settings.
+PASS 24 window images at 2560x1440. Reviewed before-grid.png and after-grid.png for matching landmark framing and hidden HUD. Sodium clouds moved, and the neutral pack showed no clouds and a hard horizon.
+PASS Neutral mode loaded TASK-10-neutral with Overworld pipeline creation and requested RGBA16F colortex0. Sodium mode logged shaders disabled.
+PASS Four normal stops saved all dimensions and completed FastQuit saves.
+PASS Five preflight files restored byte-for-byte, temporary pack removed and TASK-03 world session lock released.
+PASS python3 -m unittest discover -s scripts — 9 tests.
+PASS python3 -m py_compile scripts/{scenes,frametimes}.py evidence/task-10/{configure,summarize}.py.
+PASS sha256sum -c evidence/task-10/pack.sha256 — 12 shader files.
+PASS python3 evidence/task-10/summarize.py — CSV reproduced from archives and extracted metrics verified.
+
+Latest/debug log snapshots under artifacts/task-10:
+sodium-01/logs-20261112-104936/
+neutral-01/logs-20261112-105248/
+neutral-02/logs-20261112-105638/
+sodium-02/logs-20261112-105941/
+
+The native profiler emitted the level-dump diagnostic errors already observed in TASK-02.
+The affected archives contain example_crash.txt with "Description: Level dump" and java.lang.Exception: dummy.
+All profiles completed, and the world saved normally in each session.
+Performance is instrumented CPU loop time and throughput on the tested client. No GPU timing, effect isolation or presentation timing was measured.

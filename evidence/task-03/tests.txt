@@ -1,0 +1,14 @@
+test_bad_values_and_sequence_rejected (test_frametimes.MetricsTests.test_bad_values_and_sequence_rejected) ... ok
+test_existing_output_not_overwritten (test_frametimes.MetricsTests.test_existing_output_not_overwritten) ... ok
+test_mismatched_profile_rejected (test_frametimes.MetricsTests.test_mismatched_profile_rejected) ... ok
+test_nanoseconds_and_summary (test_frametimes.MetricsTests.test_nanoseconds_and_summary) ... ok
+test_server_metrics_never_substituted (test_frametimes.MetricsTests.test_server_metrics_never_substituted) ... ok
+test_unknown_schema_rejected (test_frametimes.MetricsTests.test_unknown_schema_rejected) ... ok
+test_build_edits_stay_bounded_and_within_command_limit (test_scenes.ScenesTests.test_build_edits_stay_bounded_and_within_command_limit) ... ok
+test_function_camera_and_conditions_match_manifest (test_scenes.ScenesTests.test_function_camera_and_conditions_match_manifest) ... ok
+test_reject_closed_world_accept_locked_world (test_scenes.ScenesTests.test_reject_closed_world_accept_locked_world) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.006s
+
+OK

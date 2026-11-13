@@ -1,0 +1,95 @@
+# Run from the repository root in sections. Use a fresh root for a repeat.
+# Launch, desktop input, F2 capture and F3+L need approved desktop access.
+set -euo pipefail
+root=artifacts/task-22
+game=$(python3 -c 'import sys; sys.path.insert(0, "tools"); import minecraft; print(minecraft.GAME)')
+python3 tools/minecraft.py stop --timeout 60
+# Before editing the candidate:
+# sha256sum --quiet -c evidence/task-21/pack.sha256
+# diff -rq artifacts/task-21/shaders shaderpack/shaders
+sha256sum --quiet -c artifacts/task-21/source-world.sha256
+sha256sum --quiet -c evidence/task-22/pack.sha256
+python3 evidence/task-22/replay.py prepare "$root"
+cp artifacts/task-21/source-world.sha256 "$root/source-world.sha256"
+diff -rq "$root/shaders" "$game/shaderpacks/TASK-22-lighting/shaders"
+diff -rq "$root/control-shaders" "$game/shaderpacks/TASK-22-control/shaders"
+
+# Inspect the first row before saving the replay's visual world-name guard.
+python3 evidence/task-22/replay.py control "$root"
+python3 tools/minecraft.py --artifacts-dir "$root/control-01" launch --timeout 120
+sleep 10
+python3 tools/minecraft.py screenshot "$root/control-01/title.png"
+python3 tools/minecraft.py click 1280 535
+python3 tools/minecraft.py screenshot "$root/control-01/world-list.png"
+magick "$root/control-01/world-list.png" -crop 780x250+890+90 +repage /tmp/task22-world-list.png
+cp "$root/control-01/world-list.png" "$root/world-list-reference.png"
+bash evidence/task-22/session.sh "$root" control-01 open
+for batch in lighting-01 sodium-01 sodium-02 lighting-02 control-02; do
+    bash evidence/task-22/session.sh "$root" "$batch"
+done
+
+python3 evidence/task-22/replay.py restore "$root"
+for path in options.txt config/{iris.properties,sodium-options.json,sodium-extra-options.json,dynamic_fps.json}; do
+    cmp "$game/$path" "$root/before/${path##*/}"
+done
+test ! -e "$game/saves/TASK-22 Lighting Scenes"
+test ! -e "$game/shaderpacks/TASK-22-lighting"
+test ! -e "$game/shaderpacks/TASK-22-control"
+test -d "$root/world"
+find "$game/saves/TASK-03 Visual Scenes" -type f -print0 | sort -z |
+    xargs -0 sha256sum | cmp "$root/source-world.sha256" -
+diff -rq "$root/shaders" shaderpack/shaders
+diff -rq "$root/control-shaders" artifacts/task-21/shaders
+
+python3 evidence/task-22/link_shaders.py shaderpack/shaders > "$root/static-link.txt" 2>&1
+test "$(rg -c '^PASS ' "$root/static-link.txt")" = 13
+python3 evidence/task-22/review_runs.py "$root" > "$root/runs-reviewed.csv"
+python3 evidence/task-22/review_pixels.py "$root" > "$root/pixels-reviewed.csv"
+# Reproduce the evidence indices from the retained original captures.
+cmp evidence/task-22/runs.csv <(python3 evidence/task-22/review_runs.py artifacts/task-22)
+cmp evidence/task-22/pixels.csv <(python3 evidence/task-22/review_pixels.py artifacts/task-22)
+python3 - "$root/runs-reviewed.csv" <<'PY'
+import csv
+from statistics import mean
+import sys
+
+with open(sys.argv[1], newline='') as source:
+    rows = list(csv.DictReader(source))
+for scene in ('night', 'cave'):
+    measurements = {}
+    for mode in ('sodium', 'control', 'lighting'):
+        runs = [row for row in rows if row['scene'] == scene and row['batch'].startswith(mode)]
+        assert len(runs) == 2
+        values = [float(row['mean_client_loop_ms']) for row in runs]
+        p95 = [float(row['p95_client_loop_ms']) for row in runs]
+        measurements[mode] = values
+        print(f'{scene} {mode}: mean {mean(values):.6f} ms, run means {values}, p95 {p95}')
+    control, candidate = (measurements[mode] for mode in ('control', 'lighting'))
+    delta = [b - a for a, b in zip(control, candidate, strict=True)]
+    print(f'{scene} TASK-22 minus TASK-21: {mean(delta):+.6f} ms, run deltas {delta}')
+PY
+for mode in control lighting sodium; do
+    for region in 440x144+1016+1212 220x52+2208+512; do
+        cmp <(magick "$root/$mode-01/daylight/native.png" -crop "$region" +repage -alpha off -depth 8 rgb:-) \
+            <(magick "$root/$mode-01/return/daylight/native.png" -crop "$region" +repage -alpha off -depth 8 rgb:-)
+    done
+done
+for region in 440x144+1016+1212 220x52+2208+512; do
+    cmp <(magick "$root/control-01/daylight/native.png" -crop "$region" +repage -alpha off -depth 8 rgb:-) \
+        <(magick "$root/lighting-01/daylight/native.png" -crop "$region" +repage -alpha off -depth 8 rgb:-)
+done
+for scene in daylight night cave lamps unlit nether end; do
+    magick montage -font DejaVu-Sans -pointsize 17 \
+        -label 'Sodium shaders off' "$root/sodium-01/$scene/native.png" \
+        -label 'TASK-21 control' "$root/control-01/$scene/native.png" \
+        -label 'TASK-22' "$root/lighting-01/$scene/native.png" \
+        -thumbnail 760x428 -tile 3x1 -geometry +4+4 "$root/$scene.jpg"
+done
+python3 -m unittest discover -s scripts -p 'test_*.py' -v
+python3 -m py_compile evidence/task-22/*.py
+bash -n evidence/task-22/session.sh
+bash -n evidence/task-22/commands.txt
+python3 scripts/verify_references.py
+git diff --check -- .gitignore docs/STATUS.md docs/DECISIONS.md docs/TEST_LOG.md \
+    docs/architecture/shaderpack_design.md docs/research/iris_feasibility.md \
+    evidence/README.md evidence/task-21/README.md shaderpack/README.md

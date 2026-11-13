@@ -1,0 +1,132 @@
+# Run from the repository root with GenshinShaderDev stopped.
+# session.sh and the interactive menu calls need scoped desktop execution
+# as described in docs/minecraft-environment.md.
+set -euo pipefail
+root=${1:-artifacts/task-15-repeat}
+test ! -e "$root"
+mc_dir=$(python3 -c 'import sys; sys.path.insert(0,"tools"); import minecraft; print(minecraft.GAME)')
+source_world="$mc_dir/saves/TASK-03 Visual Scenes"
+abs_root=$(realpath -m "$root")
+mkdir -p "$root/variants/sky"
+cp -a artifacts/task-14/variants/sky/shaders "$root/variants/sky/"
+sed "s|shaderpack/shaders/|$root/variants/sky/shaders/|" evidence/task-14/pack.sha256 | sha256sum -c -
+(cd "$source_world" && find . -type f ! -name session.lock -print0 | sort -z | xargs -0 sha256sum) > "$root/source-world.sha256"
+python3 evidence/task-15/replay.py prepare "$root"
+
+# Reuse the inspected TASK-15 first-row title mask. On a fresh machine,
+# invoke the first session without this copy. Inspect its world-list.png,
+# copy it to world-list-reference.png if TASK-15 Fog Scenes is the first row,
+# then stop the game, archive the menu-only batch and retry sodium-01.
+cp artifacts/task-15/world-list-reference.png "$root/world-list-reference.png"
+for batch in sodium-01 sky-01; do
+    bash evidence/task-15/session.sh "$root" "$batch"
+done
+
+sha256sum -c evidence/task-15/pack.sha256
+python3 - <<'PY'
+from pathlib import Path
+from tempfile import TemporaryDirectory
+import subprocess
+import sys
+sys.path.insert(0, 'evidence/task-12')
+from check_glsl import expand
+
+source = Path('shaderpack/shaders')
+defines = ('-DMC_RENDER_STAGE_SKY=1', '-DMC_RENDER_STAGE_SUNSET=2',
+           '-DMC_RENDER_STAGE_HAND_SOLID=16', '-DMC_RENDER_STAGE_CLOUDS=20',
+           '-DMC_RENDER_STAGE_RAIN_SNOW=21', '-DMC_RENDER_STAGE_HAND_TRANSLUCENT=23')
+with TemporaryDirectory(prefix='task-15-glsl-') as temp:
+    for fragment in sorted(source.glob('*.fsh')):
+        vertex = fragment.with_suffix('.vsh')
+        vert = Path(temp) / (vertex.stem + '.vert')
+        frag = Path(temp) / (fragment.stem + '.frag')
+        vert.write_text(expand(vertex, source))
+        frag.write_text(expand(fragment, source))
+        subprocess.run(['glslangValidator', '-l', *defines, vert, frag], check=True)
+        print(f'PASS {vertex.stem}')
+PY
+mkdir "$root/variants/fog"
+cp -a shaderpack/shaders "$root/variants/fog/"
+python3 evidence/task-15/replay.py stage-fog "$root"
+for batch in fog-01 fog-02 sky-02 sodium-02; do
+    bash evidence/task-15/session.sh "$root" "$batch"
+done
+
+# If interrupted, stop the scoped client gracefully, preserve the incomplete
+# batch under a different name and repeat it. To restore immediately, stop
+# the client and run replay.py restore with the original artifact root.
+for variant in sky fog; do
+    diff -rq "$root/variants/$variant/shaders" "$mc_dir/shaderpacks/TASK-15-$variant/shaders"
+done
+python3 evidence/task-15/replay.py restore "$root"
+(cd "$source_world" && sha256sum -c "$abs_root/source-world.sha256")
+test ! -e "$mc_dir/shaderpacks/TASK-15-sky"
+test ! -e "$mc_dir/shaderpacks/TASK-15-fog"
+test ! -e "$mc_dir/saves/TASK-15 Fog Scenes"
+python3 - "$root" <<'PY'
+import sys
+from pathlib import Path
+sys.path.insert(0, 'evidence/task-15')
+import replay
+
+assert not replay.mc.game_pids()
+replay.scenes.WORLD = Path(sys.argv[1]) / 'world'
+try:
+    replay.scenes.require_scene_world()
+except RuntimeError as error:
+    assert str(error).startswith('The dedicated TASK-03 world is not open')
+    print('PASS copied world lock released')
+else:
+    raise AssertionError('Copied world still open')
+PY
+
+python3 evidence/task-15/index_runs.py "$root" > "$root/runs.csv"
+python3 evidence/task-15/review.py "$root" > "$root/pixels.csv"
+python3 -m unittest discover -s scripts
+python3 scripts/verify_references.py
+python3 -m py_compile evidence/task-15/*.py
+bash -n evidence/task-15/session.sh
+bash -n evidence/task-15/commands.txt
+
+for batch in sodium-01 sky-01 fog-01 fog-02 sky-02 sodium-02; do
+    latest=("$root/$batch"/logs-*/latest.log)
+    debug=("$root/$batch"/logs-*/debug.log)
+    test "${#latest[@]}" -eq 1
+    test "$(rg -c 'Stopped tick profiling' "${latest[0]}")" -eq 2
+    rg -qF 'All dimensions are saved' "${latest[0]}"
+    if [[ "$batch" != sodium-* ]]; then
+        rg -qF "Using shaderpack: TASK-15-${batch%%-*}" "${latest[0]}"
+        rg -qF 'Creating pipeline for dimension minecraft:overworld' "${latest[0]}"
+        rg -q 'Render target settings for colortex0: .*requestedFormat=RGBA16F, clear=true' "${debug[0]}"
+    fi
+    if rg -ni 'TASK03_READY_build|ShaderCompileException|ProgramLinkException|(failed|could not) to (compile|link) shader|failed to create .*pipeline|falling back to vanilla shading' "${latest[0]}"; then
+        exit 1
+    fi
+    for scene in daylight sunset; do
+        recording="$root/$batch/runs/$scene/recording"
+        crop=110x80+855+490
+        cmp <(magick "$recording/before.png" -crop "$crop" +repage -alpha off -depth 8 rgb:-) \
+            <(magick "$recording/after.png" -crop "$crop" +repage -alpha off -depth 8 rgb:-)
+    done
+done
+
+for scene in daylight sunset rain night open-water cave; do
+    for name in preset.json options.txt sodium-options.json sodium-extra-options.json dynamic_fps.json; do
+        cmp "$root/sodium-01/$scene/$name" "$root/sky-01/$scene/$name"
+        cmp "$root/sky-01/$scene/$name" "$root/fog-01/$scene/$name"
+    done
+    magick montage -font DejaVu-Sans -pointsize 20 \
+        -label 'Sodium (shaders off)' "$root/sodium-01/$scene/native.png" \
+        -label 'TASK-14 sky' "$root/sky-01/$scene/native.png" \
+        -label 'TASK-15 distance fog' "$root/fog-01/$scene/native.png" \
+        -thumbnail 720x405 -tile 3x1 -geometry +4+4 "$root/$scene-row.jpg"
+done
+magick montage -font DejaVu-Sans -pointsize 20 \
+    -label 'TASK-14 sky' "$root/sky-01/daylight/native.png[590x385+1040+410]" \
+    -label 'TASK-15 fog' "$root/fog-01/daylight/native.png[590x385+1040+410]" \
+    -tile 2x1 -geometry +4+4 "$root/daylight-translucent.png"
+magick montage -font DejaVu-Sans -pointsize 20 \
+    -label 'R1 Valley' artifacts/task-04/video-01/frame-001.png \
+    -label 'R3 Mountain layers' artifacts/task-04/video-03/frame-009.png \
+    -label 'R9 Clear coast' artifacts/task-04/video-02/frame-001.png \
+    -thumbnail 570x320 -tile 3x1 -geometry +4+4 "$root/reference-strip.jpg"

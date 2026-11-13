@@ -1,0 +1,120 @@
+{
+  "task": "TASK-07",
+  "date": "2026-11-12",
+  "reuse": "No upstream source or assets copied into deliverables; ignored research clones only.",
+  "repositories": [
+    {
+      "name": "makeup",
+      "url": "https://github.com/javiergcim/MakeUpUltraFast",
+      "revision": "fed6d05f841389fb5981f078e2fcac8dfb9c0080",
+      "local_path": "artifacts/task-07/makeup",
+      "license": "LGPL v3.0",
+      "files": [
+        {
+          "path": "LICENSE",
+          "sha256": "e3a994d82e644b03a792a930f574002658412f62407f5fee083f2555c5f23118",
+          "url": "https://github.com/javiergcim/MakeUpUltraFast/blob/fed6d05f841389fb5981f078e2fcac8dfb9c0080/LICENSE"
+        },
+        {
+          "path": "README.md",
+          "sha256": "dbdf8e8d156fd1a9bf2f181db9d7198063c65433f904cb6edfcfa656bd200d67",
+          "url": "https://github.com/javiergcim/MakeUpUltraFast/blob/fed6d05f841389fb5981f078e2fcac8dfb9c0080/README.md"
+        },
+        {
+          "path": "shaders/gbuffers_terrain.fsh",
+          "sha256": "f5dbb81f627cd695bac0c63379c6b6aaaba3ad4151df4731e98999c1a0dc1b77",
+          "url": "https://github.com/javiergcim/MakeUpUltraFast/blob/fed6d05f841389fb5981f078e2fcac8dfb9c0080/shaders/gbuffers_terrain.fsh"
+        },
+        {
+          "path": "shaders/lib/shadow_frag.glsl",
+          "sha256": "334d616ea22bf62209470c5bcac23d02fe10afab0fa8ef691d8c1361993cbba3",
+          "url": "https://github.com/javiergcim/MakeUpUltraFast/blob/fed6d05f841389fb5981f078e2fcac8dfb9c0080/shaders/lib/shadow_frag.glsl"
+        },
+        {
+          "path": "shaders/lib/depth.glsl",
+          "sha256": "ef7d2012fa33fe0092b6cd99733cfb2cd0e43931c581a9624ca2b2d24c989b09",
+          "url": "https://github.com/javiergcim/MakeUpUltraFast/blob/fed6d05f841389fb5981f078e2fcac8dfb9c0080/shaders/lib/depth.glsl"
+        },
+        {
+          "path": "shaders/lib/tone_maps.glsl",
+          "sha256": "7952a05ba86c4ed2924468db8704b4d07bbc0305adb382387747119bc41b9dc1",
+          "url": "https://github.com/javiergcim/MakeUpUltraFast/blob/fed6d05f841389fb5981f078e2fcac8dfb9c0080/shaders/lib/tone_maps.glsl"
+        },
+        {
+          "path": "shaders/lib/water.glsl",
+          "sha256": "c20a450723aa1a604ddfc724d7c70e138b071c1bfe6d7b3282ea2e3ab7f0740f",
+          "url": "https://github.com/javiergcim/MakeUpUltraFast/blob/fed6d05f841389fb5981f078e2fcac8dfb9c0080/shaders/lib/water.glsl"
+        },
+        {
+          "path": "shaders/lib/day_blend.glsl",
+          "sha256": "57b92ad9987b15852d66bac9eaef6c7e78f2cb1d98444ee665bc80e416280925",
+          "url": "https://github.com/javiergcim/MakeUpUltraFast/blob/fed6d05f841389fb5981f078e2fcac8dfb9c0080/shaders/lib/day_blend.glsl"
+        },
+        {
+          "path": "shaders/src/low_sky.glsl",
+          "sha256": "5260909bb96b3c129dc322b21c98f6ed2176d9bb4099354c6e70cb00df33a0bd",
+          "url": "https://github.com/javiergcim/MakeUpUltraFast/blob/fed6d05f841389fb5981f078e2fcac8dfb9c0080/shaders/src/low_sky.glsl"
+        },
+        {
+          "path": "shaders/src/hi_sky.glsl",
+          "sha256": "306e00da722a9efaea4e93a199c79a53c1dc71ff5cb520b83e5dd6a06f80f6ec",
+          "url": "https://github.com/javiergcim/MakeUpUltraFast/blob/fed6d05f841389fb5981f078e2fcac8dfb9c0080/shaders/src/hi_sky.glsl"
+        },
+        {
+          "path": "shaders/src/fog_vertex.glsl",
+          "sha256": "1654364c92c9b89af50c9efd9f5023adb3749684274a5e8604064bdaa1d99eae",
+          "url": "https://github.com/javiergcim/MakeUpUltraFast/blob/fed6d05f841389fb5981f078e2fcac8dfb9c0080/shaders/src/fog_vertex.glsl"
+        }
+      ]
+    },
+    {
+      "name": "complementary",
+      "url": "https://github.com/ComplementaryDevelopment/ComplementaryReimagined",
+      "revision": "c09950df0650b27dac260c1b0f69afc11387aa6f",
+      "local_path": "artifacts/task-07/complementary",
+      "license": "Complementary License Agreement 1.7",
+      "files": [
+        {
+          "path": "License.txt",
+          "sha256": "580918e9032ff0355706d33493d014db14ede5704d8f3a5911cc9b6d08b75b4e",
+          "url": "https://github.com/ComplementaryDevelopment/ComplementaryReimagined/blob/c09950df0650b27dac260c1b0f69afc11387aa6f/License.txt"
+        },
+        {
+          "path": "shaders/world0/gbuffers_terrain.fsh",
+          "sha256": "a47766de5a8d303413451ea53cb9298c76a161cde95502817a549fc62cbbbd32",
+          "url": "https://github.com/ComplementaryDevelopment/ComplementaryReimagined/blob/c09950df0650b27dac260c1b0f69afc11387aa6f/shaders/world0/gbuffers_terrain.fsh"
+        },
+        {
+          "path": "shaders/program/gbuffers_water.glsl",
+          "sha256": "1cc42fb08d09b9c95766108a42029b291ddca58879c799706e5c519a6131f4a7",
+          "url": "https://github.com/ComplementaryDevelopment/ComplementaryReimagined/blob/c09950df0650b27dac260c1b0f69afc11387aa6f/shaders/program/gbuffers_water.glsl"
+        },
+        {
+          "path": "shaders/lib/lighting/mainLighting.glsl",
+          "sha256": "78346c00df27e244d70a9146b2e7cc9f26f047cb837ec917ac766078d4be7011",
+          "url": "https://github.com/ComplementaryDevelopment/ComplementaryReimagined/blob/c09950df0650b27dac260c1b0f69afc11387aa6f/shaders/lib/lighting/mainLighting.glsl"
+        },
+        {
+          "path": "shaders/lib/lighting/shadowSampling.glsl",
+          "sha256": "00b8ce5a845f0538a56145815392ded1004bd8beada0f894225faa798a981b8b",
+          "url": "https://github.com/ComplementaryDevelopment/ComplementaryReimagined/blob/c09950df0650b27dac260c1b0f69afc11387aa6f/shaders/lib/lighting/shadowSampling.glsl"
+        },
+        {
+          "path": "shaders/lib/atmospherics/fog/mainFog.glsl",
+          "sha256": "eaa1c720d79ca6e1116c67de2ec4ab3ab6225b9372eb4d1b40affcf68541a8d1",
+          "url": "https://github.com/ComplementaryDevelopment/ComplementaryReimagined/blob/c09950df0650b27dac260c1b0f69afc11387aa6f/shaders/lib/atmospherics/fog/mainFog.glsl"
+        },
+        {
+          "path": "shaders/lib/materials/materialMethods/wavingBlocks.glsl",
+          "sha256": "e0126ae22d0e9621e025e0325e384db7eabd2742f567cb277cdb2ee706c0c284",
+          "url": "https://github.com/ComplementaryDevelopment/ComplementaryReimagined/blob/c09950df0650b27dac260c1b0f69afc11387aa6f/shaders/lib/materials/materialMethods/wavingBlocks.glsl"
+        },
+        {
+          "path": "shaders/block.properties",
+          "sha256": "a6a6122862c59e35e64d69f021001458d48cbfcf57c7c21236604fde91ec6a3e",
+          "url": "https://github.com/ComplementaryDevelopment/ComplementaryReimagined/blob/c09950df0650b27dac260c1b0f69afc11387aa6f/shaders/block.properties"
+        }
+      ]
+    }
+  ]
+}

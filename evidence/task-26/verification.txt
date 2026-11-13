@@ -1,0 +1,31 @@
+PASS: TASK-25 working shader manifest and retained full-build source
+PASS: 13 GLSL program pairs in cloudless
+PASS: 13 GLSL program pairs in fogless
+PASS: 13 GLSL program pairs in full
+PASS: 13 GLSL program pairs in gradeless
+PASS: 13 GLSL program pairs in rain-neutral
+PASS: 13 GLSL program pairs in shadowless
+PASS: 13 GLSL program pairs in terrain-vanilla
+PASS: 13 GLSL program pairs in water-depthless
+PASS: 13 GLSL program pairs in water-vanilla
+PASS: five restored settings, removed trial packs, archived test world and verified 87 + 76 source-world hashes
+PASS: 44 validated profiles, 88 2560x1440 PNGs, 805413 CPU samples, four clean saves, and no shader errors
+PASS: all 17 matched comparison sheets and repeat deltas
+PASS: 52 GPU case summaries, 1664 paired query batches, and geometry pixel probes
+test_bad_values_and_sequence_rejected (test_frametimes.MetricsTests.test_bad_values_and_sequence_rejected) ... ok
+test_existing_output_not_overwritten (test_frametimes.MetricsTests.test_existing_output_not_overwritten) ... ok
+test_mismatched_profile_rejected (test_frametimes.MetricsTests.test_mismatched_profile_rejected) ... ok
+test_nanoseconds_and_summary (test_frametimes.MetricsTests.test_nanoseconds_and_summary) ... ok
+test_server_metrics_never_substituted (test_frametimes.MetricsTests.test_server_metrics_never_substituted) ... ok
+test_unknown_schema_rejected (test_frametimes.MetricsTests.test_unknown_schema_rejected) ... ok
+test_build_edits_stay_bounded_and_within_command_limit (test_scenes.ScenesTests.test_build_edits_stay_bounded_and_within_command_limit) ... ok
+test_function_camera_and_conditions_match_manifest (test_scenes.ScenesTests.test_function_camera_and_conditions_match_manifest) ... ok
+test_reject_closed_world_accept_locked_world (test_scenes.ScenesTests.test_reject_closed_world_accept_locked_world) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.007s
+
+OK
+PASS: 33 original inputs unchanged; 30 sources accounted for; 144 full-resolution PNG hashes/dimensions verified; all videos sampled start/interior/end with gaps <5.1s.
+PASS: all 11 scene-note groups cover every sampled frame; 435 Markdown local links resolve.
+PASS: Python/Bash syntax and scoped Git whitespace check

@@ -1,0 +1,34 @@
+{
+  "lamps": {
+    "position": [950.5, 184, 1052.5],
+    "yaw": 0,
+    "pitch": 5,
+    "time": 6000,
+    "weather": "clear",
+    "dimension": "minecraft:overworld",
+    "warmup_seconds": 20
+  },
+  "unlit": {
+    "position": [969.5, 184, 1052.5],
+    "yaw": 0,
+    "pitch": 6,
+    "time": 6000,
+    "weather": "clear",
+    "dimension": "minecraft:overworld",
+    "warmup_seconds": 20
+  },
+  "nether": {
+    "position": [0.5, 72, 0.5],
+    "yaw": 0,
+    "pitch": 10,
+    "dimension": "minecraft:the_nether",
+    "warmup_seconds": 20
+  },
+  "end": {
+    "position": [0.5, 93, 37.5],
+    "yaw": 180,
+    "pitch": 25,
+    "dimension": "minecraft:the_end",
+    "warmup_seconds": 20
+  }
+}

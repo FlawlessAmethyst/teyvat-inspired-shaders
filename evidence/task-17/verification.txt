@@ -1,0 +1,37 @@
+TASK-17 — Integrated prototype checkpoint
+2026-11-12, GenshinShaderDev Overworld
+DONE — CONTINUE
+
+PASS: 33 shader files match the TASK-16 manifest in the repository, the
+retained TASK-16 snapshot and the staged TASK-17 snapshot. The installed
+copy matched before each of the four fresh sessions. The copied scene
+world's preset functions matched scripts/scenes/data before the runs.
+
+PASS: Four matched sessions in Sodium 01, prototype 01, prototype 02,
+Sodium 02 order, with fresh log acknowledgments for all seven presets in
+every session. Both prototype sessions loaded TASK-17-prototype and
+requested RGBA16F. No shader-related error or fatal entries in the accepted
+client logs. All four sessions finished seven F3+L recordings and saved.
+
+PASS: 28 valid archives, 986782 positive contiguous CPU client-loop
+samples, spans 9996–10000 ms. Runtime, shared settings, mod hashes and
+archive options matched TASK-10. The archive and Iris settings identify
+the correct pack state for each run. Two 2560×1440 fullscreen PNGs per
+profile. The before/after grids show consistent framing and HUD state.
+Clouds, rain streaks, water and local lighting vary with animation phase.
+The largest absolute mean CPU increase was 0.304 ms in rain. GPU and
+display presentation timings remain open.
+
+PASS: The final GenshinShaderDev session saved and exited normally. Five
+settings files were restored byte-for-byte. The temporary pack was removed
+and the copied world was archived. All 76 preflight source-world hashes
+matched. All 33 original input hashes and 144 reference frame hashes and
+dimensions matched. Nine harness unit tests and replay/index shell and
+Python syntax checks passed. The run index reproduced byte-for-byte and
+189 local links and anchors resolved across the updated documents.
+
+Keep the 56 window PNGs, native F3+L archives, raw CSVs, options, logs,
+shader snapshot, world copy and settings backup under artifacts/task-17/.
+The reference index links the ten reviewed stills to their original source
+videos and exact presentation timestamps. The prior fog and shadow
+fixtures remain in artifacts/task-15/ and artifacts/task-16/.

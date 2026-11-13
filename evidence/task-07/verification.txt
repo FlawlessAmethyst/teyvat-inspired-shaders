@@ -1,0 +1,5 @@
+PASS: 2 pinned clean upstream clones, 19 file hashes and permalinks
+PASS: S1–S7 alternative coverage, 41 local document/ledger links
+PASS: no GLSL implementation introduced; acceptance is documentary, not runtime
+PASS: 33 original inputs unchanged; 30 sources accounted for; 144 full-resolution PNG hashes/dimensions verified; all videos sampled start/interior/end with gaps <5.1s.
+PASS: all 11 scene-note groups cover every sampled frame; 435 Markdown local links resolve.

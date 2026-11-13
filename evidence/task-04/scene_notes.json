@@ -1,0 +1,264 @@
+{
+  "01": [
+    [
+      0,
+      5,
+      "Grassy overlook across green valley, distant city and layered cliffs"
+    ],
+    [
+      10,
+      20,
+      "Orbit toward shaded rock walls, nearby trees and sky"
+    ],
+    [
+      25,
+      35,
+      "Valley panorama and downward view over grass, trees and terraces"
+    ],
+    [
+      40,
+      50,
+      "Cliff-facing orbit with sunward bright cloud edges"
+    ],
+    [
+      55,
+      60,
+      "Return to distant valley panorama"
+    ]
+  ],
+  "02": [
+    [
+      0,
+      5,
+      "Daylight coastal plateau and distant landscape"
+    ],
+    [
+      10,
+      25,
+      "Upward camera orbit: blue sky, clouds, sun glare"
+    ],
+    [
+      30,
+      30,
+      "Cloud cover builds over coast"
+    ],
+    [
+      35,
+      60,
+      "Dark overcast panorama; rain streaks visible in sampled frames"
+    ]
+  ],
+  "03": [
+    [
+      0,
+      10,
+      "Bright mountaintop platform above mist-filled stone pillars"
+    ],
+    [
+      15,
+      30,
+      "Skyward orbit with sun glare, clouds and floating structures"
+    ],
+    [
+      35,
+      50,
+      "Layered mountains, autumn-colored trees and low cloud/fog banks"
+    ],
+    [
+      55,
+      60,
+      "Downward view into fog-filled valley and nearer slopes"
+    ]
+  ],
+  "04": [
+    [
+      0,
+      5,
+      "High grassy island overlook, pink trees and turquoise coast"
+    ],
+    [
+      10,
+      20,
+      "Skyward orbit and nearby flowering trees"
+    ],
+    [
+      25,
+      35,
+      "Descent/glide from overlook toward lower terrain; darker blue views"
+    ],
+    [
+      40,
+      45,
+      "Low grassy clearing with trees and flowers"
+    ],
+    [
+      50,
+      60,
+      "Blue-lit grove, luminous plants and distant terrain"
+    ]
+  ],
+  "05": [
+    [
+      0,
+      15,
+      "Pink rock ledge over blue-purple basin, waterfalls and layered mist"
+    ],
+    [
+      20,
+      35,
+      "Orbit past wooden bridge, terraces, tree shadows and waterfall walls"
+    ],
+    [
+      40,
+      40,
+      "Skyward view of clouds and airborne particles"
+    ],
+    [
+      45,
+      50,
+      "Downward view of vegetation and luminous swirling water"
+    ],
+    [
+      55,
+      60,
+      "Return to broad waterfall-basin panorama"
+    ]
+  ],
+  "06": [
+    [
+      0,
+      5,
+      "Wooden walkway and small shelter amid bright grass and shaded trees"
+    ],
+    [
+      10,
+      30,
+      "Traversal across flowered grass hills, shrubs and broad tree canopies"
+    ],
+    [
+      35,
+      40,
+      "Skyward view with bright clouds and a luminous gameplay marker"
+    ],
+    [
+      45,
+      60,
+      "Grassy overlook toward densely wooded hills and giant distant tree"
+    ]
+  ],
+  "07": [
+    [
+      0,
+      15,
+      "Warm desert dunes, palms, red rock formations and monumental structures"
+    ],
+    [
+      20,
+      25,
+      "Sunward view with strong glare and long character shadow"
+    ],
+    [
+      30,
+      35,
+      "Descent toward palm-lined oasis"
+    ],
+    [
+      40,
+      45,
+      "Wading in shallow oasis water; visible bottom and surface rings"
+    ],
+    [
+      50,
+      60,
+      "Return over sand toward large stone structure"
+    ]
+  ],
+  "08": [
+    [
+      0,
+      15,
+      "Grassy lakeshore, mountains, elevated bridge and low sun"
+    ],
+    [
+      20,
+      30,
+      "Flowered slope and glide toward turquoise shoreline"
+    ],
+    [
+      35,
+      40,
+      "Beach and shallow water under warm pink-purple sky"
+    ],
+    [
+      45,
+      60,
+      "Shoreline orbit, flowers and water with progressively warmer horizon"
+    ]
+  ],
+  "09": [
+    [
+      0,
+      15,
+      "Rocky canyon settlement; orbit between orange sunward clouds and blue sky"
+    ],
+    [
+      20,
+      35,
+      "Similar overlook as warm horizon light fades toward dusk"
+    ],
+    [
+      40,
+      50,
+      "Darker blue canyon, sky and nearby cliffs"
+    ],
+    [
+      55,
+      60,
+      "Settlement panorama with blue ambient light and warm lamps"
+    ]
+  ],
+  "10": [
+    [
+      0,
+      10,
+      "Blue-purple rocky landscape, ruins, overhanging forms and luminous statue"
+    ],
+    [
+      15,
+      25,
+      "Star-like sky points, distant structures and pink horizon haze"
+    ],
+    [
+      30,
+      40,
+      "Orbit toward rocks and glowing statue/vertical light effect"
+    ],
+    [
+      45,
+      60,
+      "Broad purple-blue landscape with ruins, luminous plants and layered haze"
+    ]
+  ],
+  "11": [
+    [
+      0,
+      5,
+      "Snowy path, snow-covered conifers and nearby warm lantern"
+    ],
+    [
+      10,
+      25,
+      "Snowbound wooden village with warm windows and lamps"
+    ],
+    [
+      30,
+      35,
+      "Open snow/ice basin beneath tall cliff walls"
+    ],
+    [
+      40,
+      61,
+      "Skyward views of moon, stars, luminous sky bands and snow-covered surroundings"
+    ]
+  ]
+}

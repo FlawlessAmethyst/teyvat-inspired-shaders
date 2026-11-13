@@ -1,0 +1,4 @@
+PASS: two pinned repository revisions, 35 source file hashes and installed Iris JAR hash match.
+PASS: 34 local Markdown links; seven essential target rows; source IDs/permalinks resolve in manifest; no trailing whitespace.
+MANUAL: reviewed S1–S7 inputs, outcomes, limitations, version drift and later QA gates against official source/docs.
+LIMIT: documentation/source checks only; no client launch, shader compilation, visual acceptance or performance measurement.

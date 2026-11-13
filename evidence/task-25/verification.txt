@@ -1,0 +1,45 @@
+TASK-25 | 2026-11-13 | DONE
+Runtime: Minecraft 1.21.1, NeoForge 21.1.265, Iris 1.8.14-beta.1+mc1.21.1,
+Sodium 0.8.13+mc1.21.1, Microsoft OpenJDK 21.0.7+6-LTS, Prism Flatpak 11.1.1.
+Ryzen 9 9950X, GeForce RTX 4080 SUPER, OpenGL 4.6.0 NVIDIA 580.196.07,
+CachyOS kernel 7.3.3-1-cachyos.
+
+PASS: TASK-22 manifest verified all 38 shader files. Staged shaders and
+installed TASK-25-comparison files matched the source tree. The static
+linker passed 13 programs (artifacts/task-25/static-link.txt).
+
+PASS: 18 native 2560x1440 PNGs. Eight matched pair presets, options,
+Sodium options, Sodium Extra options and Dynamic FPS options are byte
+identical. Iris settings and live logs show the intended shader mode.
+All 18 view acknowledgements are present. The first shader-on log also
+has TASK03_READY_build after the shallows preset, confirming the basin's
+water, stripe, lamp and glass block checks.
+  artifacts/task-25/pack/logs-20261113-134023/latest.log
+  artifacts/task-25/sodium/logs-20261113-134508/latest.log
+  artifacts/task-25/pack-repeat/logs-20261113-134709/latest.log
+All three logs show all dimensions saved and contain no ERROR-level or
+shader compile/link error records. The Sodium run needed a separate
+stop/log call after the shell wrapper was edited during the running capture.
+All eight Sodium screenshots completed before the wrapper error.
+The corrected wrapper completed the two-scene repeat and graceful shutdown.
+
+PASS: Eight comparison JPEGs and an eight-row index. The seven selected
+decoded PNG hashes and their seven original video hashes match TASK-04.
+Regenerating the index with comparisons.py reproduced the reviewed CSV.
+Valley far-ridge crop 180x90+1130+640, encoded luma mean and population SD:
+  Sodium     53.9216   13.1512
+  Pack      172.738     5.72766
+  Repeat    172.738     5.72766
+The repeat cave retains the framing, warm light pools and dark recesses.
+Repeat native SHA-256:
+  082c366ce7bf7b8e96ba2603b1e37db74828c169c7ccf05adc298bec4de32871  artifacts/task-25/pack-repeat/valley/native.png
+  a61dd6d491b069e6d7ae2ee239539965773464851dacfc5a5ccded89bc936bc7  artifacts/task-25/pack-repeat/cave/native.png
+
+PASS: Five original settings files restored byte for byte. Iris shader
+selection is empty and shaders are disabled, matching the preflight state.
+Temporary shaderpack removed. Disposable world saved at artifacts/task-25/world.
+All 79 TASK-15 source-world hashes and the 76 TASK-03 world hashes match.
+
+PASS: Nine harness unit tests, Python compilation, Bash syntax, reference
+integrity and scoped whitespace checks. The existing trailing whitespace
+in evidence/task-04/versions.txt is outside the TASK-25 changes.

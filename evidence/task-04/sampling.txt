@@ -1,0 +1,12 @@
+TASK-04-VID-001: 13 frames
+TASK-04-VID-002: 13 frames
+TASK-04-VID-003: 13 frames
+TASK-04-VID-004: 13 frames
+TASK-04-VID-005: 13 frames
+TASK-04-VID-006: 13 frames
+TASK-04-VID-007: 13 frames
+TASK-04-VID-008: 13 frames
+TASK-04-VID-009: 13 frames
+TASK-04-VID-010: 13 frames
+TASK-04-VID-011: 14 frames
+PASS: 30 immutable sources; 144 indexed frames

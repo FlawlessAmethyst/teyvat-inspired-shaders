@@ -1,0 +1,35 @@
+TASK-23 verification
+
+PASS The starting source matched the TASK-22 manifest and retained shader
+     tree. Both disposable pack installs matched their snapshots. All 13
+     expanded shader pairs linked for each pack with glslangValidator.
+PASS Nine 2560x1440 native stills cover clear daylight, oak cutouts and the
+     oblique waterline in Sodium, TASK-22 and the disposable spatial trial.
+PASS Nine harness/scene unit tests, original reference integrity and local
+     reference links, Python and Bash syntax, and C compilation with warnings
+     as errors. Existing TASK-04 output contains unrelated trailing whitespace.
+
+The first X11 clips contained black scan bands. A second input trial produced
+stationary camera footage because held X11 key events did not drive movement.
+These clips were excluded. Spectacle's KWin window recorder and a scoped
+movement-key helper use the existing user device access. The accepted clips
+are checked for decoded resolution, cadence, missing rows and terrain travel.
+The native profiler emitted the known server CrashReport diagnostics during
+archive generation. The client ZIPs and graceful saves are checked separately.
+
+PASS Nine KWin window clips decode to 2560x1440 H.264 and average 39.7–39.9
+     captured frames per second. All clips show terrain travel and passed
+     the black-band check. The spatial and control paths were reviewed with
+     full-frame sheets and enlarged moving crops.
+PASS All twelve F3+L profiles match the TASK-22 runtime and settings, the
+     correct preset and pack, and stable patches of static terrain. Their
+     archived client samples reproduce the reviewed CSV.
+PASS Six isolated GPU process runs on the RTX 4080 SUPER retained 192
+     alternating-order timer pairs and show a 0.0091–0.0097 ms median paired
+     increment per 2560x1440 final draw. Full-client GPU time remains open.
+PASS All seven accepted client sessions saved and exited. The five settings
+     files match the backups, temporary packs were removed, the fixture was
+     archived and all 76 original TASK-03 world hashes verified. The live
+     shader source matches the TASK-22 manifest and control snapshot.
+
+Decision: defer shader anti-aliasing. Next task: TASK-24.

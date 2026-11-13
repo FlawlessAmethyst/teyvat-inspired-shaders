@@ -1,0 +1,42 @@
+TASK-16 — Basic optimized shadows
+2026-11-12, GenshinShaderDev Overworld
+
+PASS: TASK-15 fog control matched its 28-file manifest. The final 33-file pack
+matched the source, retained snapshot and installed shaders. Offline
+glslangValidator -l linked all 12 shader pairs with the recorded stage defines.
+
+PASS: Seven matched 2560×1440 native F2 views per mode in the copied world.
+Both shader packs loaded in Iris 1.8.14-beta.1 and requested RGBA16F. The
+accepted sessions saved the world and showed no shader compile, link, pipeline
+or fallback errors. Stone, the chest, oak leaves and cutout glass frames cast
+onto terrain. The revised caster samples atlas level zero, recovering gaps in
+the oak leaf footprint. The far range-lane crop beyond 60 blocks matches the
+fog control. Cave and night remain legible. The extra cave repeats show
+a darker near-floor patch with shadows and comparable lantern pools.
+
+PASS: 12 matched native F3+L profiles, 362699 CPU render-loop samples, spans
+9993–10000 ms. Shared options, runtime, archive contents and static before/after
+crops matched. The incremental mean cost was +0.043165 ms in forest and
++0.042566 ms in sunset. GPU pass time and presentation cadence are unmeasured.
+The second fog and Sodium repeats ran after the interruption. The initial
+cutout trial and the focus-interrupted fog repeat were excluded from runs.csv.
+
+Runtime evidence: artifacts/task-16/{sodium-01,fog-01,shadows-01,shadows-02,
+fog-02,sodium-02}/ and their logs-* subdirectories. See runs.csv for archive
+and CSV hashes and pixels.csv for exact screenshot crops.
+The first trial source and results are in variants/trial-mipped-alpha and
+trial-mipped-alpha under the artifact root. Initial camera replay attempts and
+the focus-interrupted fog session are retained there as diagnostic artifacts.
+
+PASS: Ten acknowledged camera steps of 0.0625 blocks along +Z and 11 distinct
+contact frames at yaw -90 and pitch 18. The final F3 capture records
+(1009.500, 183.00000, 1034.125). The original hotbar reset teleported the
+camera during earlier attempts. The copied fixture now holds the camera
+position within the motion lane. See shadows-motion/motion, motion-debug.png
+and the motion-strip.jpg contact sheet.
+
+PASS: GenshinShaderDev stopped after a successful save. Five settings files
+restored byte-for-byte, both temporary packs removed, copied world lock
+released and all 75 original TASK-03 world files matched SHA-256. Nine
+harness unit tests, replay Python and Bash syntax checks, 33 original input
+hashes and 144 reference frame hashes passed.

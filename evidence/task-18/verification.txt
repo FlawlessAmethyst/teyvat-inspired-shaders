@@ -1,0 +1,19 @@
+TASK-18 verification, 2026-11-12
+
+PASS Accepted source matches the 34-file manifest and artifacts/task-18/shaders.
+PASS TASK-17 control matches the TASK-16 manifest and retained TASK-17 snapshot.
+PASS All 12 expanded shader pairs linked with glslangValidator -l.
+PASS Iris loaded TASK-18-clouds and TASK-18-control in separate fresh sessions.
+PASS Five acknowledged preset captures per mode at 2560x1440. Preset and video
+     settings snapshots match across modes. Both sessions saved cleanly.
+PASS A 1600x360 daylight foreground crop matched byte-for-byte.
+PASS Both final GPU runs identify the RTX 4080 SUPER with NVIDIA 580.196.07.
+     Each run provides 32 paired 64-draw batches per view across four views.
+     The checked-in timing summary reproduces from the raw batch CSVs.
+PASS Nine repository harness tests, Python and Bash syntax, and strict C build.
+PASS Reference integrity check verified 33 original inputs and 144 frames.
+PASS Five instance settings restored byte-for-byte, with Iris shaders disabled
+     and empty selection. Both temporary packs removed and the test world
+     archived. All 76 original TASK-03 world file hashes matched.
+
+See commands.txt for replay. Retain artifacts/task-18 for native evidence.

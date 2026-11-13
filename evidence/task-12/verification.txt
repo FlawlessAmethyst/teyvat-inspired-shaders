@@ -1,0 +1,28 @@
+PASS glslangValidator 16.6.0 linked all eight Iris-include-expanded shader pairs.
+PASS python3 -m unittest discover -s scripts (9 tests).
+PASS py_compile for TASK-12 replay/evidence tools and the shared TASK-11 summarizer.
+PASS bash -n for commands.txt and session.sh.
+PASS TASK-11 control snapshot matched evidence/task-11/pack.sha256.
+PASS TASK-12 tested snapshot and repository source matched evidence/task-12/pack.sha256.
+PASS TASK-11 summarizer regenerated its retained runs.csv byte-for-byte.
+PASS TASK-12 index_runs.py validated 16 archives and regenerated runs.csv byte-for-byte.
+PASS 281008 valid loop samples; profile durations 9995–10001 ms.
+PASS Runtime, mod hashes, preset, options and 2560×1440 profile captures matched the TASK-10 conditions.
+PASS Both modes captured daylight, forest, night and cave plus 16 time sweep frames each.
+PASS Both sunset stone-face captures at tick 12000 had acknowledged camera triggers.
+PASS Native images and fixed crops inspected; evidence/task-12/pixels.csv records median sRGB codes.
+PASS Iris loaded both packs, built the Overworld pipeline and requested cleared RGBA16F colortex0.
+PASS All four sessions logged four completed profiles and a normal world save.
+PASS The 15 time steps appeared in order in each first-session log; no build preset ran.
+PASS No shader compilation, link or pipeline failure was found in the retained logs.
+PASS Both installed shader trees matched their tested snapshots before removal.
+PASS GenshinShaderDev stopped and released the dedicated world's session lock.
+PASS Five original client configuration files matched the preflight backups byte-for-byte.
+PASS The installed scene datapack data tree and pack.mcmeta matched the original.
+PASS Both temporary shaderpacks were removed.
+
+Logs:
+artifacts/task-12/graded-01/logs-20261112-114933/
+artifacts/task-12/sunlight-01/logs-20261112-115643/
+artifacts/task-12/sunlight-02/logs-20261112-120113/
+artifacts/task-12/graded-02/logs-20261112-120519/

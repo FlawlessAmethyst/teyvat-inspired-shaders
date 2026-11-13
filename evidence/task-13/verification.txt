@@ -1,0 +1,27 @@
+PASS Current TASK-13 source and the retained ambient snapshot match the shader manifest.
+PASS TASK-12 control snapshot matches the TASK-12 shader manifest.
+PASS glslangValidator 16.6.0 linked all eight Iris-include-expanded program pairs.
+PASS python3 -m unittest discover -s scripts (9 tests).
+PASS TASK-13 Python tools compiled and both shell files passed bash -n.
+PASS The TASK-12 timing index still reproduces its original CSV byte-for-byte.
+PASS The TASK-13 timing index validated 12 archives and reproduced runs.csv byte-for-byte.
+PASS Profiles match TASK-10 runtime, mod hashes and options and the TASK-03 preset metadata.
+PASS 280821 valid CPU client-loop samples with profile durations of 9996–10000 ms.
+PASS Both modes captured daylight, sunset, forest, cave and night at 2560x1440.
+PASS Paired native captures have identical preset and shared client settings files.
+PASS All native scene pairs reviewed. Fixed sRGB patches reproduce pixels.csv byte-for-byte.
+PASS All four logs show the expected Iris pack, Overworld pipeline and cleared RGBA16F colortex0.
+PASS Each session recorded three completed profiles and a normal world save.
+PASS No build trigger or shader compile, link or pipeline failure in the retained logs.
+PASS The installed shader trees matched both tested snapshots before removal.
+PASS GenshinShaderDev stopped and released the dedicated world's session lock.
+PASS Five client settings files restored to their preflight bytes.
+PASS The installed scene datapack data and pack.mcmeta match the source.
+PASS Both temporary shaderpacks were removed.
+PASS Local links and heading anchors resolve in the updated Markdown files.
+
+Logs:
+artifacts/task-13/sunlight-01/logs-20261112-122012/
+artifacts/task-13/ambient-01/logs-20261112-122546/
+artifacts/task-13/ambient-02/logs-20261112-122845/
+artifacts/task-13/sunlight-02/logs-20261112-123112/

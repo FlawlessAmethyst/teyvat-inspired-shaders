@@ -1,0 +1,49 @@
+TASK-03, 2026-11-12; run from the repository root.
+Desktop commands used approved execution outside the sandbox. No other instance used.
+
+Preparation:
+python3 scripts/scenes.py prepare
+# Creates test-world copy and backs up settings; run once only.
+# During development the final datapack source was copied into this same test
+# world's datapacks/task03/data while the client was stopped, then reloaded by launch.
+python3 scripts/harness.py --artifacts-dir artifacts/task-03 launch --timeout 120
+python3 scripts/harness.py screenshot artifacts/task-03/title-ready.png
+python3 scripts/harness.py click 1280 535
+python3 scripts/harness.py screenshot artifacts/task-03/world-list.png
+python3 scripts/harness.py click 1200 300
+python3 scripts/harness.py click 1050 1315
+# Initial world-list row was second. After saving it became first:
+python3 scripts/harness.py click 1200 200
+python3 scripts/harness.py click 1050 1315
+# Always inspect a fresh list; these are recorded actions, not blind navigation.
+
+# build-01 through build-05 were failed command-text/clipboard probes, not captures.
+# Final verified runner uses number keys and does not access the clipboard.
+python3 scripts/scenes.py capture build artifacts/task-03/build-06
+python3 scripts/scenes.py capture daylight artifacts/task-03/daylight-01
+python3 scripts/scenes.py capture sunset artifacts/task-03/sunset-01
+python3 scripts/scenes.py capture night artifacts/task-03/night-01
+python3 scripts/scenes.py capture rain artifacts/task-03/rain-01
+python3 scripts/scenes.py capture forest artifacts/task-03/forest-01
+python3 scripts/scenes.py capture open-water artifacts/task-03/open-water-01
+python3 scripts/scenes.py capture cave artifacts/task-03/cave-01
+python3 scripts/scenes.py capture daylight artifacts/task-03/daylight-02
+python3 scripts/scenes.py capture forest artifacts/task-03/forest-02
+python3 scripts/scenes.py capture cave artifacts/task-03/cave-02
+python3 scripts/harness.py stop --timeout 60
+python3 scripts/harness.py --artifacts-dir artifacts/task-03 logs
+# Installed revised sunset and shore cameras with client stopped, relaunched,
+# inspected title/world list, and selected TASK-03 Visual Scenes again.
+python3 scripts/harness.py --artifacts-dir artifacts/task-03 launch --timeout 120
+python3 scripts/scenes.py capture sunset artifacts/task-03/sunset-02
+python3 scripts/scenes.py capture open-water artifacts/task-03/open-water-02
+
+Verification:
+python3 -m unittest discover -s scripts -p 'test_*.py' -v > evidence/task-03/tests.txt 2>&1
+python3 -m py_compile scripts/scenes.py scripts/test_scenes.py scripts/compare_scenes.py
+python3 scripts/compare_scenes.py artifacts/task-03 > evidence/task-03/repeats.json
+# ImageMagick contact sheets visually inspected in addition to numerical metrics.
+# Original inputs/reference SHA256s compared against task-01 manifest, excluding
+# tools/minecraft.py whose authorized change happened in TASK-02.
+python3 scripts/harness.py stop --timeout 60
+python3 scripts/harness.py --artifacts-dir artifacts/task-03 logs

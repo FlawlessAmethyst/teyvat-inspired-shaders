@@ -1,0 +1,16 @@
+PASS 14 native stills, 42 timed weather frames and three Iris dimension changes
+PASS two static Overworld return patches are byte-identical
+PASS waterline IN → OUT → IN, basin block checks, active pack, saved world and crash-file check
+PASS stone-strafe: 246 frames, 6.183 s, XYZ [1013.4477887057909, 183.0, 1036.5], yaw/pitch [-180.0, 8.0]
+PASS forest-walk: 245 frames, 6.150 s, XYZ [1018.5, 183.0, 992.5522112942091], yaw/pitch [-180.0, 5.0]
+PASS forest-turn: 175 frames, 4.399 s, XYZ [1018.5, 183.0, 1005.5], yaw/pitch [-113.849785, 5.0]
+PASS shore-strafe: 248 frames, 6.233 s, XYZ [981.8673293563694, 182.0, 1016.2506921080352], yaw/pitch [150.0, 12.0]
+PASS waterline: 296 frames, 7.449 s, XYZ [1027.5, 179.0, 1037.5], yaw/pitch [-90.0, 5.0]
+PASS cave-entry: 246 frames, 6.183 s, XYZ [969.5, 184.0, 1033.447788705792], yaw/pitch [0.0, 3.0]
+PASS 13 expanded program pairs linked, accepted shader manifest and snapshot matched.
+PASS Five settings matched their backups byte for byte; temporary pack removed.
+PASS Archived the closed test world and verified 76 TASK-03 and 112 TASK-22 source-world hashes.
+PASS Nine existing harness tests, original reference verification, Python and Bash syntax, and C compilation with warnings treated as errors.
+The initial menu-only trial stopped on an OCR mismatch. No world was opened in that trial.
+The accepted run used the reviewed world-row mask and saved normally.
+Next numbered task: TASK-29.

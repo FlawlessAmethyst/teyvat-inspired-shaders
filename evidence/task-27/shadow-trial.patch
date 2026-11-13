@@ -1,0 +1,9 @@
+--- a/lib/shadows.glsl
++++ b/lib/shadows.glsl
+@@ -1,5 +1,5 @@
+ // One orthographic map. The receiver fades out before the caster cull range.
+-const int shadowMapResolution = 1024;
++const int shadowMapResolution = 768;
+ const float shadowDistance = 64.0;
+ const float shadowDistanceRenderMul = 1.0;
+ const float shadowIntervalSize = 0.0625;

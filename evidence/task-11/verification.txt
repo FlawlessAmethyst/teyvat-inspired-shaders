@@ -1,0 +1,29 @@
+TASK-11 — DONE — 2026-11-12
+
+PASS All four shipped shader pairs and diagnostic final linked with glslangValidator -l after expanding Iris includes.
+PASS python3 -m unittest discover -s scripts (9 tests), py_compile of TASK-11 Python files, bash -n for session.sh and commands.txt.
+PASS Graded manifest (13 files) and reconstructed neutral manifest (12 files). Installed neutral, graded and diagnostic shaders matched staged copies before removal.
+PASS All retained sessions selected the expected shaderpack and built the Overworld pipeline. Iris requested RGBA16F colortex0 with clearing. No shader compile, shader creation or datapack function load errors.
+PASS Ten 2560×1440 native captures across daylight, forest, sunset, night and cave. Native 2560×1440 snow swatch and ramp.
+PASS Graded frames had zero channel values at 255. The night sky retained its 1,215,668 black pixels. Other graded frames had zero pixels with a channel at zero.
+PASS Three 2,560-sample diagnostic rows monotonic and within one 8-bit code per channel of the single sRGB encode. SDR gray endpoint 236, HDR gray 251, HDR green RGB 49/251/107.
+PASS Snow showed distinct faces and texture. TASK11_SNOW_PLACED_24_6 and TASK11_SNOW_REMOVED_24_6 confirm all 30 snow blocks were placed and removed.
+PASS 12 archives and 211,181 raw client render-loop samples over 9.996–10.000 seconds. Same TASK-10 settings, mod hashes, runtime values, resolution and presets. CSV reproduced from original archives.
+PASS Five retained sessions saved normally. The TASK-03 lock was released. Restored the original scene datapack and five settings files. Removed three temporary shaderpacks.
+
+Retained latest.log and debug.log pairs under artifacts/task-11:
+neutral-01/logs-20261112-111337/
+graded-01/logs-20261112-112634/
+graded-02/logs-20261112-112933/
+neutral-02/logs-20261112-113231/
+diagnostic/logs-20261112-113401/
+
+The first grading trial is under initial-grade-01 and variants/initial-grade.
+It is excluded from the comparison matrix. Its blue-channel zeros in the
+forest profiler frame motivated the final lower-gamut bound. Its chat-based
+snow probe triggered the existing TASK-03 build preset. The final swatch ran
+through acknowledged temporary datapack functions.
+
+The profiler emitted the prior level-dump diagnostic noise. All profiles
+completed and the world saved normally. GPU pass timing, presentation cadence,
+other dimensions and other configurations remain unverified.

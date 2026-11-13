@@ -1,0 +1,37 @@
+TASK-14 — DONE, 2026-11-12
+
+PASS TASK-13 control and TASK-14 source/snapshot manifests verified.
+PASS Nine expanded shader pairs linked with glslangValidator 16.6.0 and the Iris sky stage defines.
+PASS All nine script tests, Python byte-compilation and Bash syntax checks.
+PASS 33 original inputs and 144 generated reference frame hashes verified by scripts/verify_references.py.
+PASS Five retained sessions loaded the intended Overworld pipeline and cleared RGBA16F colortex0.
+PASS No shader compile, link or pipeline error in the retained sessions.
+PASS 20 matched native sweep frames per pack and 19 acknowledged clock changes in each sweep log.
+PASS Fixed cameras and five shared config/preset files match for the native comparison pairs.
+PASS Static wall crops match before and after all eight CPU profiles.
+PASS Timing index verifies 184799 samples, client settings, runtime and mod hashes against TASK-10.
+PASS Native dawn and dusk sequences contain 486 clean 2560x1440 frames. Maximum capture gap 0.334 s.
+PASS Dusk trigger/freeze 12300 to 13893. Dawn trigger/freeze 22530 to 243.
+PASS Dawn wrap review and fixed 23999/0 native medians show no abrupt palette change in the samples.
+PASS All retained client sessions saved and exited. Dedicated world lock released.
+PASS Five original settings files and all original test-world triggers restored byte-for-byte.
+PASS Installed scene datapack matches the repository. Both TASK-14 packs removed from the instance.
+
+Retained client logs
+artifacts/task-14/sky-01/logs-20261112-155708/
+artifacts/task-14/ambient-01/logs-20261112-160202/
+artifacts/task-14/ambient-02/logs-20261112-160351/
+artifacts/task-14/sky-02/logs-20261112-160926/
+artifacts/task-14/sky-video/logs-20261112-161812/
+
+Capture recovery
+The initial focus loss interrupted the night capture. A fresh attempt found a
+temporary dawn trigger sharing the cave binding. Restored the original
+triggers, moved the dawn and dusk test bindings to unused presets, and ran
+the matched matrix from fresh sessions. The X11 capture path produced black
+bands in both uncapped and VSync-limited trials. Native screenshots at 3 Hz
+replaced those recordings. Rejected material remains in interrupted-sky-01,
+trigger-conflict-sky-01 and invalid-x11grab under artifacts/task-14/.
+
+The commands in commands.txt reproduce the retained captures and analyses.
+See docs/testing/sky.md for capture conditions, results and the TASK-15 handoff.

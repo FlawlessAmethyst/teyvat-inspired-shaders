@@ -1,0 +1,4 @@
+PASS glslangValidator -l final.vsh final.fsh
+PASS glslangValidator -l gbuffers_basic.vsh gbuffers_basic.fsh
+PASS glslangValidator -l gbuffers_textured.vsh gbuffers_textured.fsh
+PASS glslangValidator -l gbuffers_textured_lit.vsh gbuffers_textured_lit.fsh

@@ -1,0 +1,38 @@
+{
+  "daylight": {
+    "first": "artifacts/task-03/daylight-01/native.png",
+    "repeat": "artifacts/task-03/daylight-02/native.png",
+    "full_frame_normalized_mae": 0.0139199,
+    "static_region": "2560x720+0+720",
+    "static_region_normalized_mae": 0.0,
+    "static_region_below_0_01": true,
+    "sha256": [
+      "893d5ec3602233cad1c13ecdb38a500f57041061e50ffa28adcba21fb5cc99d2",
+      "044aadff58b8c7e86523222dfb79a51a80a7a9d08e083d653230019ccc2a399e"
+    ]
+  },
+  "forest": {
+    "first": "artifacts/task-03/forest-01/native.png",
+    "repeat": "artifacts/task-03/forest-02/native.png",
+    "full_frame_normalized_mae": 0.0211061,
+    "static_region": "2560x720+0+720",
+    "static_region_normalized_mae": 0.0,
+    "static_region_below_0_01": true,
+    "sha256": [
+      "7a5c3701fc76df3aef199d17d7499b839ec835c834405c2239d8e23a68c5264d",
+      "2879b72aaa9f00ec6593a687a8c3fad0b39a75c8b4e0e8e855427484783c7488"
+    ]
+  },
+  "cave": {
+    "first": "artifacts/task-03/cave-01/native.png",
+    "repeat": "artifacts/task-03/cave-02/native.png",
+    "full_frame_normalized_mae": 0.000641911,
+    "static_region": "2560x1440+0+0",
+    "static_region_normalized_mae": 0.000641911,
+    "static_region_below_0_01": true,
+    "sha256": [
+      "d97711b48c00db319e601ac11565439c2755c88f110a098f05fba21c708d82af",
+      "9ed12206af9dc89fd3f3c2476ff0c2d83f6a2e8677cb31084252c87be53293cd"
+    ]
+  }
+}

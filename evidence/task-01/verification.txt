@@ -1,0 +1,5 @@
+PASS: 35 original inputs unchanged, including 30 references
+PASS: required layout and ledgers exist; shader implementation has not started
+PASS: Git initialized; references/captures/caches ignored; small TASK-01 evidence eligible
+PASS: initial repository has no staged/committed files; eligible files are source/text only
+NOT TESTED: Minecraft runtime, GLSL compilation, visual quality or performance (outside TASK-01)

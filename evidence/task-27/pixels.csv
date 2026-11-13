@@ -1,0 +1,16 @@
+trial,scene,patch,crop,identical_rgb_pct,rgb_mean_abs_delta,rgb_p95_abs_delta,mean_luma_delta
+shadow,contact,unoccluded stone,108x60+1200+838,100.000,0.000,0.000,+0.000
+shadow,contact,suspended leaf footprint,135x55+1058+588,51.542,6.385,34.000,+2.954
+shadow,contact,stone pillar contact,135x25+1457+615,79.022,0.927,6.000,-0.445
+shadow,sunset,unoccluded stone,100x60+1100+894,93.900,0.024,0.000,+0.005
+shadow,sunset,chest cast shadow,62x19+1738+615,70.798,1.685,9.000,+1.746
+shadow,sunset,suspended leaf footprint,172x190+1380+685,29.012,4.023,15.000,-1.067
+shadow,sunset,stone pillar shadow,66x35+720+808,100.000,0.000,0.000,+0.000
+shadow,sunset,clear-glass footprint,260x100+390+610,54.296,3.179,16.000,+0.742
+shadow,range,near pillar footprint,60x9+1606+749,83.889,0.473,4.000,-0.123
+shadow,range,fade-zone pillar footprint,26x6+1336+678,98.077,0.034,0.000,-0.002
+shadow,range,far pillar footprint,20x5+1299+673,100.000,0.000,0.000,+0.000
+fog,valley,terrain and horizon,420x220+1080+510,22.998,2.411,10.000,-0.104
+fog,rain,terrain and horizon,420x220+1080+510,74.424,3.055,18.000,+0.299
+fog,dusk,terrain and horizon,520x250+1020+420,83.102,0.127,1.000,-0.000
+fog,ridges,terrain and horizon,500x180+1050+565,89.299,0.658,5.000,-0.011

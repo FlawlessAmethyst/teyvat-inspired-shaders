@@ -1,0 +1,56 @@
+# Run in stages from the repository root. Pass a fresh path under artifacts/
+# when replaying alongside the retained artifacts/task-25/ evidence.
+set -euo pipefail
+root=$(realpath -m "${1:-artifacts/task-25}")
+game=$(python3 -c 'import sys; sys.path.insert(0,"tools"); import minecraft; print(minecraft.GAME)')
+
+# Confirm GenshinShaderDev is idle before staging the retained TASK-22 shaders.
+python3 tools/minecraft.py stop --timeout 60
+python3 evidence/task-25/replay.py prepare "$root"
+diff -rq "$root/shaders" "$game/shaderpacks/TASK-25-comparison/shaders"
+python3 evidence/task-22/link_shaders.py "$root/shaders" > "$root/static-link.txt" 2>&1
+test "$(rg -c '^PASS ' "$root/static-link.txt")" = 13
+
+# Run the Minecraft desktop commands with scoped host access.
+python3 evidence/task-25/replay.py pack "$root"
+python3 tools/minecraft.py --artifacts-dir "$root/pack" launch --timeout 120
+python3 tools/minecraft.py screenshot "$root/pack/title.png"
+# Check that the title screen is ready before entering the world list.
+python3 tools/minecraft.py click 1280 535
+python3 tools/minecraft.py screenshot "$root/pack/world-list.png"
+magick "$root/pack/world-list.png" -crop 780x420+890+90 +repage "$root/world-list-review.png"
+# Verify that the first row reads TASK-25 Visual Comparison before saving the guard.
+cp "$root/pack/world-list.png" "$root/world-list-reference.png"
+bash evidence/task-25/session.sh "$root" pack open
+bash evidence/task-25/session.sh "$root" sodium
+# The original Sodium capture reached all eight views. Its wrapper was edited
+# while running and failed before the stop/log commands. Recovery used:
+# python3 tools/minecraft.py --artifacts-dir "$root/sodium" stop --timeout 60
+# python3 tools/minecraft.py --artifacts-dir "$root/sodium" logs
+bash evidence/task-25/session.sh "$root" pack-repeat valley cave
+
+python3 evidence/task-25/replay.py restore "$root"
+for path in options.txt config/{iris.properties,sodium-options.json,sodium-extra-options.json,dynamic_fps.json}; do
+    cmp "$game/$path" "$root/before/${path##*/}"
+done
+test ! -e "$game/saves/TASK-25 Visual Comparison"
+test ! -e "$game/shaderpacks/TASK-25-comparison"
+test -d "$root/world"
+(cd artifacts/task-15/world && sha256sum --quiet -c "$root/source-world.sha256")
+sha256sum --quiet -c artifacts/task-22/source-world.sha256
+diff -rq "$root/shaders" artifacts/task-22/shaders
+python3 evidence/task-25/comparisons.py "$root" > "$root/comparisons.csv"
+for mode in sodium pack pack-repeat; do
+    magick "$root/$mode/valley/native.png" -crop 180x90+1130+640 +repage \
+        -fx '0.2126*r+0.7152*g+0.0722*b' -channel R \
+        -format "$mode mean=%[fx:255*mean] stdev=%[fx:255*standard_deviation]\n" info:
+done
+# ImageMagick returns 1 for valid captures with animated pixel differences.
+magick compare -metric AE "$root/pack/cave/native.png" "$root/pack-repeat/cave/native.png" null: || test "$?" = 1
+python3 -m unittest discover -s scripts -p 'test_*.py' -v
+python3 -m py_compile evidence/task-25/*.py
+bash -n evidence/task-25/session.sh
+bash -n evidence/task-25/commands.txt
+python3 scripts/verify_references.py
+git diff --check -- .gitignore docs/{CODEX_TASKS,DECISIONS,STATUS,TEST_LOG}.md \
+    docs/architecture/shaderpack_design.md evidence/README.md

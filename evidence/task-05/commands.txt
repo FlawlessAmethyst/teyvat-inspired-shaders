@@ -1,0 +1,34 @@
+# Run from repository root: bash evidence/task-05/commands.txt > evidence/task-05/verification.txt
+set -eu
+python3 scripts/verify_references.py
+python3 - <<'PY'
+import json
+import re
+from pathlib import Path
+from decimal import Decimal
+root = Path.cwd()
+files = [Path('docs/research/style_targets.md'), Path('docs/STATUS.md'), Path('docs/DECISIONS.md'), Path('docs/TEST_LOG.md')]
+links = 0
+for p in files:
+    body = p.read_text()
+    assert not any(line.rstrip() != line for line in body.splitlines()), p
+    for target in re.findall(r'\]\(([^)]+)\)', body):
+        if '://' in target or target.startswith('#'):
+            continue
+        assert (p.parent / target.split('#')[0]).resolve().exists(), (p, target)
+        links += 1
+print(f'PASS: {links} local Markdown links resolve across four deliverable/ledger files; no trailing whitespace.')
+body = files[0].read_text()
+frames = {r['path']: r for r in json.loads(Path('evidence/task-04/frames.json').read_text())}
+rows = re.findall(r'^\| R\d+ \|.*$', body, re.M)
+assert len(rows) == 10
+for row in rows:
+    source, stamp, png = re.search(r'\]\(../../(references/[^)]+)\), ([0-9.]+) s.*\]\(../../(artifacts/[^)]+)\)', row).groups()
+    assert frames[png]['source'] == source
+    assert Decimal(stamp) == Decimal(str(frames[png]['timestamp_seconds'])), (png, stamp)
+assert len(re.findall(r'^### S[1-7] —', body, re.M)) == 7
+print('PASS: all 10 example source paths and exact timestamps match TASK-04 frame manifest; seven target sections present.')
+print('MANUAL REVIEW: 10 referenced PNGs visually inspected; TASK-03 lighting/materials sheets and final sunset-02/open-water-02 images reviewed.')
+print('MANUAL REVIEW: each S1–S7 has observed evidence IDs, proposed cheap method, scene mapping, qualitative pass checks and limitations; scope stops before TASK-06.')
+print('LIMIT: document/integrity validation only; no runtime, temporal, shader, feasibility or performance acceptance.')
+PY

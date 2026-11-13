@@ -1,0 +1,26 @@
+TASK-27 — DONE — 2026-11-13
+Control and retained default: evidence/task-25/fog-pack.sha256.
+PASS sha256sum --quiet -c evidence/task-25/fog-pack.sha256.
+PASS diff -rq shaderpack/shaders artifacts/task-27/variants/full/shaders.
+PASS 13 GLSL pairs each in full, shadow, fog and retained source.
+PASS four scoped sessions saved and stopped. Iris acknowledged both trials
+and the full control. The expected RGBA16F target was logged for each pack.
+PASS 24 native F3+L profiles, 549153 client-loop samples, 9995–10000 ms
+per profile. Matched 2560x1440 options, mod hashes, fixed preset and mode.
+The TASK-16 fixture was built after full-01 profiles. It was present
+throughout the reversed shader session.
+PASS two EGL GPU runs per trial on RTX 4080 SUPER / NVIDIA 580.196.07.
+384 paired batches of 64 draws or pass iterations. Shadow depth and copy
+probes matched at 1024 and 768. All sampled fog RGB probes matched.
+PASS 10 native F2 screenshots and 48 before/after profile window frames.
+Contact and range retained. Lower-resolution cutout detail visibly softened.
+PASS five settings restored byte for byte. Three temporary packs removed.
+Copied world archived and unlocked. All 87 retained TASK-25 world files
+and 76 original TASK-03 world files match their preflight SHA-256 manifests.
+PASS regenerated runs.csv, gpu-summary.csv and pixels.csv match the reviewed
+indices. Python compilation, shell syntax, nine harness tests and reference
+verification passed. See commands.txt for the exact replay.
+Known profiler output: dummy level-dump crash reports. All sessions finished
+profiling and saved. No shader compiler, linker or pipeline fallback errors.
+Not measured: integrated GPU frame/shadow-pass time, presentation cadence,
+or continuous shadow motion. Next: TASK-28.

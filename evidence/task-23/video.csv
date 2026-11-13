@@ -1,0 +1,10 @@
+mode,scene,frames,duration_seconds,frames_per_second,codec,terrain_delta_codes,recording
+control,daylight,245,6.144,39.88,h264,4.329,artifacts/task-23/control-02/daylight/motion.mp4
+control,forest,246,6.181,39.80,h264,13.597,artifacts/task-23/control-02/forest/motion.mp4
+control,open-water,245,6.163,39.76,h264,28.062,artifacts/task-23/control-02/open-water/motion.mp4
+spatial,daylight,245,6.164,39.75,h264,4.334,artifacts/task-23/spatial-02/daylight/motion.mp4
+spatial,forest,244,6.147,39.70,h264,13.622,artifacts/task-23/spatial-02/forest/motion.mp4
+spatial,open-water,245,6.158,39.79,h264,28.054,artifacts/task-23/spatial-02/open-water/motion.mp4
+sodium,daylight,245,6.164,39.75,h264,3.547,artifacts/task-23/sodium-motion/daylight/motion.mp4
+sodium,forest,245,6.165,39.74,h264,7.516,artifacts/task-23/sodium-motion/forest/motion.mp4
+sodium,open-water,246,6.182,39.80,h264,6.467,artifacts/task-23/sodium-motion/open-water/motion.mp4

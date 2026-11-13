@@ -1,0 +1,275 @@
+[
+  {
+    "path": "references/pictures/settings_screen/01.jpg",
+    "sha256": "8bc71c7e0b43acb835b6b1a192c20b5808a5b122be9578003afe44d5c02fcc2e",
+    "bytes": 359222,
+    "width": 1920,
+    "height": 1080,
+    "codec": "mjpeg"
+  },
+  {
+    "path": "references/pictures/settings_screen/02.jpg",
+    "sha256": "3601ad31ead3a72329e34e7fbc688e896107a381a590431c8807d7ab9dea5651",
+    "bytes": 375717,
+    "width": 1920,
+    "height": 1080,
+    "codec": "mjpeg"
+  },
+  {
+    "path": "references/pictures/settings_screen/03.jpg",
+    "sha256": "f97cda316bf884bf64b66099d00ce948df9faa0de618b4edff56a62cbcb9845e",
+    "bytes": 432193,
+    "width": 1920,
+    "height": 1080,
+    "codec": "mjpeg"
+  },
+  {
+    "path": "references/pictures/settings_screen/04.jpg",
+    "sha256": "50c1e649198057cecb895e2f6f1392521b00d6d698fe9c564de4f3f05537c0b6",
+    "bytes": 352612,
+    "width": 1920,
+    "height": 1080,
+    "codec": "mjpeg"
+  },
+  {
+    "path": "references/pictures/settings_screen/05.jpg",
+    "sha256": "9ccaf8d2c0e063b18d8d065ab130fba0778913b4a923ed13268cb7920b000cfa",
+    "bytes": 358435,
+    "width": 1920,
+    "height": 1080,
+    "codec": "mjpeg"
+  },
+  {
+    "path": "references/pictures/settings_screen/06.jpg",
+    "sha256": "c248ec2ade6d1305624732c2a695a1840ace5277e9c326debae4379dac945a18",
+    "bytes": 339694,
+    "width": 1920,
+    "height": 1080,
+    "codec": "mjpeg"
+  },
+  {
+    "path": "references/pictures/settings_screen/07.jpg",
+    "sha256": "3678d8a581236704f3a9f4f143a02f401886e05e7e8315ae9f2beeadbd4f34c6",
+    "bytes": 355962,
+    "width": 1920,
+    "height": 1080,
+    "codec": "mjpeg"
+  },
+  {
+    "path": "references/pictures/settings_screen/08.jpg",
+    "sha256": "0179f4a21ea68bcd7de0d281a7ea9de082d6a3c5700615d9c7834409c76665c0",
+    "bytes": 358665,
+    "width": 1920,
+    "height": 1080,
+    "codec": "mjpeg"
+  },
+  {
+    "path": "references/pictures/settings_screen/09.jpg",
+    "sha256": "9ba9bd95cbdc3ac6f61ac1864be375228aaa5b6f69916671cfe7fa6fff5b00be",
+    "bytes": 357949,
+    "width": 1920,
+    "height": 1080,
+    "codec": "mjpeg"
+  },
+  {
+    "path": "references/pictures/settings_screen/10.jpg",
+    "sha256": "2f8dc4e215e320730e74d9a18a1f14b65dcf574bcf03c7fb22827b705a315cd2",
+    "bytes": 356823,
+    "width": 1920,
+    "height": 1080,
+    "codec": "mjpeg"
+  },
+  {
+    "path": "references/pictures/settings_screen/11.jpg",
+    "sha256": "e75b75d2f91b3d12f262382a78c6be8fdc76004af22028899cf32fe461dc7a01",
+    "bytes": 356354,
+    "width": 1920,
+    "height": 1080,
+    "codec": "mjpeg"
+  },
+  {
+    "path": "references/pictures/settings_screen/12.jpg",
+    "sha256": "0e7da7068e74f0071c113333a6af5caaace2cb2bb68206699c226e2aefcc65a9",
+    "bytes": 358865,
+    "width": 1920,
+    "height": 1080,
+    "codec": "mjpeg"
+  },
+  {
+    "path": "references/pictures/settings_screen/13.jpg",
+    "sha256": "4e202fffb3fe22808e6a0930bc219a8aca7c98429cad365e16a61257fa531920",
+    "bytes": 368433,
+    "width": 1920,
+    "height": 1080,
+    "codec": "mjpeg"
+  },
+  {
+    "path": "references/pictures/settings_screen/14.jpg",
+    "sha256": "d4e3abebb7d11cf4b5615e0351ae86ddc15f7366320231d933763c5260e39e4c",
+    "bytes": 365393,
+    "width": 1920,
+    "height": 1080,
+    "codec": "mjpeg"
+  },
+  {
+    "path": "references/pictures/settings_screen/15.jpg",
+    "sha256": "3f6db6ff69f4d331da4e840022d27628dde5fe61fbf7ddd176b0a34f0b70254c",
+    "bytes": 368950,
+    "width": 1920,
+    "height": 1080,
+    "codec": "mjpeg"
+  },
+  {
+    "path": "references/pictures/settings_screen/16.jpg",
+    "sha256": "388fe2bd87ab874ff2de38345ad7fab19da563d7ba94d8df6c474eb9c514b1c3",
+    "bytes": 368739,
+    "width": 1920,
+    "height": 1080,
+    "codec": "mjpeg"
+  },
+  {
+    "path": "references/pictures/settings_screen/17.jpg",
+    "sha256": "148cf20ba3708d9861900ebd1b5b5f723d7b27ae3be81f55745504f1becc8f5d",
+    "bytes": 370570,
+    "width": 1920,
+    "height": 1080,
+    "codec": "mjpeg"
+  },
+  {
+    "path": "references/pictures/settings_screen/18.jpg",
+    "sha256": "aae766edc5fa46ed21fe3fc70bf13fceb69914a5f6347c0f73803e586700445e",
+    "bytes": 371206,
+    "width": 1920,
+    "height": 1080,
+    "codec": "mjpeg"
+  },
+  {
+    "path": "references/pictures/settings_screen/19.jpg",
+    "sha256": "e1675fd4e5b9f3720db3644ae28fee012b06fe15d00ae1bb937a8dbc31c64bbf",
+    "bytes": 357549,
+    "width": 1920,
+    "height": 1080,
+    "codec": "mjpeg"
+  },
+  {
+    "path": "references/video/gameplay/01.mp4",
+    "sha256": "4229346b4250c441944406193ba811f17b954ea45aeebad76954efff83fa23c9",
+    "bytes": 135394843,
+    "width": 1920,
+    "height": 1080,
+    "codec": "h264",
+    "duration_seconds": 58.833,
+    "average_frame_rate": "187500000/3529999",
+    "task": "TASK-04-VID-001"
+  },
+  {
+    "path": "references/video/gameplay/02.mp4",
+    "sha256": "1b6fcd3849f4ad48ea4f48d2b30b2d7ad4a8019640d9595fe30718e4ab7a685c",
+    "bytes": 80646612,
+    "width": 1920,
+    "height": 1080,
+    "codec": "h264",
+    "duration_seconds": 58.349983,
+    "average_frame_rate": "200940000/3500999",
+    "task": "TASK-04-VID-002"
+  },
+  {
+    "path": "references/video/gameplay/03.mp4",
+    "sha256": "f122555cb855f71e4354a063ba71aa3ac7785b2ab49731f15087b8d67ae0f6a9",
+    "bytes": 103259117,
+    "width": 1920,
+    "height": 1080,
+    "codec": "h264",
+    "duration_seconds": 59.433,
+    "average_frame_rate": "189480000/3565999",
+    "task": "TASK-04-VID-003"
+  },
+  {
+    "path": "references/video/gameplay/04.mp4",
+    "sha256": "cb99293460d18975419c41041774b97a238d65bb5bc18760ae547b297f3f2ae7",
+    "bytes": 183338553,
+    "width": 1920,
+    "height": 1080,
+    "codec": "h264",
+    "duration_seconds": 58.283,
+    "average_frame_rate": "171780000/3496999",
+    "task": "TASK-04-VID-004"
+  },
+  {
+    "path": "references/video/gameplay/05.mp4",
+    "sha256": "0b46f57a538237165b77b0e3e250b30772c38785dcdf76b0e3660f9a5a8a9e8d",
+    "bytes": 143783442,
+    "width": 1920,
+    "height": 1080,
+    "codec": "h264",
+    "duration_seconds": 58.61665,
+    "average_frame_rate": "55180000/1172333",
+    "task": "TASK-04-VID-005"
+  },
+  {
+    "path": "references/video/gameplay/06.mp4",
+    "sha256": "01f1e4f07598229dc96dfeee644695c12cbe385e443728da7cd9d4da5081c320",
+    "bytes": 256349800,
+    "width": 1920,
+    "height": 1080,
+    "codec": "h264",
+    "duration_seconds": 59.083,
+    "average_frame_rate": "174060000/3544999",
+    "task": "TASK-04-VID-006"
+  },
+  {
+    "path": "references/video/gameplay/07.mp4",
+    "sha256": "59d223e787a657ce47ba98471070906d1e25bd5b3eb28ecc69ca203ce53f9329",
+    "bytes": 155806633,
+    "width": 1920,
+    "height": 1080,
+    "codec": "h264",
+    "duration_seconds": 59.483,
+    "average_frame_rate": "159420000/3568999",
+    "task": "TASK-04-VID-007"
+  },
+  {
+    "path": "references/video/gameplay/08.mp4",
+    "sha256": "f7de4e224694a2a79dfc2074c21feef09fdb205f37e7bba6a86543dc8b5d4599",
+    "bytes": 218356950,
+    "width": 1920,
+    "height": 1080,
+    "codec": "h264",
+    "duration_seconds": 59.61665,
+    "average_frame_rate": "58680000/1192333",
+    "task": "TASK-04-VID-008"
+  },
+  {
+    "path": "references/video/gameplay/09.mp4",
+    "sha256": "168db7c9c2fabe18a61cfdb352e586d19b967cb6fd747ff5bd421beda33bd0f0",
+    "bytes": 90058647,
+    "width": 1920,
+    "height": 1080,
+    "codec": "h264",
+    "duration_seconds": 59.41665,
+    "average_frame_rate": "18820000/396111",
+    "task": "TASK-04-VID-009"
+  },
+  {
+    "path": "references/video/gameplay/10.mp4",
+    "sha256": "56d9102277e63ccd2118f91ca808b8bcdf56db36d94b2d1db6de0c072975fdfe",
+    "bytes": 84227914,
+    "width": 1920,
+    "height": 1080,
+    "codec": "h264",
+    "duration_seconds": 58.96665,
+    "average_frame_rate": "54860000/1179333",
+    "task": "TASK-04-VID-010"
+  },
+  {
+    "path": "references/video/gameplay/11.mp4",
+    "sha256": "f7545fa46319d3313dd9516494e561ed6cf20eb108b89bec3213e5ecfd472878",
+    "bytes": 128223830,
+    "width": 1920,
+    "height": 1080,
+    "codec": "h264",
+    "duration_seconds": 60.91665,
+    "average_frame_rate": "53740000/1218333",
+    "task": "TASK-04-VID-011"
+  }
+]

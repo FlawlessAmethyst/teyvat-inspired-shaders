@@ -1,0 +1,74 @@
+# Run from the repository root. Retain the TASK-10, TASK-11 and TASK-12 artifacts.
+# Run session.sh via the scoped desktop execution boundary in
+# docs/minecraft-environment.md. Run sessions serially in the listed order.
+set -euo pipefail
+root=artifacts/task-12-repeat
+mc_dir=$(python3 -c 'import sys; sys.path.insert(0, "tools"); import minecraft; print(minecraft.GAME)')
+mkdir -p "$root/variants/"{graded,sunlight}
+cp -a artifacts/task-11/variants/graded/shaders "$root/variants/graded/"
+cp -a artifacts/task-12/variants/sunlight/shaders "$root/variants/sunlight/"
+sed "s|shaderpack/shaders/|$root/variants/graded/shaders/|" evidence/task-11/pack.sha256 | sha256sum -c -
+sed "s|shaderpack/shaders/|$root/variants/sunlight/shaders/|" evidence/task-12/pack.sha256 | sha256sum -c -
+diff -rq scripts/scenes/data "$mc_dir/saves/TASK-03 Visual Scenes/datapacks/task03/data"
+python3 evidence/task-12/replay.py prepare "$root"
+
+for batch in graded-01 sunlight-01 sunlight-02 graded-02; do
+    bash evidence/task-12/session.sh "$root" "$batch"
+done
+
+for variant in graded sunlight; do
+    diff -rq "$root/variants/$variant/shaders" "$mc_dir/shaderpacks/TASK-12-$variant/shaders"
+done
+python3 evidence/task-12/replay.py restore "$root"
+diff -rq scripts/scenes/data "$mc_dir/saves/TASK-03 Visual Scenes/datapacks/task03/data"
+cmp scripts/scenes/pack.mcmeta "$mc_dir/saves/TASK-03 Visual Scenes/datapacks/task03/pack.mcmeta"
+test ! -e "$mc_dir/shaderpacks/TASK-12-graded"
+test ! -e "$mc_dir/shaderpacks/TASK-12-sunlight"
+python3 - <<'PY'
+import sys
+sys.path[:0] = ['tools', 'scripts']
+import minecraft as mc
+import scenes
+assert not mc.game_pids()
+try:
+    scenes.require_scene_world()
+except RuntimeError:
+    print('PASS dedicated world lock released')
+else:
+    raise AssertionError('Dedicated world still open')
+PY
+
+python3 evidence/task-12/index_runs.py --artifacts-dir "$root" > "$root/runs.csv"
+python3 evidence/task-12/check_glsl.py "$root/variants/sunlight/shaders"
+python3 -m unittest discover -s scripts
+python3 -m py_compile evidence/task-12/*.py evidence/task-11/summarize.py
+bash -n evidence/task-12/session.sh
+bash -n evidence/task-12/commands.txt
+python3 evidence/task-11/summarize.py --artifacts-dir artifacts/task-11 | cmp - evidence/task-11/runs.csv
+rg -n 'Using shaderpack: TASK-12-|Creating pipeline|TASK03_READY_|TASK12_(TIME_|FACING_READY)|Stopped tick profiling|All dimensions are saved' "$root"/*/logs-*/latest.log
+rg -n 'Render target settings for colortex0:' "$root"/*/logs-*/debug.log
+
+# If a session fails, inspect the target's current screen and latest.log.
+# Use tools/minecraft.py stop and logs via scoped execution before configuring
+# another run or restoring. Preserve failed evidence under a separate name.
+
+# Generate labeled comparisons from the native F2 frames.
+for scene in daylight forest night cave transition/preset; do
+    output="${scene//\//-}"
+    magick montage -font DejaVu-Sans -pointsize 20 \
+        -label "$scene - graded" "$root/graded-01/$scene/native.png" \
+        -label "$scene - sunlight" "$root/sunlight-01/$scene/native.png" \
+        -thumbnail 720x405 -tile 2x1 -geometry +4+4 "$root/$output-row.png"
+done
+magick "$root"/{daylight,transition-preset,forest,night,cave}-row.png -append -quality 94 "$root/comparison.jpg"
+
+for variant in graded sunlight; do
+    magick montage -font DejaVu-Sans -pointsize 18 -set label '%f' \
+        "$root/$variant-01/transition/"[0-9]*.png \
+        -thumbnail 512x288 -tile 3x -geometry +4+4 "$root/$variant-transition.jpg"
+done
+magick montage -font DejaVu-Sans -pointsize 20 \
+    -label '12000 - graded' "$root/graded-02/facing/native.png" \
+    -label '12000 - sunlight' "$root/sunlight-02/facing/native.png" \
+    -thumbnail 960x540 -tile 2x1 -geometry +4+4 "$root/stone-faces.jpg"
+python3 evidence/task-12/sample_pixels.py "$root" > "$root/pixels.csv"

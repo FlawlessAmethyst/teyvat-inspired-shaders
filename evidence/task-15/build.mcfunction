@@ -1,0 +1,35 @@
+# West-facing test overlook. The stock TASK-03 map is north of this fixture.
+fill 989 180 1089 1014 181 1117 minecraft:stone
+fill 989 182 1089 1014 182 1117 minecraft:grass_block
+fillbiome 992 180 1088 1015 211 1119 minecraft:plains
+fill 980 179 1106 990 183 1116 minecraft:stone
+fill 980 184 1106 990 184 1116 minecraft:grass_block
+fill 981 190 1107 985 193 1111 minecraft:oak_leaves[persistent=true]
+fill 983 185 1109 983 192 1109 minecraft:oak_log
+fill 977 180 1092 988 182 1105 minecraft:sand
+fill 940 181 1093 976 182 1105 minecraft:sand
+fill 941 182 1094 975 182 1104 minecraft:water
+fill 966 183 1088 967 191 1092 minecraft:cyan_stained_glass
+fill 968 180 1086 989 182 1092 minecraft:stone
+fill 927 180 1086 967 182 1092 minecraft:grass_block
+fill 884 180 1086 926 182 1092 minecraft:grass_block
+fill 844 180 1086 883 182 1092 minecraft:grass_block
+fill 831 180 1086 843 182 1092 minecraft:grass_block
+fill 906 174 1096 925 187 1130 minecraft:stone
+fill 907 188 1104 921 195 1129 minecraft:stone
+fill 907 196 1113 916 200 1125 minecraft:stone
+fill 908 201 1113 915 201 1125 minecraft:grass_block
+fill 909 207 1116 913 210 1120 minecraft:oak_leaves[persistent=true]
+fill 911 202 1118 911 209 1118 minecraft:oak_log
+fill 900 184 1067 900 200 1079 minecraft:cyan_stained_glass
+fill 878 175 1066 893 193 1080 minecraft:stone
+fill 853 173 1064 877 188 1107 minecraft:stone
+fill 855 189 1068 869 201 1100 minecraft:stone
+fill 857 202 1076 864 208 1094 minecraft:stone
+fill 857 209 1079 863 209 1090 minecraft:grass_block
+fill 858 215 1082 862 218 1086 minecraft:oak_leaves[persistent=true]
+fill 860 210 1084 860 217 1084 minecraft:oak_log
+fill 831 174 1097 843 193 1144 minecraft:stone
+fill 832 194 1105 841 203 1137 minecraft:stone
+fill 833 204 1116 840 213 1130 minecraft:stone
+execute if block 983 191 1109 minecraft:oak_log if block 925 185 1113 minecraft:stone if block 877 185 1084 minecraft:stone if block 833 209 1120 minecraft:stone if block 900 192 1071 minecraft:cyan_stained_glass if block 958 182 1100 minecraft:water run tellraw @s {"text":"TASK15_READY_FIXTURE"}

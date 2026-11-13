@@ -1,0 +1,31 @@
+TASK-19 verification, 2026-11-12
+
+PASS TASK-18 control matches its 34-file manifest. The accepted 36-file
+     water tree matches shaderpack/shaders, the retained snapshot and the
+     temporary installed pack before cleanup.
+PASS Twelve expanded production shader pairs and the water diagnostic
+     pair link with glslangValidator -l. Iris loads the accepted water,
+     TASK-18 control and diagnostic variants on the installed Overworld
+     stack. No shader compile, link or pipeline errors in the accepted logs.
+PASS Seven paired 2560x1440 native captures with matching preset and video
+     snapshots. Dry deck and glass over sky RGB match byte-for-byte.
+PASS The stepped fixture acknowledged its block checks. The diagnostic
+     shows gray codes 127, 147 and 236 at the three basin sample points,
+     and cyan (10,215,229) on the submerged underside. The glass panel
+     and held stone and stained glass remain distinct in the diagnostic.
+PASS The fixed shore wave sample has a 0.262897 mean absolute 8-bit RGB
+     code difference over water and zero in the dry foreground patch.
+PASS Twelve matched native profile archives across six fresh sessions.
+     The profile index reproduces from retained archives and raw CSVs.
+     Water adds mean CPU client-loop time of 0.007083 ms in daylight and
+     0.013242 ms in rain against TASK-18. Integrated GPU time is open.
+PASS Nine repository harness tests, Python and Bash syntax checks, and
+     reference integrity verification for 33 inputs and 144 frames.
+PASS Seven accepted sessions saved all dimensions and exited normally.
+     Five settings files were restored byte-for-byte. Iris is disabled
+     with an empty selection. The disposable world is archived and all
+     three temporary packs are removed. All 76 source-world hashes match.
+
+The initial spectator preset and one timed-out Prism launch are retained
+under depth-trial/ and sodium-02-launch-trial/. The final camera preset uses
+creative mode on the flat basin floor. See commands.txt for the replay.

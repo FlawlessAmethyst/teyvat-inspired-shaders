@@ -1,0 +1,49 @@
+# Run from the repository root. Use a fresh output directory for a new live run.
+set -euo pipefail
+root=${1:-artifacts/task-30-regression}
+sha256sum --quiet -c evidence/task-25/fog-pack.sha256
+diff -rq shaderpack/shaders artifacts/task-28/shaders
+python3 evidence/task-22/link_shaders.py shaderpack/shaders
+python3 -m unittest discover -s scripts -p 'test_*.py' -v
+python3 scripts/verify_references.py
+python3 evidence/task-28/review.py artifacts/task-28
+
+# Recompute reviewed indices from the original raw samples.
+python3 evidence/task-26/review.py artifacts/task-26 | cmp - evidence/task-26/runs.csv
+python3 evidence/task-26/compare.py evidence/task-26/runs.csv | cmp - evidence/task-26/effect-deltas.csv
+python3 evidence/task-26/summarize_gpu.py artifacts/task-26/gpu | cmp - evidence/task-26/gpu-summary.csv
+python3 evidence/task-27/review_results.py client artifacts/task-27 | cmp - evidence/task-27/runs.csv
+python3 evidence/task-27/review_results.py gpu artifacts/task-27 | cmp - evidence/task-27/gpu-summary.csv
+python3 evidence/task-27/visual_metrics.py artifacts/task-27 | cmp - evidence/task-27/pixels.csv
+
+# Run the live phase with scoped host desktop access and GenshinShaderDev idle.
+(
+    python3 evidence/task-28/replay.py prepare "$root"
+    finish() {
+        result=$?
+        python3 tools/minecraft.py --artifacts-dir "$root" stop --timeout 60 || return
+        python3 evidence/task-28/replay.py restore "$root" || return
+        exit "$result"
+    }
+    trap finish EXIT
+    cc -std=c11 -O2 -Wall -Wextra -Werror evidence/task-28/motion_input.c -o "$root/motion-input"
+    python3 evidence/task-22/link_shaders.py shaderpack/shaders > "$root/static-link.txt" 2>&1
+    test "$(rg -c '^PASS ' "$root/static-link.txt")" = 13
+    bash evidence/task-28/session.sh "$root"
+)
+
+# Preserve the TASK-03 replay input with the client stopped, then check the copy.
+game=$(python3 tools/minecraft.py paths | python3 -c 'import json, sys; print(json.load(sys.stdin)["minecraft"])')
+source_fixture="$game/saves/TASK-03 Visual Scenes"
+fixture="$root/fixtures/TASK-03 Visual Scenes"
+mkdir -- "$root/fixtures"
+cp -a -- "$source_fixture" "$fixture"
+diff -rq -- "$source_fixture" "$fixture"
+root_path=$(realpath -- "$root")
+(cd "$fixture" && sha256sum --quiet -c "$root_path/original-world.sha256")
+sha256sum --quiet -c evidence/task-25/fog-pack.sha256
+diff -rq shaderpack/shaders "$root/shaders"
+diff -u artifacts/task-28/original-world.sha256 "$root/original-world.sha256"
+diff -u artifacts/task-28/source-world.sha256 "$root/source-world.sha256"
+python3 evidence/task-28/review.py "$root"
+git diff --check

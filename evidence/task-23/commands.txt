@@ -1,0 +1,60 @@
+# Run in stages from the repository root. Set root to a fresh artifact path
+# before running the preparation commands.
+# Inspect the generated world-list-review.png before copying the selection guard.
+# The Minecraft desktop, Spectacle, uinput and NVIDIA commands need scoped host access.
+set -euo pipefail
+root=${1:-artifacts/task-23}
+game=$(python3 -c 'import sys; sys.path.insert(0,"tools"); import minecraft; print(minecraft.GAME)')
+python3 tools/minecraft.py stop --timeout 60
+sha256sum --quiet -c evidence/task-22/pack.sha256
+sha256sum --quiet -c artifacts/task-22/source-world.sha256
+python3 evidence/task-23/replay.py prepare "$root"
+diff -rq "$root/shaders" "$game/shaderpacks/TASK-23-control/shaders"
+diff -rq "$root/spatial-shaders" "$game/shaderpacks/TASK-23-spatial/shaders"
+python3 evidence/task-22/link_shaders.py "$root/shaders" > "$root/control-static-link.txt" 2>&1
+python3 evidence/task-22/link_shaders.py "$root/spatial-shaders" > "$root/spatial-static-link.txt" 2>&1
+test "$(rg -c '^PASS ' "$root/control-static-link.txt")" = 13
+test "$(rg -c '^PASS ' "$root/spatial-static-link.txt")" = 13
+
+python3 evidence/task-23/replay.py control "$root"
+python3 tools/minecraft.py --artifacts-dir "$root/control-01" launch --timeout 120
+sleep 10
+python3 tools/minecraft.py screenshot "$root/control-01/title.png"
+python3 tools/minecraft.py click 1280 535
+python3 tools/minecraft.py screenshot "$root/control-01/world-list.png"
+magick "$root/control-01/world-list.png" -crop 780x250+890+90 +repage "$root/world-list-review.png"
+# Verify the first row visually says TASK-23 Motion Scenes before saving this guard.
+cp "$root/control-01/world-list.png" "$root/world-list-reference.png"
+cc -std=c11 -O2 -Wall -Wextra -Werror evidence/task-23/hold_key.c -o "$root/hold_key"
+bash evidence/task-23/session.sh "$root" control-01 open
+for batch in spatial-01 sodium-01 sodium-02 spatial-02 control-02; do
+    bash evidence/task-23/session.sh "$root" "$batch"
+done
+bash evidence/task-23/session.sh "$root" sodium-02 motion-only
+
+python3 evidence/task-23/replay.py restore "$root"
+for path in options.txt config/{iris.properties,sodium-options.json,sodium-extra-options.json,dynamic_fps.json}; do
+    cmp "$game/$path" "$root/before/${path##*/}"
+done
+test ! -e "$game/saves/TASK-23 Motion Scenes"
+test ! -e "$game/shaderpacks/TASK-23-control"
+test ! -e "$game/shaderpacks/TASK-23-spatial"
+test -d "$root/world"
+find "$game/saves/TASK-03 Visual Scenes" -type f -print0 | sort -z |
+    xargs -0 sha256sum | cmp "$root/source-world.sha256" -
+sha256sum --quiet -c evidence/task-22/pack.sha256
+diff -rq "$root/shaders" shaderpack/shaders
+bash evidence/task-23/gpu.sh "$root"
+python3 evidence/task-23/review.py runs "$root" > "$root/runs-reviewed.csv"
+python3 evidence/task-23/review.py gpu "$root" > "$root/gpu-reviewed.csv"
+python3 evidence/task-23/review.py video "$root" > "$root/video-reviewed.csv"
+bash evidence/task-23/comparisons.sh "$root"
+python3 -m unittest discover -s scripts -p 'test_*.py' -v
+python3 -m py_compile evidence/task-23/*.py
+for script in evidence/task-23/{commands.txt,comparisons.sh,gpu.sh,session.sh}; do
+    bash -n "$script"
+done
+python3 scripts/verify_references.py
+git diff --check -- .gitignore docs/STATUS.md docs/DECISIONS.md docs/TEST_LOG.md \
+    docs/architecture/shaderpack_design.md docs/research/iris_feasibility.md \
+    docs/testing/prototype_checkpoint.md evidence/README.md

@@ -1,0 +1,51 @@
+# Run from the repository root with the dedicated instance idle. Pass a fresh
+# path under artifacts/ to keep the retained fog-tuning evidence.
+# The baseline stills and world-list guard come from artifacts/task-25/.
+set -euo pipefail
+root=${1:-artifacts/task-25-fog-tuning}
+baseline=artifacts/task-25
+game=$(python3 -c 'import sys; sys.path.insert(0,"tools"); import minecraft; print(minecraft.GAME)')
+sha256sum --quiet -c evidence/task-25/fog-pack.sha256
+python3 evidence/task-25/replay.py prepare "$root"
+cp shaderpack/shaders/lib/fog.glsl "$root/shaders/lib/fog.glsl"
+cp "$root/shaders/lib/fog.glsl" "$game/shaderpacks/TASK-25-comparison/shaders/lib/fog.glsl"
+diff -rq "$root/shaders" shaderpack/shaders
+diff -rq "$root/shaders" "$game/shaderpacks/TASK-25-comparison/shaders"
+cp "$baseline/world-list-reference.png" "$root/world-list-reference.png"
+python3 evidence/task-22/link_shaders.py "$root/shaders" > "$root/static-link.txt" 2>&1
+test "$(rg -c '^PASS ' "$root/static-link.txt")" = 13
+
+# Use scoped host desktop access for the capture session.
+bash evidence/task-25/session.sh "$root" pack valley rain ridges dusk night
+python3 evidence/task-25/replay.py restore "$root"
+for path in options.txt config/{iris.properties,sodium-options.json,sodium-extra-options.json,dynamic_fps.json}; do
+    cmp "$game/$path" "$root/before/${path##*/}"
+done
+test ! -e "$game/saves/TASK-25 Visual Comparison"
+test ! -e "$game/shaderpacks/TASK-25-comparison"
+test -d "$root/world"
+sha256sum --quiet -c artifacts/task-22/source-world.sha256
+sha256sum --quiet -c evidence/task-25/fog-pack.sha256
+
+mkdir -p "$root/comparisons"
+for scene in valley rain ridges dusk night; do
+    before="$baseline/pack/$scene"
+    after="$root/pack/$scene"
+    for path in preset.json options.txt sodium-options.json sodium-extra-options.json dynamic_fps.json; do
+        cmp "$before/$path" "$after/$path"
+    done
+    diff -u <(sed '/^#/d' "$before/iris.properties") <(sed '/^#/d' "$after/iris.properties")
+    magick montage -font DejaVu-Sans -pointsize 22 \
+        -label 'TASK-25 original fog' "$before/native.png" \
+        -label 'Tuned fog' "$after/native.png" \
+        -tile 2x1 -geometry 950x535+5+5 -background '#171b22' -fill '#f3f3f3' \
+        -quality 92 "$root/comparisons/$scene.jpg"
+done
+for path in "$baseline" "$root"; do
+    magick "$path/pack/valley/native.png" -crop 180x90+1130+640 +repage \
+        -fx '0.2126*r+0.7152*g+0.0722*b' -channel R \
+        -format "$path mean=%[fx:255*mean] stdev=%[fx:255*standard_deviation]\n" info:
+done
+python3 -m unittest discover -s scripts -p 'test_*.py' -v
+python3 -m py_compile evidence/task-{17,25}/replay.py
+bash -n evidence/task-25/fog-commands.txt

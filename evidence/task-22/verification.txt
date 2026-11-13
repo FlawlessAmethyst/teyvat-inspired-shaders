@@ -1,0 +1,30 @@
+TASK-22 verification
+
+PASS The starting live source matched the TASK-21 manifest and retained tree.
+     The TASK-22 manifest records all 38 accepted shader files. The retained
+     control and candidate installs were compared with their source snapshots.
+PASS glslangValidator 16.6.0 linked all 13 expanded shader pairs.
+PASS Fixed 2560x1440 native captures cover clear daylight, midnight, the original
+     lantern cave, a mixed lamp room and an unlit room with steps. Candidate
+     daylight grass and stone patches match TASK-21 byte for byte.
+PASS The candidate opened the Nether and End and returned to the Overworld.
+     Iris logged all three pipeline rebuilds. Candidate pre/post daylight
+     terrain patches match. No shader compilation or OpenGL errors were found.
+PASS All twelve F3+L profiles match the recorded settings, mod hashes,
+     runtime, presets and pack selection. Static terrain remained aligned
+     across each profile. The raw samples and reviewed index reproduced.
+PASS All six accepted sessions saved and exited. Five settings files were
+     restored byte for byte, both temporary packs removed, the fixture
+     archived and all 76 original scene-world files verified.
+PASS Nine harness/scene unit tests, Python and Bash syntax, and the original
+     reference integrity checks. TASK-22 files passed whitespace checks.
+     The worktree already contains trailing whitespace in the TASK-04
+     ImageMagick version output. That historical evidence was left intact.
+
+The first control trial was excluded because its spectator camera intercepted
+hotbar preset input. The final fixture uses creative cameras with barrier
+anchors and was run from a fresh copy. The native profiling save emitted
+the same server CrashReport diagnostics present in TASK-21. Client recording,
+world saves and graceful shutdowns were verified separately.
+
+Next task: TASK-23.

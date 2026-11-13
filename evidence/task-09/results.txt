@@ -1,0 +1,17 @@
+PASS dedicated instance stopped and installed sources match repository
+PASS restored options.txt sha256=00232f75249377d7f675a1afe9709bdddf82b02bd2ca0f325b6dcb2665ffa1d9
+PASS restored config/iris.properties sha256=68e7bcdc27fbbac4101ac2788f6ebfa1441b68cc281e113828400573c09253cb
+PASS restored config/sodium-options.json sha256=1540f5c7608dea82588508895ac8087f9ede577686bbaad2fcd6c5363517d4fb
+PASS removed temporary TASK-09-neutral pack
+PASS TASK-03 Visual Scenes session lock released
+PASS Iris loaded TASK-09-neutral in the Overworld, requested RGBA16F, and logged no shader compile or pipeline errors (artifacts/task-09/logs-20261112-104212)
+PASS artifacts/task-09/daylight/native.png matches native 2026-11-12_10.41.26.png at 2560x1440 sha256=d2310c8ae825f0cbaec60755996106239cadd87bb95f79c898162347606ca306
+PASS artifacts/task-09/cave/native.png matches native 2026-11-12_10.41.55.png at 2560x1440 sha256=535e2e2c66de4adcf531f01277c5a6ed54826dd6150ca84bc591160a622d1aca
+[12Nov2026 10:42:11.274] [Render thread/INFO] [com.kingcontaria.fastquit.FastQuit/]: [FastQuit] Waiting for "TASK-03 Visual Scenes" to finish saving...
+[12Nov2026 10:42:11.357] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving players
+[12Nov2026 10:42:11.357] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving worlds
+[12Nov2026 10:42:11.614] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage (TASK-03 Visual Scenes): All chunks are saved
+[12Nov2026 10:42:11.614] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[12Nov2026 10:42:11.614] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+[12Nov2026 10:42:11.614] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage: All dimensions are saved
+[12Nov2026 10:42:11.623] [Server thread/INFO] [com.kingcontaria.fastquit.FastQuit/]: [FastQuit] Finished saving "TASK-03 Visual Scenes"

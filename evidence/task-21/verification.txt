@@ -1,0 +1,34 @@
+TASK-21 — DONE (2026-11-13)
+
+PASS The live source matched the TASK-20 manifest and saved shader tree
+     before edits. The candidate and control installs match their retained
+     source trees. All 13 expanded vertex/fragment pairs link in
+     glslangValidator 16.6.0.
+PASS Six 2560x1440 native comparison pairs cover daylight, settled rain,
+     open water and dense canopy. Clear-day grass and wall patches are
+     byte-identical between the candidate and control.
+PASS Six live native screenshot series cover both transition directions
+     from all three cameras. All 264 frames have the expected dimensions,
+     contain no black rows in the review raster, and match capture timing.
+     The six weather triggers acknowledged daytime 6000. The reviews show
+     coordinated light, haze and water changes without a severe flash or
+     jump in the sampled frames. The initial X11 recording had black bands
+     and was excluded. Candidate and control endpoint sessions were saved
+     through the toolkit after a replay script edit during capture.
+PASS All twelve native profiles match the baseline runtime, options and
+     mod hashes, expected pack, preset and profile duration. All six
+     daylight before/after wall patches match. Accepted shader sessions
+     loaded RGBA16F with no shader compile/link or OpenGL errors.
+PASS Two offscreen 1440p GPU timer runs compared the exact sky source on
+     the RTX 4080 SUPER. Each run has 32 paired 64-draw batches per view.
+PASS All accepted sessions saved and exited. The five preflight settings
+     match byte for byte. Both temporary packs were removed. The copied
+     world was archived. All 76 original scene-world files and all 82
+     archived vegetation source-world files matched their manifests.
+PASS All 38 shader hashes match. Nine harness/scene unit tests, Python and
+     Bash syntax checks and git diff --check passed. All 33 original input
+     and 144 reference frame hashes verified.
+LIMIT Fixed midday clear/rain in the installed Overworld only. Rainy
+      twilight/night, snow, thunder, underwater transitions, other
+      dimensions, full-client GPU time and presentation cadence remain open.
+Next task: TASK-22.

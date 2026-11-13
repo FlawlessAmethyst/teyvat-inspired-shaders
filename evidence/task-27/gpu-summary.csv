@@ -1,0 +1,13 @@
+trial,round,scene,paired_batches,control_median_ms,trial_median_ms,paired_delta_median_ms
+shadow,01,shadow-caster,32,0.021872,0.013616,-0.008280
+shadow,02,shadow-caster,32,0.018976,0.012808,-0.006176
+fog,01,fog-near,32,0.025536,0.025544,0.000024
+fog,01,fog-clear,32,0.025632,0.025632,0.000008
+fog,01,fog-dusk,32,0.028056,0.028168,0.000048
+fog,01,fog-rain,32,0.025648,0.025632,0.000000
+fog,01,fog-under,32,0.025632,0.025632,0.000000
+fog,02,fog-near,32,0.025536,0.025568,0.000048
+fog,02,fog-clear,32,0.025632,0.025632,0.000000
+fog,02,fog-dusk,32,0.028280,0.028216,-0.000112
+fog,02,fog-rain,32,0.025648,0.025648,0.000000
+fog,02,fog-under,32,0.025632,0.025632,-0.000008

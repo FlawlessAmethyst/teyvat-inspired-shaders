@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+# Run one fresh session against the same named TASK-03 world as TASK-11.
+set -euo pipefail
+root=$1
+batch=$2
+case "$batch" in
+    graded-01|sunlight-01|sunlight-02|graded-02) ;;
+    *) exit 2 ;;
+esac
+variant=${batch%%-*}
+dest="$root/$batch"
+
+world_name_mask() {
+    magick "$1" -crop 350x26+984+155 +repage -alpha off -separate \
+        -evaluate-sequence Min -threshold 80% -depth 8 gray:- | sha256sum
+}
+
+reference=$(world_name_mask artifacts/task-11/graded-01/world-list.png)
+python3 evidence/task-12/replay.py "$variant" "$root"
+python3 tools/minecraft.py --artifacts-dir "$dest" launch --timeout 120
+sleep 10
+python3 tools/minecraft.py screenshot "$dest/title.png"
+for attempt in {1..8}; do
+    python3 tools/minecraft.py click 1280 535
+    python3 tools/minecraft.py screenshot "$dest/world-list.png"
+    if [[ $(world_name_mask "$dest/world-list.png") == "$reference" ]]; then
+        break
+    fi
+    if [[ "$attempt" == 8 ]]; then
+        echo "Could not verify TASK-03 Visual Scenes in the first row" >&2
+        exit 1
+    fi
+done
+python3 tools/minecraft.py click 1200 195
+python3 tools/minecraft.py click 1050 1315
+sleep 8
+
+# Collect the matched profiles first to standardize warm-up across sessions.
+python3 scripts/scenes.py profile "$dest/runs" daylight sunset forest cave
+if [[ "$batch" == *-01 ]]; then
+    for scene in daylight forest night cave; do
+        python3 scripts/scenes.py capture "$scene" "$dest/$scene"
+    done
+    python3 evidence/task-12/replay.py sweep "$dest/transition"
+else
+    python3 evidence/task-12/replay.py facing "$dest/facing"
+fi
+python3 tools/minecraft.py stop --timeout 60
+python3 tools/minecraft.py --artifacts-dir "$dest" logs

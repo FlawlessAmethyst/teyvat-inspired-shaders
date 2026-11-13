@@ -1,0 +1,9 @@
+scene,patch,region,byte_identical,control_r,control_g,control_b,vegetation_r,vegetation_g,vegetation_b
+daylight,grass,450x140+1020+1220,False,101.08,136.34,32.12,105.77,130.33,35.77
+daylight,stone brick wall,110x52+2190+485,True,103.79,112.73,122.52,103.79,112.73,122.52
+forest,oak crown,100x90+1470+330,False,39.76,66.03,8.30,44.03,74.51,13.28
+forest,oak trunk,28x66+1490+610,True,79.85,63.13,29.53,79.85,63.13,29.53
+dense,plains oak leaves,105x100+355+233,False,41.32,69.07,10.44,45.69,77.83,15.51
+dense,jungle oak leaves,105x100+2155+233,False,15.40,73.21,4.17,9.15,81.69,10.49
+dense,lit stone path,105x100+1280+1120,True,157.81,152.79,147.26,157.81,152.79,147.26
+dense,shadowed stone path,23x50+1275+839,True,79.41,76.52,72.43,79.41,76.52,72.43

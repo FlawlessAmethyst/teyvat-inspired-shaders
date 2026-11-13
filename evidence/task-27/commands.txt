@@ -1,0 +1,26 @@
+# Run from the repository root with the dedicated client idle.
+# The four scoped desktop sessions and the hardware GPU queries require host access.
+set -euo pipefail
+root=${1:-artifacts/task-27-replay}
+python3 evidence/task-27/optimize.py prepare "$root"
+bash evidence/task-27/session.sh "$root" sodium-01
+bash evidence/task-27/session.sh "$root" full-01 shadow-01 fog-01
+bash evidence/task-27/session.sh "$root" fog-02 shadow-02 full-02
+bash evidence/task-27/session.sh "$root" sodium-02
+
+# On interruption, preserve the partial batch and logs under another name before
+# rerunning the session. The wrapper tries to stop the game gracefully on exit.
+# After the client stops, use restore even when a replay cannot be completed.
+python3 evidence/task-27/optimize.py restore "$root"
+bash evidence/task-27/verify_state.sh "$root"
+bash evidence/task-27/gpu.sh "$root"
+
+python3 evidence/task-27/review_results.py client "$root" > "$root/runs.csv"
+python3 evidence/task-27/review_results.py gpu "$root" > "$root/gpu-summary.csv"
+bash evidence/task-27/visuals.sh "$root"
+python3 evidence/task-27/visual_metrics.py "$root" > "$root/pixels.csv"
+python3 evidence/task-22/link_shaders.py shaderpack/shaders
+python3 -m unittest discover -s scripts -p 'test_*.py' -v
+python3 scripts/verify_references.py
+python3 -m py_compile evidence/task-27/*.py
+for script in evidence/task-27/*.sh evidence/task-27/commands.txt; do bash -n "$script"; done

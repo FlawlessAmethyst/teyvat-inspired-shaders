@@ -1,0 +1,29 @@
+variant,scene,surface,crop,r,g,b
+sunlight,daylight,grass,400x160+1050+1060,99.0,134.0,31.0
+sunlight,daylight,stone,80x100+1130+405,113.0,113.0,113.0
+ambient,daylight,grass,400x160+1050+1060,99.0,134.0,31.0
+ambient,daylight,stone,80x100+1130+405,108.0,118.0,127.0
+sunlight,sunset,grass,400x160+1050+1060,64.0,85.0,22.0
+sunlight,sunset,shaded stone,130x100+200+435,89.0,89.0,100.0
+sunlight,sunset,doorway recess,40x90+476+594,40.0,33.0,29.0
+ambient,sunset,grass,400x160+1050+1060,62.0,87.0,28.0
+ambient,sunset,shaded stone,130x100+200+435,84.0,93.0,112.0
+ambient,sunset,doorway recess,40x90+476+594,40.0,33.0,29.0
+sunlight,forest,stone,80x100+755+328,113.0,113.0,113.0
+sunlight,forest,oak trunk,44x100+490+562,90.0,65.0,25.0
+sunlight,forest,grass beside trunk,64x28+570+695,98.0,132.0,31.0
+sunlight,forest,open grass,400x160+1050+1060,99.0,134.0,31.0
+ambient,forest,stone,80x100+755+328,108.0,118.0,128.0
+ambient,forest,oak trunk,44x100+490+562,87.0,68.0,32.0
+ambient,forest,grass beside trunk,64x28+570+695,98.0,132.0,31.0
+ambient,forest,open grass,400x160+1050+1060,99.0,134.0,31.0
+sunlight,cave,floor near lantern,90x40+1840+820,141.0,139.0,135.0
+sunlight,cave,ceiling recess,120x60+1250+360,13.0,9.0,7.0
+ambient,cave,floor near lantern,90x40+1840+820,139.0,137.0,129.0
+ambient,cave,ceiling recess,120x60+1250+360,12.0,9.0,7.0
+sunlight,night,grass,400x160+1050+1060,23.0,37.0,23.0
+sunlight,night,stone,80x100+1130+405,43.0,43.0,76.0
+sunlight,night,brick wall,220x100+2110+486,41.0,40.0,72.0
+ambient,night,grass,400x160+1050+1060,20.0,37.0,29.0
+ambient,night,stone,80x100+1130+405,38.0,43.0,86.0
+ambient,night,brick wall,220x100+2110+486,35.0,40.0,82.0

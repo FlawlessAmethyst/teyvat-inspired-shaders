@@ -1,0 +1,77 @@
+variant,scene,step,tick,surface,crop,r,g,b
+graded,daylight,0,6000,grass,400x160+1050+1060,93.0,129.0,32.0
+graded,daylight,0,6000,stone,80x100+1130+405,120.0,120.0,120.0
+graded,cave,0,6000,floor near lantern,90x40+1840+820,141.0,139.0,134.0
+graded,cave,0,6000,ceiling recess,120x60+1250+360,16.0,14.0,13.0
+graded,transition,0,12000,grass,400x160+1050+1060,75.0,103.0,36.0
+graded,transition,0,12000,stone,130x100+200+435,96.0,96.0,106.0
+graded,transition,1,12400,grass,400x160+1050+1060,62.0,86.0,37.0
+graded,transition,1,12400,stone,130x100+200+435,80.0,79.0,97.0
+graded,transition,2,12750,grass,400x160+1050+1060,49.0,67.0,35.0
+graded,transition,2,12750,stone,130x100+200+435,63.0,62.0,85.0
+graded,transition,3,13000,grass,400x160+1050+1060,39.0,53.0,32.0
+graded,transition,3,13000,stone,130x100+200+435,50.0,48.0,73.0
+graded,transition,4,13600,grass,400x160+1050+1060,33.0,45.0,30.0
+graded,transition,4,13600,stone,130x100+200+435,42.0,41.0,65.0
+graded,transition,5,18000,grass,400x160+1050+1060,33.0,45.0,30.0
+graded,transition,5,18000,stone,130x100+200+435,42.0,41.0,65.0
+graded,transition,6,22500,grass,400x160+1050+1060,33.0,45.0,30.0
+graded,transition,6,22500,stone,130x100+200+435,42.0,41.0,65.0
+graded,transition,7,23200,grass,400x160+1050+1060,47.0,65.0,35.0
+graded,transition,7,23200,stone,130x100+200+435,60.0,59.0,83.0
+graded,transition,8,23800,grass,400x160+1050+1060,69.0,95.0,37.0
+graded,transition,8,23800,stone,130x100+200+435,88.0,88.0,102.0
+graded,transition,9,0,grass,400x160+1050+1060,75.0,103.0,36.0
+graded,transition,9,0,stone,130x100+200+435,96.0,96.0,106.0
+graded,transition,10,800,grass,400x160+1050+1060,93.0,130.0,32.0
+graded,transition,10,800,stone,130x100+200+435,120.0,120.0,120.0
+graded,transition,11,1800,grass,400x160+1050+1060,93.0,130.0,32.0
+graded,transition,11,1800,stone,130x100+200+435,120.0,120.0,120.0
+graded,transition,12,6000,grass,400x160+1050+1060,93.0,130.0,32.0
+graded,transition,12,6000,stone,130x100+200+435,120.0,120.0,120.0
+graded,transition,13,10000,grass,400x160+1050+1060,93.0,130.0,32.0
+graded,transition,13,10000,stone,130x100+200+435,120.0,120.0,120.0
+graded,transition,14,11300,grass,400x160+1050+1060,93.0,129.0,32.0
+graded,transition,14,11300,stone,130x100+200+435,120.0,120.0,120.0
+graded,transition,15,12000,grass,400x160+1050+1060,75.0,103.0,36.0
+graded,transition,15,12000,stone,130x100+200+435,96.0,96.0,106.0
+graded,facing,0,12000,west face,90x120+1140+490,73.0,73.0,80.0
+graded,facing,0,12000,south face,90x120+1400+490,96.0,96.0,106.0
+sunlight,daylight,0,6000,grass,400x160+1050+1060,99.0,134.0,31.0
+sunlight,daylight,0,6000,stone,80x100+1130+405,113.0,113.0,113.0
+sunlight,cave,0,6000,floor near lantern,90x40+1840+820,141.0,139.0,134.0
+sunlight,cave,0,6000,ceiling recess,120x60+1250+360,13.0,9.0,7.0
+sunlight,transition,0,12000,grass,400x160+1050+1060,64.0,85.0,22.0
+sunlight,transition,0,12000,stone,130x100+200+435,89.0,89.0,100.0
+sunlight,transition,1,12400,grass,400x160+1050+1060,53.0,75.0,29.0
+sunlight,transition,1,12400,stone,130x100+200+435,84.0,84.0,105.0
+sunlight,transition,2,12750,grass,400x160+1050+1060,41.0,61.0,31.0
+sunlight,transition,2,12750,stone,130x100+200+435,70.0,70.0,101.0
+sunlight,transition,3,13000,grass,400x160+1050+1060,30.0,46.0,27.0
+sunlight,transition,3,13000,stone,130x100+200+435,53.0,53.0,87.0
+sunlight,transition,4,13600,grass,400x160+1050+1060,24.0,37.0,23.0
+sunlight,transition,4,13600,stone,130x100+200+435,43.0,43.0,76.0
+sunlight,transition,5,18000,grass,400x160+1050+1060,24.0,37.0,23.0
+sunlight,transition,5,18000,stone,130x100+200+435,43.0,43.0,76.0
+sunlight,transition,6,22500,grass,400x160+1050+1060,24.0,37.0,23.0
+sunlight,transition,6,22500,stone,130x100+200+435,43.0,43.0,76.0
+sunlight,transition,7,23200,grass,400x160+1050+1060,40.0,58.0,31.0
+sunlight,transition,7,23200,stone,130x100+200+435,68.0,68.0,100.0
+sunlight,transition,8,23800,grass,400x160+1050+1060,58.0,79.0,25.0
+sunlight,transition,8,23800,stone,130x100+200+435,86.0,86.0,102.0
+sunlight,transition,9,0,grass,400x160+1050+1060,64.0,85.0,22.0
+sunlight,transition,9,0,stone,130x100+200+435,89.0,89.0,100.0
+sunlight,transition,10,800,grass,400x160+1050+1060,84.0,113.0,25.0
+sunlight,transition,10,800,stone,130x100+200+435,113.0,113.0,113.0
+sunlight,transition,11,1800,grass,400x160+1050+1060,90.0,123.0,28.0
+sunlight,transition,11,1800,stone,130x100+200+435,113.0,113.0,113.0
+sunlight,transition,12,6000,grass,400x160+1050+1060,100.0,134.0,32.0
+sunlight,transition,12,6000,stone,130x100+200+435,113.0,113.0,113.0
+sunlight,transition,13,10000,grass,400x160+1050+1060,91.0,124.0,29.0
+sunlight,transition,13,10000,stone,130x100+200+435,113.0,113.0,113.0
+sunlight,transition,14,11300,grass,400x160+1050+1060,83.0,111.0,24.0
+sunlight,transition,14,11300,stone,130x100+200+435,112.0,112.0,112.0
+sunlight,transition,15,12000,grass,400x160+1050+1060,64.0,85.0,22.0
+sunlight,transition,15,12000,stone,130x100+200+435,89.0,89.0,100.0
+sunlight,facing,0,12000,west face,90x120+1140+490,144.0,125.0,116.0
+sunlight,facing,0,12000,south face,90x120+1400+490,89.0,89.0,100.0

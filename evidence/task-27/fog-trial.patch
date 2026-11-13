@@ -1,0 +1,14 @@
+--- a/lib/fog.glsl
++++ b/lib/fog.glsl
+@@ -38,6 +38,9 @@
+     }
+ 
+     float luminance = dot(color, vec3(0.2126, 0.7152, 0.0722));
+-    color = mix(color, vec3(luminance), 0.16 * haze);
+-    return mix(color, horizon, haze);
++    // Distribute the remaining surface weight across its color and luma.
++    float surfaceWeight = 1.0 - haze;
++    float grayWeight = 0.16 * haze * surfaceWeight;
++    return color * (surfaceWeight - grayWeight)
++         + vec3(grayWeight * luminance) + haze * horizon;
+ }

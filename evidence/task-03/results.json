@@ -1,0 +1,84 @@
+{
+  "task": "TASK-03",
+  "status": "DONE",
+  "date": "2026-11-12",
+  "world_seed": -6092235014036965370,
+  "captures": {
+    "daylight": {
+      "path": "artifacts/task-03/daylight-01/native.png",
+      "sha256": "893d5ec3602233cad1c13ecdb38a500f57041061e50ffa28adcba21fb5cc99d2",
+      "dimensions": [
+        2560,
+        1440
+      ]
+    },
+    "sunset": {
+      "path": "artifacts/task-03/sunset-02/native.png",
+      "sha256": "a3bc1de96fb12708e1e0fadc68d0f46911c00c384f203f93c0d673ae6f217a9d",
+      "dimensions": [
+        2560,
+        1440
+      ]
+    },
+    "night": {
+      "path": "artifacts/task-03/night-01/native.png",
+      "sha256": "0f3decc1beb8bd2b6f5f1db0f8f67381d38305c49692a329f34c67ed0213fbf9",
+      "dimensions": [
+        2560,
+        1440
+      ]
+    },
+    "rain": {
+      "path": "artifacts/task-03/rain-01/native.png",
+      "sha256": "90b09f8f552c7edbabb7dad7a5faf3876124c2c22363ca9bed8ce31bb6a0b280",
+      "dimensions": [
+        2560,
+        1440
+      ]
+    },
+    "forest": {
+      "path": "artifacts/task-03/forest-01/native.png",
+      "sha256": "7a5c3701fc76df3aef199d17d7499b839ec835c834405c2239d8e23a68c5264d",
+      "dimensions": [
+        2560,
+        1440
+      ]
+    },
+    "open-water": {
+      "path": "artifacts/task-03/open-water-02/native.png",
+      "sha256": "fd0368f3232dfd3e2e19e363b913a3a5a5b1af44aaeaa9389ad720540d2a08d4",
+      "dimensions": [
+        2560,
+        1440
+      ]
+    },
+    "cave": {
+      "path": "artifacts/task-03/cave-01/native.png",
+      "sha256": "d97711b48c00db319e601ac11565439c2755c88f110a098f05fba21c708d82af",
+      "dimensions": [
+        2560,
+        1440
+      ]
+    }
+  },
+  "repeat_results": "evidence/task-03/repeats.json",
+  "tests_passed": 9,
+  "closed_world_input_guard_verified": true,
+  "installed_datapack_matches_source": true,
+  "original_input_hashes_unchanged": 34,
+  "original_world_level_dat_unchanged": true,
+  "mod_inventory_unchanged_since_task02": true,
+  "final_saved_player_position": [
+    974.5,
+    183.0,
+    1020.5
+  ],
+  "final_logs": "artifacts/task-03/logs-20261112-012427",
+  "all_dimensions_saved": true,
+  "client_stopped": true,
+  "limitations": [
+    "Synthetic controlled workload, not natural forest or ocean stress test",
+    "Animation phases not locked",
+    "No shader compilation, performance benchmark, or cross-platform support claim"
+  ]
+}

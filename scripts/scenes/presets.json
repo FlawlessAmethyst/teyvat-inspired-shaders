@@ -1,0 +1,93 @@
+{
+  "daylight": {
+    "position": [
+      1000.5,
+      184,
+      1036.5
+    ],
+    "yaw": 180,
+    "pitch": 8,
+    "time": 6000,
+    "weather": "clear",
+    "dimension": "minecraft:overworld",
+    "warmup_seconds": 20
+  },
+  "sunset": {
+    "position": [
+      1000.5,
+      184,
+      1000.5
+    ],
+    "yaw": 90,
+    "pitch": 2,
+    "time": 12000,
+    "weather": "clear",
+    "dimension": "minecraft:overworld",
+    "warmup_seconds": 20
+  },
+  "night": {
+    "position": [
+      1000.5,
+      184,
+      1036.5
+    ],
+    "yaw": 180,
+    "pitch": 8,
+    "time": 18000,
+    "weather": "clear",
+    "dimension": "minecraft:overworld",
+    "warmup_seconds": 20
+  },
+  "rain": {
+    "position": [
+      1000.5,
+      184,
+      1036.5
+    ],
+    "yaw": 180,
+    "pitch": 8,
+    "time": 6000,
+    "weather": "rain",
+    "dimension": "minecraft:overworld",
+    "warmup_seconds": 20
+  },
+  "forest": {
+    "position": [
+      1018.5,
+      184,
+      1005.5
+    ],
+    "yaw": 180,
+    "pitch": 5,
+    "time": 6000,
+    "weather": "clear",
+    "dimension": "minecraft:overworld",
+    "warmup_seconds": 20
+  },
+  "open-water": {
+    "position": [
+      974.5,
+      183,
+      1020.5
+    ],
+    "yaw": 180,
+    "pitch": 5,
+    "time": 6000,
+    "weather": "clear",
+    "dimension": "minecraft:overworld",
+    "warmup_seconds": 20
+  },
+  "cave": {
+    "position": [
+      970.5,
+      184,
+      1027.5
+    ],
+    "yaw": 0,
+    "pitch": 3,
+    "time": 6000,
+    "weather": "clear",
+    "dimension": "minecraft:overworld",
+    "warmup_seconds": 20
+  }
+}

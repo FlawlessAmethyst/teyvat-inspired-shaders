@@ -1,0 +1,49 @@
+Working directory: the repository root
+Desktop commands executed with approved escalation. Runtime timestamps use host clock.
+
+python3 tools/minecraft.py launch --timeout 120
+python3 tools/minecraft.py screenshot artifacts/task-02/startup.png
+cp -a "$HOME/.var/app/org.prismlauncher.PrismLauncher/data/PrismLauncher/instances/GenshinShaderDev/minecraft/saves/New World" artifacts/task-02/world-before
+python3 tools/minecraft.py click 1280 535
+python3 tools/minecraft.py screenshot artifacts/task-02/world-list.png
+python3 tools/minecraft.py click 1200 200
+python3 tools/minecraft.py click 1050 1315
+
+Exploratory inputs: key F3+l, key Escape, click 1280 414, key F3,
+key Escape F3+l, key F3+q, key Escape F3+q, input-info.
+Lowercase debug chords failed. input-info initially failed due to absent xmodmap;
+removed that dependency, setxkbmap reported US layout. Captures retained in artifacts.
+python3 tools/minecraft.py record artifacts/task-02/probe --resume-paused
+python3 tools/minecraft.py record artifacts/task-02/probe-direct --resume-paused
+Both probes timed out; corrected chord and archive directory afterwards.
+python3 tools/minecraft.py key Escape F3+L
+PASS: first native archive and rendered confirmation (uppercase.png).
+
+python3 tools/minecraft.py record artifacts/task-02/baseline-01 --resume-paused
+python3 scripts/frametimes.py 'artifacts/task-02/baseline-01/2026-11-11_21_41_19-New World-1_21_1.zip' artifacts/task-02/baseline-01/analysis
+python3 tools/minecraft.py key F3 F2
+python3 tools/minecraft.py screenshot artifacts/task-02/baseline-world.png
+python3 scripts/harness.py record artifacts/task-02/baseline-02 --resume-paused
+Second archive converted via scripts.frametimes.convert from a Python snippet;
+equivalent repeat command (new output directory required):
+python3 scripts/frametimes.py 'artifacts/task-02/baseline-02/2026-11-11_21_42_41-New World-1_21_1.zip' artifacts/task-02/baseline-02/analysis
+python3 scripts/harness.py stop --timeout 60
+python3 scripts/harness.py logs
+PASS: all dimensions saved and Java exited.
+
+Installed Java's bin/javap -c -p -classpath <installed 1.21.1 SRG JAR>
+  net.minecraft.util.profiling.metrics.profiling.ServerMetricsSamplersProvider
+  net.minecraft.client.profiling.ClientMetricsSamplersProvider
+Outputs retained as metric-bytecode.txt and client-metric-bytecode.txt.
+
+python3 -m unittest discover -s scripts -p 'test_*.py' -v
+python3 -m py_compile tools/minecraft.py scripts/harness.py scripts/frametimes.py scripts/test_frametimes.py
+python3 scripts/harness.py --help
+python3 scripts/harness.py launch --timeout 120
+python3 scripts/harness.py screenshot artifacts/task-02/relaunch-title.png
+First screenshot attempted before launch finished: safely failed (no window).
+Same screenshot command after launch completed: PASS, title screen inspected.
+python3 scripts/harness.py stop --timeout 60
+python3 scripts/harness.py stop --timeout 60
+python3 scripts/harness.py logs
+PASS: exit, already stopped, logs-20261111-214542.

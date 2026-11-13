@@ -1,0 +1,7 @@
+scene,run,pairs,median_control_ms,median_spatial_ms,median_paired_delta_ms,device,raw_csv
+daylight,01,32,0.014216,0.023312,0.009144,NVIDIA Corporation | NVIDIA GeForce RTX 4080 SUPER/PCIe/SSE2 | 4.6.0 NVIDIA 580.196.07,artifacts/task-23/gpu-daylight-01.csv
+daylight,02,32,0.013792,0.023456,0.009608,NVIDIA Corporation | NVIDIA GeForce RTX 4080 SUPER/PCIe/SSE2 | 4.6.0 NVIDIA 580.196.07,artifacts/task-23/gpu-daylight-02.csv
+forest,01,32,0.014048,0.023616,0.009672,NVIDIA Corporation | NVIDIA GeForce RTX 4080 SUPER/PCIe/SSE2 | 4.6.0 NVIDIA 580.196.07,artifacts/task-23/gpu-forest-01.csv
+forest,02,32,0.014088,0.023560,0.009552,NVIDIA Corporation | NVIDIA GeForce RTX 4080 SUPER/PCIe/SSE2 | 4.6.0 NVIDIA 580.196.07,artifacts/task-23/gpu-forest-02.csv
+open-water,01,32,0.013992,0.023256,0.009384,NVIDIA Corporation | NVIDIA GeForce RTX 4080 SUPER/PCIe/SSE2 | 4.6.0 NVIDIA 580.196.07,artifacts/task-23/gpu-open-water-01.csv
+open-water,02,32,0.013784,0.023280,0.009568,NVIDIA Corporation | NVIDIA GeForce RTX 4080 SUPER/PCIe/SSE2 | 4.6.0 NVIDIA 580.196.07,artifacts/task-23/gpu-open-water-02.csv

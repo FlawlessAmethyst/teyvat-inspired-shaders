@@ -1,0 +1,41 @@
+# Run from repository root:
+# bash evidence/task-06/commands.txt > evidence/task-06/verification.txt
+# Acquisition (already performed; requires network, clones stay ignored):
+# git clone --depth 1 --branch 1.21.1 https://github.com/IrisShaders/Iris.git artifacts/task-06/iris-source
+# git clone --depth 1 https://github.com/IrisShaders/DocsPage.git artifacts/task-06/iris-docs
+# For reconstruction, fetch/checkout the exact revisions in sources.json; do not silently use a new HEAD.
+# python3 evidence/task-06/collect_sources.py
+set -eu
+python3 - <<'PY'
+from pathlib import Path
+import hashlib,json,re,subprocess
+m=json.loads(Path('evidence/task-06/sources.json').read_text())
+for key,repo in m['repositories'].items():
+ assert subprocess.check_output(['git','-C',repo['local_path'],'rev-parse','HEAD'],text=True).strip()==repo['revision']
+for item in m['files']:
+ p=Path(m['repositories'][item['repository']]['local_path'])/item['path']
+ assert hashlib.sha256(p.read_bytes()).hexdigest()==item['sha256'],p
+jar=m['installed_jar'];assert hashlib.sha256(Path(jar['path']).read_bytes()).hexdigest()==jar['sha256']
+print('PASS: two pinned repository revisions, 35 source file hashes and installed Iris JAR hash match.')
+files=[Path('docs/research/iris_feasibility.md')]+[Path('docs')/(n+'.md') for n in ['STATUS','DECISIONS','TEST_LOG']]
+links=0
+for p in files:
+ body=p.read_text();assert all(line==line.rstrip() for line in body.splitlines()),p
+ for target in re.findall(r'\]\(([^)]+)\)',body):
+  if '://' in target or target.startswith('#'):continue
+  assert (p.parent/target.split('#')[0]).resolve().exists(),(p,target)
+  links+=1
+body=files[0].read_text()
+rows=re.findall(r'^\| S[1-7] .*$',body,re.M)
+assert len(rows)==7
+for i,row in enumerate(rows,1):
+ assert row.startswith('| S'+str(i)+' ') and '**Feasible**' in row
+ assert re.search(r'\[D\d+',row)
+assert 'Uncertain' in body and 'Not feasible' in body
+for ref in re.findall(r'\b(?:D|J)\d+\b',body):assert '**'+ref+'**:' in body,ref
+urls=set(re.findall(r'\]\((https://github.com/[^)]+)\)',body))
+assert urls <= {x['url'] for x in m['files']}, urls-{x['url'] for x in m['files']}
+print(f'PASS: {links} local Markdown links; seven essential target rows; source IDs/permalinks resolve in manifest; no trailing whitespace.')
+print('MANUAL: reviewed S1–S7 inputs, outcomes, limitations, version drift and later QA gates against official source/docs.')
+print('LIMIT: documentation/source checks only; no client launch, shader compilation, visual acceptance or performance measurement.')
+PY

@@ -1,0 +1,56 @@
+# TASK-09 commands, from the repository root.
+# Desktop commands use the scoped execution boundary in docs/minecraft-environment.md.
+# With the dedicated instance stopped, back up options.txt, config/iris.properties,
+# and config/sodium-options.json to artifacts/task-09/before/ before changing Iris.
+# Copy shaderpack/shaders to minecraft/shaderpacks/TASK-09-neutral/shaders.
+# In config/iris.properties select shaderPack=TASK-09-neutral and enableShaders=true.
+
+python3 tools/minecraft.py paths
+python3 tools/minecraft.py window
+python3 tools/minecraft.py --artifacts-dir artifacts/task-09 launch --timeout 120
+python3 tools/minecraft.py screenshot artifacts/task-09/title.png
+python3 tools/minecraft.py click 1280 535
+python3 tools/minecraft.py screenshot artifacts/task-09/world-list.png
+python3 tools/minecraft.py click 1200 195
+python3 tools/minecraft.py click 1050 1315
+# First attempt only. After preserving the error, update final.fsh in the installed
+# folder and reapply the enabled Iris config.
+python3 tools/minecraft.py stop --timeout 60
+python3 tools/minecraft.py --artifacts-dir artifacts/task-09 logs
+
+# Corrected launch.
+python3 tools/minecraft.py --artifacts-dir artifacts/task-09 launch --timeout 120
+python3 tools/minecraft.py click 1280 535
+python3 tools/minecraft.py click 1200 195
+python3 tools/minecraft.py click 1050 1315
+
+# Corrected runtime, from inside TASK-03 Visual Scenes.
+python3 scripts/scenes.py capture daylight artifacts/task-09/daylight
+python3 scripts/scenes.py capture cave artifacts/task-09/cave
+python3 tools/minecraft.py stop --timeout 60
+python3 tools/minecraft.py --artifacts-dir artifacts/task-09 logs
+# After shutdown, restore backed-up client settings and remove the temporary pack.
+
+# Standalone compatibility GLSL syntax/link check with Iris includes expanded.
+python3 - <<'PY'
+from pathlib import Path
+import re
+import subprocess
+from tempfile import TemporaryDirectory
+
+shaders = Path("shaderpack/shaders")
+def expand(path):
+    return re.sub(r'^#include "/([^"]+)"$', lambda m: expand(shaders / m[1]),
+                  path.read_text(), flags=re.MULTILINE)
+
+with TemporaryDirectory(prefix="task-09-glsl-") as temp:
+    for fragment in sorted(shaders.glob("*.fsh")):
+        vertex = fragment.with_suffix(".vsh")
+        vertex_output = Path(temp) / (vertex.stem + ".vert")
+        fragment_output = Path(temp) / (fragment.stem + ".frag")
+        vertex_output.write_text(expand(vertex))
+        fragment_output.write_text(expand(fragment))
+        subprocess.run(["glslangValidator", "-l", vertex_output, fragment_output],
+                       check=True, capture_output=True, text=True)
+        print(f"PASS glslangValidator -l {vertex.name} {fragment.name}")
+PY

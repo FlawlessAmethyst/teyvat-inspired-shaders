@@ -1,0 +1,2 @@
+PASS: 34 original inputs unchanged; 30 sources accounted for; 144 full-resolution PNG hashes/dimensions verified; all videos sampled start/interior/end with gaps <5.1s.
+PASS: all 11 scene-note groups cover every sampled frame; 434 Markdown local links resolve.

@@ -1,0 +1,25 @@
+TASK-20 — DONE (2026-11-13)
+PASS TASK-19 source manifest matched before edits. Installed TASK-19 control
+     and TASK-20 candidate matched their retained shader trees.
+PASS All 12 expanded shader pairs linked with glslangValidator 16.6.0.
+PASS Iris loaded the expected pack and RGBA16F attachment in shader sessions.
+     No shader-related errors or fatal entries in accepted sessions.
+PASS Fixture confirmed the plains and jungle biomes, tall-grass and large-fern
+     upper blocks, cherry leaves and the stone camera perch.
+PASS Four 2560x1440 native visual pairs passed the preset and option checks.
+PASS Two leaf/sky edge masks matched. Selected wall, trunk, lit path and
+     shadowed path RGB patches matched byte-for-byte.
+PASS Twelve native profiles matched mode, runtime, options, preset, sample
+     count and duration. Selected static camera patches matched before and
+     after each profile and across both sessions in each mode.
+     The first control attempt lost focus. It was excluded and rerun.
+PASS All six accepted sessions saved and exited normally. Two temporary
+     packs were removed, the fixture was archived, and all five settings
+     files were restored byte-for-byte.
+PASS All 76 original TASK-03 world file hashes matched. All 36 accepted
+     shader file hashes matched. The retained source and profile index replay.
+PASS Nine Python unit tests, Python/Bash syntax checks and git diff --check.
+PASS 33 original inputs and 144 reference frame hashes verified.
+LIMIT Fixed clear-day Overworld only. GPU vertex cost, presentation cadence,
+      waterlogged leaves, live weather and other dimensions remain unverified.
+Next task: TASK-21.

@@ -1,0 +1,173 @@
+# Run from the repository root. Choose a fresh artifact root when replaying.
+# Run GenshinShaderDev desktop commands with approved scoped access.
+set -euo pipefail
+root=artifacts/task-20
+game=$(python3 -c 'import sys; sys.path.insert(0,"tools"); import minecraft; print(minecraft.GAME)')
+python3 tools/minecraft.py stop --timeout 60
+sha256sum --quiet -c artifacts/task-19/source-world.sha256
+sha256sum --quiet -c evidence/task-20/pack.sha256
+python3 evidence/task-20/replay.py prepare "$root"
+cp artifacts/task-19/source-world.sha256 "$root/source-world.sha256"
+diff -rq "$root/shaders" "$game/shaderpacks/TASK-20-vegetation/shaders"
+diff -rq "$root/control-shaders" "$game/shaderpacks/TASK-20-control/shaders"
+
+bash evidence/task-20/session.sh "$root" vegetation-01
+# Inspect the first row for TASK-20 Vegetation Scenes before accepting it.
+magick "$root/vegetation-01/world-list.png" -crop 780x245+890+95 +repage /tmp/task20-world-list.png
+cp "$root/vegetation-01/world-list.png" "$root/world-list-reference.png"
+bash evidence/task-20/session.sh "$root" vegetation-01 open
+# The first control-01 trial lost focus. It was saved and exited, its logs
+# collected and the directory retained as control-01-focus-trial before retrying.
+# python3 tools/minecraft.py --artifacts-dir "$root/control-01" stop --timeout 60
+# python3 tools/minecraft.py --artifacts-dir "$root/control-01" logs
+# mv -T --no-clobber "$root/control-01" "$root/control-01-focus-trial"
+for batch in control-01 sodium-01 sodium-02 control-02 vegetation-02; do
+    bash evidence/task-20/session.sh "$root" "$batch"
+    sleep 5
+done
+
+python3 evidence/task-20/replay.py restore "$root"
+for path in options.txt config/{iris.properties,sodium-options.json,sodium-extra-options.json,dynamic_fps.json}; do
+    cmp "$game/$path" "$root/before/${path##*/}"
+done
+test ! -e "$game/saves/TASK-20 Vegetation Scenes"
+for mode in vegetation control; do test ! -e "$game/shaderpacks/TASK-20-$mode"; done
+find "$game/saves/TASK-03 Visual Scenes" -type f -print0 | sort -z |
+    xargs -0 sha256sum | cmp "$root/source-world.sha256" -
+diff -rq "$root/shaders" shaderpack/shaders
+
+python3 evidence/task-20/index_runs.py "$root" > "$root/runs-reviewed.csv"
+# Re-indexing the retained runs reproduces evidence/task-20/runs.csv.
+python3 - "$root/runs-reviewed.csv" <<'PY'
+import csv
+from statistics import mean
+import sys
+
+with open(sys.argv[1], newline='') as file:
+    rows = list(csv.DictReader(file))
+for scene in ('daylight', 'dense'):
+    means = {}
+    for mode in ('sodium', 'control', 'vegetation'):
+        group = [row for row in rows if row['scene'] == scene and row['batch'].startswith(mode)]
+        assert len(group) == 2
+        loops = [float(row['mean_client_loop_ms']) for row in group]
+        p95 = [float(row['p95_client_loop_ms']) for row in group]
+        means[mode] = loops
+        print(f'{scene} {mode} mean={mean(loops):.6f} ms runs={loops} p95={p95}')
+    deltas = [a - b for a, b in zip(means['vegetation'], means['control'], strict=True)]
+    print(f'{scene} vegetation minus TASK-19: {mean(deltas):+.6f} ms '
+          f'({mean(deltas) / mean(means["control"]):+.2%}), runs={deltas}')
+PY
+for scene in daylight forest dense canopy-top; do
+    magick montage -font DejaVu-Sans -pointsize 18 \
+        -label 'TASK-19 control' "$root/control-01/$scene/native.png" \
+        -label 'TASK-20 vegetation' "$root/vegetation-01/$scene/native.png" \
+        -thumbnail 896x504 -tile 2x1 -geometry +4+4 "$root/$scene.jpg"
+done
+
+# Expand Iris includes and link every vertex/fragment pair.
+python3 - <<'PY' > "$root/static-link.txt"
+from pathlib import Path
+import subprocess
+import sys
+from tempfile import TemporaryDirectory
+
+sys.path.insert(0, 'evidence/task-12')
+from check_glsl import expand
+
+stages = {'SKY': 1, 'SUNSET': 2, 'STARS': 6, 'HAND_SOLID': 16, 'CLOUDS': 20,
+          'RAIN_SNOW': 21, 'HAND_TRANSLUCENT': 23}
+defines = [f'-DMC_RENDER_STAGE_{name}={value}' for name, value in stages.items()]
+shaders = Path('shaderpack/shaders')
+with TemporaryDirectory(prefix='task-20-glsl-') as temp:
+    for fragment in sorted(shaders.glob('*.fsh')):
+        vertex = fragment.with_suffix('.vsh')
+        vert = Path(temp) / (vertex.stem + '.vert')
+        frag = Path(temp) / (fragment.stem + '.frag')
+        vert.write_text(expand(vertex, shaders))
+        frag.write_text(expand(fragment, shaders))
+        subprocess.run(['glslangValidator', '-l', *defines, vert, frag], check=True)
+        print(f'PASS {fragment.stem}', flush=True)
+PY
+python3 -m unittest discover -s scripts -p 'test_*.py' -v
+python3 -m py_compile evidence/task-20/{replay,index_runs}.py
+bash -n evidence/task-20/session.sh
+bash -n evidence/task-20/commands.txt
+python3 scripts/verify_references.py
+git diff --check
+
+# Compare native RGB in selected static patches. Animated sky is outside these regions.
+python3 - "$root" <<'PY'
+from pathlib import Path
+from subprocess import check_output
+import sys
+
+root = Path(sys.argv[1])
+
+def crop(path, region):
+    return check_output(['magick', str(path), '-crop', region, '+repage',
+                         '-alpha', 'off', '-depth', '8', 'RGB:-'])
+
+for mode in ('vegetation', 'control', 'sodium'):
+    for scene, region in (('daylight', '110x52+2190+485'), ('dense', '105x100+1280+1120')):
+        patches = [
+            crop(root / f'{mode}-{session}' / 'runs' / scene / 'recording' / f'{frame}.png', region)
+            for session in ('01', '02') for frame in ('before', 'after')
+        ]
+        assert all(patch == patches[0] for patch in patches[1:]), (mode, scene, 'static camera patch changed')
+        print(f'{mode}/{scene}: static camera patch matches across both profile sessions')
+PY
+
+# Compare material response and neutral surfaces under the same canopy shadow.
+python3 - "$root" <<'PY' > "$root/pixels-reviewed.csv"
+import csv
+from pathlib import Path
+from statistics import mean
+from subprocess import check_output
+import sys
+
+root = Path(sys.argv[1])
+patches = (
+    ('daylight', 'grass', '450x140+1020+1220', False),
+    ('daylight', 'stone brick wall', '110x52+2190+485', True),
+    ('forest', 'oak crown', '100x90+1470+330', False),
+    ('forest', 'oak trunk', '28x66+1490+610', True),
+    ('dense', 'plains oak leaves', '105x100+355+233', False),
+    ('dense', 'jungle oak leaves', '105x100+2155+233', False),
+    ('dense', 'lit stone path', '105x100+1280+1120', True),
+    ('dense', 'shadowed stone path', '23x50+1275+839', True),
+)
+writer = csv.writer(sys.stdout, lineterminator='\n')
+writer.writerow(('scene', 'patch', 'region', 'byte_identical',
+                 'control_r', 'control_g', 'control_b',
+                 'vegetation_r', 'vegetation_g', 'vegetation_b'))
+for scene, label, region, identical in patches:
+    control, vegetation = [
+        check_output(['magick', str(root / f'{mode}-01' / scene / 'native.png'),
+                      '-crop', region, '+repage', '-alpha', 'off', '-depth', '8', 'RGB:-'])
+        for mode in ('control', 'vegetation')
+    ]
+    assert (control == vegetation) == identical, (scene, label)
+    values = [f'{mean(data[channel::3]):.2f}' for data in (control, vegetation)
+              for channel in range(3)]
+    writer.writerow((scene, label, region, identical, *values))
+PY
+# Rechecking the retained comparisons reproduces evidence/task-20/pixels.csv.
+
+# Check leaf/sky coverage on two lower crown edges against the cloud-free horizon.
+python3 - "$root" <<'PY'
+from pathlib import Path
+from subprocess import check_output
+import sys
+
+root = Path(sys.argv[1])
+for region in ('230x150+25+450', '180x140+2290+415'):
+    masks = []
+    for mode in ('control', 'vegetation'):
+        image = root / f'{mode}-01/dense/native.png'
+        rgb = check_output(['magick', str(image), '-crop', region, '+repage',
+                            '-alpha', 'off', '-depth', '8', 'RGB:-'])
+        masks.append(bytes(blue >= 150 for blue in rgb[2::3]))
+    assert masks[0] == masks[1] and 0 < sum(masks[0]) < len(masks[0]), region
+    print(f'{region}: identical leaf/sky coverage across {len(masks[0])} pixels')
+PY

@@ -1,0 +1,139 @@
+# Run from the repository root in sections. For a repeat, replace the root
+# assignment with a fresh path under artifacts/ before preparing the instance.
+# Desktop commands and the NVIDIA device timer use approved scoped access.
+# TASK-10 supplies the baseline recording and TASK-20 supplies the world,
+# presets, source-world manifest and control shaders. See the evidence README.
+set -euo pipefail
+root=artifacts/task-21
+game=$(python3 -c 'import sys; sys.path.insert(0,"tools"); import minecraft; print(minecraft.GAME)')
+python3 tools/minecraft.py stop --timeout 60
+# Before implementation, TASK-20 also passed:
+# sha256sum --quiet -c evidence/task-20/pack.sha256
+# diff -rq artifacts/task-20/shaders shaderpack/shaders
+sha256sum --quiet -c artifacts/task-20/source-world.sha256
+sha256sum --quiet -c evidence/task-21/pack.sha256
+python3 evidence/task-21/replay.py prepare "$root"
+cp artifacts/task-20/source-world.sha256 "$root/source-world.sha256"
+find artifacts/task-20/world -type f -print0 | sort -z | xargs -0 sha256sum > "$root/vegetation-world.sha256"
+diff -rq "$root/shaders" "$game/shaderpacks/TASK-21-weather/shaders"
+diff -rq "$root/control-shaders" "$game/shaderpacks/TASK-21-control/shaders"
+
+bash evidence/task-21/session.sh "$root" weather-01
+# Visually verify TASK-21 Weather Scenes is the first row before the next command.
+magick "$root/weather-01/world-list.png" -crop 780x245+890+95 +repage /tmp/task21-world-list.png
+cp "$root/weather-01/world-list.png" "$root/world-list-reference.png"
+bash evidence/task-21/session.sh "$root" weather-01 open
+bash evidence/task-21/session.sh "$root" weather-live
+bash evidence/task-21/session.sh "$root" control-01
+bash evidence/task-21/session.sh "$root" remaining
+
+python3 evidence/task-21/replay.py restore "$root"
+for path in options.txt config/{iris.properties,sodium-options.json,sodium-extra-options.json,dynamic_fps.json}; do
+    cmp "$game/$path" "$root/before/${path##*/}"
+done
+test ! -e "$game/saves/TASK-21 Weather Scenes"
+for mode in weather control; do test ! -e "$game/shaderpacks/TASK-21-$mode"; done
+find "$game/saves/TASK-03 Visual Scenes" -type f -print0 | sort -z |
+    xargs -0 sha256sum | cmp "$root/source-world.sha256" -
+find artifacts/task-20/world -type f -print0 | sort -z |
+    xargs -0 sha256sum | cmp "$root/vegetation-world.sha256" -
+diff -rq "$root/shaders" shaderpack/shaders
+diff -rq "$root/control-shaders" artifacts/task-20/shaders
+
+python3 evidence/task-21/index_runs.py "$root" > "$root/runs-reviewed.csv"
+python3 evidence/task-21/review.py settled "$root" > "$root/pixels-reviewed.csv"
+python3 evidence/task-21/review.py transitions "$root" > "$root/transitions-reviewed.csv"
+python3 - "$root/runs-reviewed.csv" <<'PY'
+import csv
+from statistics import mean
+import sys
+
+with open(sys.argv[1], newline='') as file:
+    rows = list(csv.DictReader(file))
+for scene in ('daylight', 'rain'):
+    values = {}
+    for mode in ('sodium', 'control', 'weather'):
+        runs = [row for row in rows if row['scene'] == scene and row['batch'].startswith(mode)]
+        assert len(runs) == 2
+        values[mode] = [float(row['mean_client_loop_ms']) for row in runs]
+        p95 = [float(row['p95_client_loop_ms']) for row in runs]
+        print(f'{scene} {mode}: mean {mean(values[mode]):.6f} ms, runs {values[mode]}, p95 {p95}')
+    differences = [a - b for a, b in zip(values['weather'], values['control'], strict=True)]
+    print(f'{scene} TASK-21 minus TASK-20: {mean(differences):+.6f} ms '
+          f'({mean(differences) / mean(values["control"]):+.2%}), runs {differences}')
+PY
+
+# These foreground regions exclude animated clouds and water.
+for region in 440x144+1016+1212 220x52+2208+512; do
+    cmp <(magick "$root/control-01/daylight/native.png" -crop "$region" +repage -alpha off -depth 8 rgb:-) \
+        <(magick "$root/weather-01/daylight/native.png" -crop "$region" +repage -alpha off -depth 8 rgb:-)
+done
+for batch in weather-01 control-01 sodium-01 sodium-02 control-02 weather-02; do
+    recording="$root/$batch/runs/daylight/recording"
+    cmp <(magick "$recording/before.png" -crop 220x52+2208+512 +repage -alpha off -depth 8 rgb:-) \
+        <(magick "$recording/after.png" -crop 220x52+2208+512 +repage -alpha off -depth 8 rgb:-)
+done
+
+for pair in daylight:rain open-water:water-rain dense:dense-rain; do
+    clear=${pair%:*}
+    rain=${pair#*:}
+    magick montage -font DejaVu-Sans -pointsize 17 \
+        -label 'TASK-20 clear' "$root/control-01/$clear/native.png" \
+        -label 'TASK-20 rain' "$root/control-01/$rain/native.png" \
+        -label 'TASK-21 clear' "$root/weather-01/$clear/native.png" \
+        -label 'TASK-21 rain' "$root/weather-01/$rain/native.png" \
+        -thumbnail 768x432 -tile 2x2 -geometry +4+4 "$root/$clear.jpg"
+done
+python3 evidence/task-21/replay.py encode "$root/weather-live/transitions"
+
+# Link all pairs and expand the sky sources for the existing isolated GPU timer.
+python3 - "$root" <<'PY' > "$root/static-link.txt"
+from pathlib import Path
+import subprocess
+import sys
+from tempfile import TemporaryDirectory
+
+sys.path.insert(0, 'evidence/task-12')
+from check_glsl import expand
+
+stages = {'SKY': 1, 'SUNSET': 2, 'STARS': 6, 'HAND_SOLID': 16, 'CLOUDS': 20,
+          'RAIN_SNOW': 21, 'HAND_TRANSLUCENT': 23}
+defines = [f'-DMC_RENDER_STAGE_{name}={value}' for name, value in stages.items()]
+root = Path(sys.argv[1])
+shaders = root / 'shaders'
+with TemporaryDirectory(prefix='task-21-glsl-') as temp:
+    for fragment in sorted(shaders.glob('*.fsh')):
+        vertex = fragment.with_suffix('.vsh')
+        vert = Path(temp) / (vertex.stem + '.vert')
+        frag = Path(temp) / (fragment.stem + '.frag')
+        vert.write_text(expand(vertex, shaders))
+        frag.write_text(expand(fragment, shaders))
+        subprocess.run(['glslangValidator', '-l', *defines, vert, frag], check=True)
+        print(f'PASS {fragment.stem}', flush=True)
+
+out = root / 'timer-source'
+out.mkdir(exist_ok=True)
+macros = ''.join(f'#define MC_RENDER_STAGE_{name} {stages[name]}\n'
+                 for name in ('SKY', 'SUNSET', 'STARS'))
+for name, snapshot in [('control', 'control-shaders'), ('weather', 'shaders')]:
+    source = root / snapshot
+    for stage, ext in [('vsh', 'vert'), ('fsh', 'frag')]:
+        version, body = expand(source / f'gbuffers_skybasic.{stage}', source).split('\n', 1)
+        (out / f'{name}.{ext}').write_text(version + '\n' + macros + body)
+PY
+
+# Run the offscreen timer after the client is stopped.
+cc -std=c11 -O2 -Wall -Wextra -Werror evidence/task-18/sky_timer.c -o "$root/sky_timer" -lEGL -lGL -lm
+for run in 01 02; do
+    "$root/sky_timer" "$root/timer-source"/{control.vert,control.frag,weather.vert,weather.frag} \
+        > "$root/gpu-$run.csv" 2> "$root/gpu-$run-device.txt"
+done
+python3 evidence/task-18/summarize_gpu.py "$root"/gpu-{01,02}.csv |
+    sed '1s/clouds_median_ms/weather_median_ms/' > "$root/gpu-reviewed.csv"
+
+python3 -m unittest discover -s scripts -p 'test_*.py' -v
+python3 -m py_compile evidence/task-21/{replay,index_runs,review}.py
+bash -n evidence/task-21/session.sh
+bash -n evidence/task-21/commands.txt
+python3 scripts/verify_references.py
+git diff --check

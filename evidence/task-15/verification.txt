@@ -1,0 +1,33 @@
+TASK-15 verification, 2026-11-12
+
+PASS  TASK-14 control hash manifest and snapshot tree match.
+PASS  TASK-15 live source, retained snapshot and temporary installed shader
+      tree match the tested source. Ten expanded GLSL pairs link with
+      glslangValidator and Iris render-stage defines.
+PASS  Copied fixture acknowledgments and fixed camera checks. Early fixture
+      attempts are retained under artifacts/task-15/fixture-first-attempt/
+      and fixture-second-attempt/. Force-loading during setup and ordering
+      the log fills after the leaf fills resolved the failed block check.
+PASS  Eighteen native 2560x1440 screenshots, six scenes in each mode.
+      Every comparison shares the same preset and shared client settings.
+      Foreground, cutouts, stone, sky, glass, water and cave patch index
+      regenerated from the native PNGs.
+PASS  Six real client sessions saved normally. Both Iris variants created
+      the expected Overworld pipeline and RGBA16F color target. No shader
+      compile or link error or vanilla fallback in the accepted logs.
+PASS  Twelve complete native CPU client-loop profiles, 397216 samples.
+      Matched presets, mod hashes, runtime and graphics settings. All
+      stationary before/after crops matched. The timing index and raw
+      CSV analysis reproduce from the retained ZIPs.
+PASS  GenshinShaderDev stopped. Five configuration files restored exactly.
+      Both temporary packs removed, copied world archived and lock released.
+      The archived world has no forced chunks. 75 source world file hashes
+      match the preflight manifest.
+PASS  Nine script tests, Python compile checks and Bash syntax checks.
+      Original reference inputs and 144 generated reference frame hashes
+      match. Local Markdown links and shader whitespace checks passed.
+
+GPU pass duration, presentation timing, live rain transitions, other
+render distances, other dimensions and submerged cameras remain unverified.
+Exact replay and check commands are in commands.txt. Raw evidence is in
+artifacts/task-15/ and the compact indices are in this directory.
